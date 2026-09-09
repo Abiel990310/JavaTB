@@ -99,6 +99,15 @@ Every runnable sample is a complete program with a `public class Main` and a
 in `// [hidden]` is compiled but not shown, which is how a fragment gets its
 imports and its `class Main` scaffolding without cluttering the point.
 
+:::note
+Write `public class Main` and nothing else. The name is fixed because the local
+backend compiles `Main.java`, and the `public` is stripped automatically before
+a sample is sent to the hosted fallback, which writes the source to a file it
+names itself — javac rejects a public class whose file name does not match, and
+that is what readers saw on the live site before `forHostedCompiler` existed.
+A sample that names its top-level class anything else will not run for anyone.
+:::
+
 All of these assertions are verified. `npm run verify:snippets` fails if an
 `expect-error` sample compiles by accident, and equally if an `expect-throw`
 sample runs clean — a demonstration of a failure that no longer fails is worse

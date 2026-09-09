@@ -57,7 +57,9 @@ function resolveHostedCompiler(): Promise<string> {
       headers: { Accept: 'application/json' },
       signal: AbortSignal.timeout(20_000),
     });
-    if (!res.ok) throw new Error(`Compiler Explorer returned ${res.status}`);
+    if (!res.ok) {
+      throw new Error(`could not list Compiler Explorer's JDKs (HTTP ${res.status})`);
+    }
     const list = (await res.json()) as { id: string; semver?: string }[];
     const version = (semver: string | undefined): number =>
       Number.parseFloat(semver?.replace(/[^\d.]/g, '') || '0') || 0;
@@ -110,13 +112,33 @@ const joinText = (parts: unknown): string =>
     ? parts.map((p) => (p as { text?: string }).text ?? '').join('\n')
     : '';
 
+/**
+ * Compiler Explorer writes the source to a file whose name it chooses, not
+ * ours. javac requires a *public* class to live in a file matching its name,
+ * so `public class Main` fails there with "class Main is public, should be
+ * declared in a file named Main.java" — which is exactly what readers hit on
+ * the statically hosted site. A non-public class carries no such constraint,
+ * still compiles to Main.class, and still runs, so dropping the modifier makes
+ * one source work under both backends.
+ *
+ * Only the class declaration is rewritten. A blanket rename of the identifier
+ * would corrupt string literals — one problem's expected output contains the
+ * word "Main.class" — and would change what the reader's program prints.
+ */
+export function forHostedCompiler(source: string): string {
+  return source.replace(
+    /^([ \t]*)public\s+((?:(?:final|abstract|sealed|non-sealed)\s+)*)class\s/m,
+    '$1$2class ',
+  );
+}
+
 async function compileHosted(req: CompileRequest): Promise<CompileResult> {
   const started = performance.now();
   const bytecodeMode = req.action === 'bytecode';
   const compilerId = await resolveHostedCompiler();
 
   const body = {
-    source: req.source,
+    source: forHostedCompiler(req.source),
     lang: 'java',
     allowStoreCodeDebug: false,
     options: {
