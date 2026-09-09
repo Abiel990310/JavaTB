@@ -174,12 +174,19 @@ async function compileHosted(req: CompileRequest): Promise<CompileResult> {
   const diagnostics =
     joinText(data.buildResult?.stderr) || (bytecodeMode ? joinText(data.stderr) : '');
 
+  // Compiler Explorer compiles the source as a file of its own choosing, so
+  // diagnostics and stack traces name example.java — a file the reader never
+  // wrote and cannot see. Everything downstream copes with any name, but the
+  // reader should not have to: report the name they actually typed.
+  const asOurFile = (text: string): string =>
+    text.replace(/\b[A-Za-z_$][\w$]*\.java\b/g, 'Main.java');
+
   return {
     compiled: buildCode === 0,
     exitCode: data.code ?? null,
     stdout: joinText(data.stdout),
-    stderr: bytecodeMode ? '' : joinText(data.stderr),
-    diagnostics,
+    stderr: bytecodeMode ? '' : asOurFile(joinText(data.stderr)),
+    diagnostics: asOurFile(diagnostics),
     bytecode: bytecodeMode ? joinText(data.asm) : undefined,
     timedOut: false,
     durationMs: Math.round(performance.now() - started),

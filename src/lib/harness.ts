@@ -28,13 +28,22 @@ public class Main {
   static int tbPassed = 0;
   static int tbFailed = 0;
   static String[] tbSource = null;
+  static String tbSourceName = null;
 
-  /** The text of a check, recovered from this file so it can be shown verbatim. */
-  static String tbTextAt(int line) {
-    if (tbSource == null) {
+  /**
+   * The text of a check, recovered from this file so it can be shown verbatim.
+   *
+   * The file name comes from the stack frame rather than being assumed to be
+   * Main.java: a hosted compiler writes the source under a name it chooses,
+   * and guessing wrong silently turns every check label into the word "check".
+   */
+  static String tbTextAt(String file, int line) {
+    if (file == null) return "check";
+    if (tbSource == null || !file.equals(tbSourceName)) {
+      tbSourceName = file;
       try {
         tbSource = new String(
-            java.nio.file.Files.readAllBytes(java.nio.file.Path.of("Main.java")),
+            java.nio.file.Files.readAllBytes(java.nio.file.Path.of(file)),
             java.nio.charset.StandardCharsets.UTF_8).split("\n", -1);
       } catch (Exception e) {
         tbSource = new String[0];
@@ -61,8 +70,9 @@ public class Main {
     return String.valueOf(v);
   }
 
-  static void tbReport(boolean ok, int line, String got, String want) {
-    String expr = tbTextAt(line);
+  static void tbReport(boolean ok, StackTraceElement at, String got, String want) {
+    int line = at == null ? 0 : at.getLineNumber();
+    String expr = tbTextAt(at == null ? null : at.getFileName(), line);
     if (ok) {
       tbPassed++;
       System.out.println("MARKER PASS " + line + " " + expr);
@@ -76,15 +86,15 @@ public class Main {
     }
   }
 
-  static int tbLine() {
+  static StackTraceElement tbCaller() {
     StackTraceElement[] frames = new Throwable().getStackTrace();
-    // 0 is tbLine, 1 is the check method, 2 is whoever called it.
-    return frames.length > 2 ? frames[2].getLineNumber() : 0;
+    // 0 is tbCaller, 1 is the check method, 2 is whoever called it.
+    return frames.length > 2 ? frames[2] : null;
   }
 
   /** Assert that a condition holds. */
   static void check(boolean cond) {
-    tbReport(cond, tbLine(), String.valueOf(cond), null);
+    tbReport(cond, tbCaller(), String.valueOf(cond), null);
   }
 
   /**
@@ -94,38 +104,38 @@ public class Main {
    * and useless in a grader.
    */
   static void checkEq(long a, long b) {
-    tbReport(a == b, tbLine(), String.valueOf(a), String.valueOf(b));
+    tbReport(a == b, tbCaller(), String.valueOf(a), String.valueOf(b));
   }
 
   static void checkEq(double a, double b) {
-    tbReport(a == b, tbLine(), String.valueOf(a), String.valueOf(b));
+    tbReport(a == b, tbCaller(), String.valueOf(a), String.valueOf(b));
   }
 
   static void checkEq(boolean a, boolean b) {
-    tbReport(a == b, tbLine(), String.valueOf(a), String.valueOf(b));
+    tbReport(a == b, tbCaller(), String.valueOf(a), String.valueOf(b));
   }
 
   static void checkEq(char a, char b) {
-    tbReport(a == b, tbLine(), "'" + a + "'", "'" + b + "'");
+    tbReport(a == b, tbCaller(), "'" + a + "'", "'" + b + "'");
   }
 
   /** Deep equality, so arrays and nested collections compare by value. */
   static void checkEq(Object a, Object b) {
-    tbReport(java.util.Objects.deepEquals(a, b), tbLine(), tbShow(a), tbShow(b));
+    tbReport(java.util.Objects.deepEquals(a, b), tbCaller(), tbShow(a), tbShow(b));
   }
 
   static void checkNear(double a, double b, double eps) {
-    tbReport(Math.abs(a - b) <= eps, tbLine(), String.valueOf(a), String.valueOf(b));
+    tbReport(Math.abs(a - b) <= eps, tbCaller(), String.valueOf(a), String.valueOf(b));
   }
 
   /** Assert that running the body throws, and that the exception is of this type. */
   static void checkThrows(Class<? extends Throwable> expected, Runnable body) {
-    int line = tbLine();
+    StackTraceElement at = tbCaller();
     try {
       body.run();
-      tbReport(false, line, "nothing thrown", expected.getSimpleName());
+      tbReport(false, at, "nothing thrown", expected.getSimpleName());
     } catch (Throwable actual) {
-      tbReport(expected.isInstance(actual), line,
+      tbReport(expected.isInstance(actual), at,
                actual.getClass().getSimpleName(), expected.getSimpleName());
     }
   }
@@ -231,7 +241,7 @@ export function buildSubmission(
  */
 export function remapPositions(text: string, submission: Submission): string {
   if (!submission.regions.length) return text;
-  return text.replace(/Main\.java:(\d+)/g, (whole, digits: string) => {
+  return text.replace(/\b[A-Za-z_$][\w$]*\.java:(\d+)/g, (whole, digits: string) => {
     const line = Number(digits);
     for (const region of submission.regions) {
       if (line >= region.start && line < region.start + region.lines) {
