@@ -39,7 +39,7 @@ and reason about a single-file program.
 - [x] 1.3 Control flow — `if`, loops, and both forms of `switch`
 - [x] 1.4 Methods — parameters, returns, overloading, and why Java passes
       everything by value
-- [ ] 1.5 Arrays — fixed length, bounds checking, and the `Arrays` utilities
+- [x] 1.5 Arrays — fixed length, bounds checking, and the `Arrays` utilities
 - [ ] 1.6 Strings — immutability, the pool, `==` versus `equals`,
       `StringBuilder`, text blocks
 - [ ] 1.7 Input and output — `Scanner`, `BufferedReader`, `printf`
