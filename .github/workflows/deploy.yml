@@ -1,0 +1,63 @@
+name: Deploy to Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Publishing happens by pushing the built site to the gh-pages branch, so the
+# only permission needed is write access to repository contents. The
+# actions/configure-pages route needs a token that can create a Pages site,
+# which GITHUB_TOKEN is not allowed to do ("Resource not accessible by
+# integration"), and would require someone to enable Pages by hand first.
+permissions:
+  contents: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - run: npm ci
+
+      # A GitHub Pages project site is served from /<repo>/, so every link and
+      # asset needs that prefix. Derive it from the repository name rather than
+      # hardcoding it, so a rename or a fork still builds correctly.
+      - name: Build for the Pages sub-path
+        run: npx vite build
+        env:
+          TB_BASE: /${{ github.event.repository.name }}/
+
+      - name: Publish to gh-pages
+        run: |
+          set -euo pipefail
+          rm -rf dist/.vite
+          touch dist/.nojekyll          # serve the files as-is, no Jekyll pass
+          cd dist
+          git init -q -b gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Publish ${GITHUB_SHA:0:7}
+
+          Built from ${GITHUB_SHA}. Generated output — edit content/ on main."
+          git push -q -f \
+            "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" \
+            gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

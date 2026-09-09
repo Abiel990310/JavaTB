@@ -1,0 +1,43 @@
+name: Verify
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      # The verifiers invoke a real compiler. The runner ships a JDK, but not
+      # necessarily the one this book is written against, so pin it: a sample
+      # using a Java 21 feature must fail here if the toolchain regresses,
+      # rather than being quietly compiled by whatever happened to be present.
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - run: npm ci
+
+      - name: Compiler version
+        run: javac -version && java -version
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Every runnable sample compiles
+        run: npm run verify:snippets
+
+      - name: Every problem grades correctly
+        run: npm run verify:problems
+
+      - name: Build the site
+        run: npx vite build
