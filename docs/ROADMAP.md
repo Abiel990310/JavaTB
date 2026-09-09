@@ -49,8 +49,13 @@ and reason about a single-file program.
 ### Wave B — modelling with classes
 
 - [x] 2.1 Classes and objects — fields, constructors, `this`
-- [ ] 2.2 References — what a variable actually holds; aliasing, and the two
-      variables that turn out to be one object
+- [x] 2.2 Aliasing — when sharing an object goes wrong, and defensive copying
+      *(retitled from "References — what a variable actually holds; aliasing".
+      1.4 already teaches that a variable holds an arrow and that a method gets
+      a copy of it, and 2.1 closes on two names for one book. A third pass over
+      the same ground would teach nothing, so this chapter is the consequence
+      instead: references escaping through constructors and getters, defensive
+      copies, and immutability as the alternative to copying.)*
 - [ ] 2.3 Encapsulation — access modifiers as a tool for keeping invariants
 - [ ] 2.4 `equals`, `hashCode`, `toString` — the contracts, and what breaks
       when you honour one and not the other
