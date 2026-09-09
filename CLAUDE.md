@@ -3,9 +3,11 @@
 An interactive Java textbook. Every code sample is compiled by a real compiler
 and every practice problem is auto-graded.
 
-**Status: the engine is ported and one chapter is written.** Wave 0 in
-`docs/ROADMAP.md` is done; the queue starts at 1.1's successor. As of the last
-full run: 5 samples and 2 problems, all verified.
+**Status: the engine is ported and Wave A is under way.** Wave 0 in
+`docs/ROADMAP.md` is done and chapters 1.1–1.2 are written. As of the last full
+run: 15 samples and 4 problems, all verified. The site is live at
+https://abiel990310.github.io/JavaTB/ — Pages is enabled, so every push to
+`main` republishes it.
 
 This is a sibling of **CppTB** (`Abiel990310/CppTB`), a finished 82-chapter C++
 book built on the same engine. CppTB is **paused** — do not write C++ chapters

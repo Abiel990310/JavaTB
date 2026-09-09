@@ -34,7 +34,7 @@ and reason about a single-file program.
 
 - [ ] 1.1 Hello, JVM — source to class file to running program; what `javac`
       and `java` each do, and what "write once, run anywhere" actually buys
-- [ ] 1.2 Values and variables — the eight primitives, literals, and what
+- [x] 1.2 Values and variables — the eight primitives, literals, and what
       happens when an `int` runs out of room
 - [ ] 1.3 Control flow — `if`, loops, and both forms of `switch`
 - [ ] 1.4 Methods — parameters, returns, overloading, and why Java passes
