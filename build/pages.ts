@@ -10,6 +10,9 @@ const DIFFICULTY_LABEL: Record<Exercise['difficulty'], string> = {
   deep: 'Deep end',
 };
 
+/** "1 chapter", "12 chapters" — the book starts small and the front page says so. */
+const plural = (n: number, noun: string): string => `${n} ${noun}${n === 1 ? '' : 's'}`;
+
 export function renderHome(book: Book, assets: Assets): string {
   const chapters = book.parts.flatMap((p) => p.chapters);
   const complete = chapters.filter((c) => c.status === 'complete').length;
@@ -55,7 +58,7 @@ export function renderHome(book: Book, assets: Assets): string {
         <a class="button" href="${url('practice/')}">Jump to problems</a>
         <button class="button" id="resume-button" hidden>Resume where you left off</button>
       </div>
-      <p class="hero__stats">${chapters.length} chapters · ${complete} written · ${book.exercises.length} problems</p>
+      <p class="hero__stats">${plural(chapters.length, 'chapter')} · ${complete} written · ${plural(book.exercises.length, 'problem')}</p>
     </section>
 
     <section class="paths">
