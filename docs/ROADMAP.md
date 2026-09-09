@@ -30,7 +30,7 @@ streams, virtual threads. What carries over is the method, not the syllabus.
 The reader has never written Java. By the end of this part they can write, run
 and reason about a single-file program.
 
-### Wave A — first programs
+### Wave A — first programs ✅ complete
 
 - [ ] 1.1 Hello, JVM — source to class file to running program; what `javac`
       and `java` each do, and what "write once, run anywhere" actually buys
@@ -42,7 +42,7 @@ and reason about a single-file program.
 - [x] 1.5 Arrays — fixed length, bounds checking, and the `Arrays` utilities
 - [x] 1.6 Strings — immutability, the pool, `==` versus `equals`,
       `StringBuilder`, text blocks
-- [ ] 1.7 Input and output — `Scanner`, `BufferedReader`, `printf`
+- [x] 1.7 Input and output — `Scanner`, `BufferedReader`, `printf`
 
 ## Part 2 — Objects
 
