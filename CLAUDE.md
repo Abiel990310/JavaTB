@@ -4,8 +4,8 @@ An interactive Java textbook. Every code sample is compiled by a real compiler
 and every practice problem is auto-graded.
 
 **Status: the engine is ported and Wave A is under way.** Wave 0 in
-`docs/ROADMAP.md` is done and chapters 1.1–1.2 are written. As of the last full
-run: 15 samples and 4 problems, all verified. The site is live at
+`docs/ROADMAP.md` is done and chapters 1.1–1.3 are written. As of the last full
+run: 25 samples and 6 problems, all verified. The site is live at
 https://abiel990310.github.io/JavaTB/ — Pages is enabled, so every push to
 `main` republishes it.
 
