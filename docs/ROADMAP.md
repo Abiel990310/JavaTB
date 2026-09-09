@@ -48,7 +48,7 @@ and reason about a single-file program.
 
 ### Wave B — modelling with classes
 
-- [ ] 2.1 Classes and objects — fields, constructors, `this`
+- [x] 2.1 Classes and objects — fields, constructors, `this`
 - [ ] 2.2 References — what a variable actually holds; aliasing, and the two
       variables that turn out to be one object
 - [ ] 2.3 Encapsulation — access modifiers as a tool for keeping invariants
