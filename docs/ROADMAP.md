@@ -37,7 +37,7 @@ and reason about a single-file program.
 - [x] 1.2 Values and variables — the eight primitives, literals, and what
       happens when an `int` runs out of room
 - [x] 1.3 Control flow — `if`, loops, and both forms of `switch`
-- [ ] 1.4 Methods — parameters, returns, overloading, and why Java passes
+- [x] 1.4 Methods — parameters, returns, overloading, and why Java passes
       everything by value
 - [ ] 1.5 Arrays — fixed length, bounds checking, and the `Arrays` utilities
 - [ ] 1.6 Strings — immutability, the pool, `==` versus `equals`,
