@@ -3,6 +3,14 @@ import { highlightSource } from './highlight.ts';
 /**
  * A textarea with a highlighted layer behind it and a line-number gutter.
  *
+ * The two must stay exactly the same size, or a click lands on a different
+ * character than the one under the pointer. That is done with layout rather
+ * than with JavaScript: the highlight layer is in normal flow and sizes the
+ * surface, and the textarea is stretched over it with `inset: 0`. An earlier
+ * version measured `scrollHeight` and set the height itself, which read 0
+ * because the constructor runs before the editor is in the document — leaving
+ * a 32-pixel strip of clickable area over a full-height block of text.
+ *
  * Deliberately not a full editor: no autocomplete, no linting, no 800 KB of
  * dependency. What it does have is the handful of behaviours that make typing
  * Java in a browser tolerable — real tabs, indent preservation, bracket
@@ -26,6 +34,10 @@ export class CodeEditor {
 
     const surface = document.createElement('div');
     surface.className = 'editor__surface';
+    // The highlight layer is in flow and gives the surface its height; the
+    // textarea is absolutely positioned on top of it. A minimum keeps a short
+    // starter from collapsing to two lines.
+    surface.style.minHeight = `calc(${options.minRows ?? 6} * 1.6em + 2rem)`;
 
     this.highlightLayer = document.createElement('pre');
     this.highlightLayer.className = 'editor__highlight';
@@ -85,9 +97,6 @@ export class CodeEditor {
       );
     }
 
-    // Grow with the content; the textarea never scrolls on its own.
-    this.textarea.style.height = 'auto';
-    this.textarea.style.height = `${this.textarea.scrollHeight}px`;
     this.onChange?.(text);
   }
 
