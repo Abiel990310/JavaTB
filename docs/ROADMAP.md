@@ -82,7 +82,7 @@ and reason about a single-file program.
 
 ## Part 4 — Collections
 
-### Wave D — the library you actually use
+### Wave D — the library you actually use ✅ complete
 
 - [x] 4.1 The collections framework — the shape of the hierarchy
 - [x] 4.2 `List` — `ArrayList` versus `LinkedList`, measured
@@ -90,7 +90,14 @@ and reason about a single-file program.
 - [x] 4.4 `Set` and ordering — `Comparable`, `Comparator`, `TreeMap`
 - [x] 4.5 Queues and deques — `ArrayDeque`, `PriorityQueue`
 - [x] 4.6 Iteration — iterators, `ConcurrentModificationException`, safe removal
-- [ ] 4.7 Immutable and unmodifiable collections — and the difference
+- [x] 4.7 Immutable collections in practice — shallow immutability, and the
+      order the JDK deliberately scrambles
+      *(retitled from "Immutable and unmodifiable collections — and the
+      difference". 4.1 already contrasts List.of, Arrays.asList,
+      unmodifiableList and copyOf in one sample, so the taxonomy is taught. This
+      chapter is what 4.1 left: an immutable collection of mutable elements,
+      the per-JVM salting of Set.of and Map.of iteration order, null hostility
+      as a design decision, and where a copy is free. 2.2 is the precedent.)*
 
 ## Part 5 — Generics
 
