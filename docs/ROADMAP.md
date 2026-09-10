@@ -138,7 +138,12 @@ and reason about a single-file program.
 - [x] 8.2 The memory model — `synchronized`, `volatile`, happens-before
 - [x] 8.3 Executors and futures
 - [x] 8.4 Concurrent collections
-- [ ] 8.5 Virtual threads and structured concurrency
+- [x] 8.5 Virtual threads
+      *(Retitled from "Virtual threads and structured concurrency":
+      `StructuredTaskScope` is a preview API in Java 21 and will not compile
+      without `--enable-preview`, so nothing about it can be verified. The
+      chapter shows its shape in a non-runnable sketch and gives the working
+      equivalent. 2.2 is the precedent.)*
 - [ ] 8.6 Parallel streams — and the cases where they lose
 
 ## Part 9 — Engineering
