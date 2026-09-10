@@ -59,7 +59,7 @@ and reason about a single-file program.
 - [x] 2.3 Encapsulation — access modifiers as a tool for keeping invariants
 - [x] 2.4 `equals`, `hashCode`, `toString` — the contracts, and what breaks
       when you honour one and not the other
-- [ ] 2.5 Inheritance — `extends`, `super`, and overriding
+- [x] 2.5 Inheritance — `extends`, `super`, and overriding
 - [ ] 2.6 Polymorphism — what happens at the call site, and what it costs
 - [ ] 2.7 Interfaces — including default methods and why they exist
 - [ ] 2.8 Abstract classes — and choosing between the two
