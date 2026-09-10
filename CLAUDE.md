@@ -100,9 +100,10 @@ books to be maintained slowly from here rather than for this one to be written
 at speed: plan in the morning, then do one item.
 
 One Routine is active: **`trig_017zYznE5wwj44ZGRirzmBRL`**, once a day at
-07:00 UTC, which resumes the *existing* long-running session rather than
-spawning a new one — so it keeps its context instead of re-reading everything.
-It has covered CppTB, then this book, and now both.
+23:00 UTC — 07:00 in the author's timezone, UTC+8 — which resumes the
+*existing* long-running session rather than spawning a new one, so it keeps its
+context instead of re-reading everything. It has covered CppTB, then this book,
+and now both.
 
 Each run: read the **Maintenance queue** at the top of Part 10 in
 `docs/ROADMAP.md` here and the standing-work section in CppTB's, take the
