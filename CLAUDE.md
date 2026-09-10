@@ -6,9 +6,9 @@ and every practice problem is auto-graded.
 **Status: Parts 1 to 7 are complete.** Wave 0 (the engine), Wave A (1.1–1.7),
 Wave B (2.1–2.12), Wave C (3.1–3.5), Wave D (4.1–4.7) in `docs/ROADMAP.md`,
 Wave E (5.1–5.4), Wave F (6.1–6.5) and Wave G (7.1–7.7) are done. Wave H is
-under way: 8.1–8.2 are written, and the next unticked chapter is 8.3, Executors
-and futures. As of the last full run: 271 samples and 98 problems, all
-verified. The site is live at
+under way: 8.1–8.3 are written, and the next unticked chapter is 8.4,
+Concurrent collections. As of the last full run: 275 samples and 100 problems,
+all verified. The site is live at
 https://abiel990310.github.io/JavaTB/ — Pages is enabled, so every push to
 `main` republishes it.
 
