@@ -197,6 +197,13 @@ export async function compileAndRun(req: CompileRequest): Promise<CompileRespons
         // that happens to be Serializable, and this-escape on constructors that
         // call an overridable method to illustrate exactly that hazard.
         '-Xlint:all,-serial,-this-escape',
+        // Retain local variable names. Without -g the class file has no local
+        // variable table, and Java's helpful NullPointerException messages
+        // degrade from `because "name" is null` to `because "<local1>" is
+        // null` — which is exactly the detail that makes them worth teaching.
+        // Real builds pass it: Maven and Gradle both enable debug info by
+        // default, so this matches what a reader sees in their own project.
+        '-g',
         '-encoding', 'UTF-8',
         '-d', dir,
         src,
