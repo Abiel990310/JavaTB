@@ -5,9 +5,9 @@ and every practice problem is auto-graded.
 
 **Status: Parts 1 to 5 are complete.** Wave 0 (the engine), Wave A (1.1–1.7),
 Wave B (2.1–2.12), Wave C (3.1–3.5) and Wave D (4.1–4.7) in `docs/ROADMAP.md`
-and Wave E (5.1–5.4) are done. Part 6 (Functional Java) is next: the top
-unticked chapter is 6.1, Lambdas and functional interfaces. As of the
-last full run: 172 samples and 70 problems, all verified. The site is live at
+and Wave E (5.1–5.4) are done. Wave F is under way: 6.1 is written. The next
+unticked chapter is 6.2, Method references. As of the
+last full run: 184 samples and 72 problems, all verified. The site is live at
 https://abiel990310.github.io/JavaTB/ — Pages is enabled, so every push to
 `main` republishes it.
 
