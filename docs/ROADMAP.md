@@ -134,7 +134,7 @@ and reason about a single-file program.
 
 ### Wave H — more than one thread
 
-- [ ] 8.1 Threads, and why shared mutable state is the whole problem
+- [x] 8.1 Threads, and why shared mutable state is the whole problem
 - [ ] 8.2 The memory model — `synchronized`, `volatile`, happens-before
 - [ ] 8.3 Executors and futures
 - [ ] 8.4 Concurrent collections
