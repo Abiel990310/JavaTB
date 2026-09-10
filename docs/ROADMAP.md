@@ -127,7 +127,7 @@ and reason about a single-file program.
 - [x] 7.3 Class loading and initialisation order
 - [x] 7.4 Reflection and annotations
 - [x] 7.5 The classpath and the module system
-- [ ] 7.6 Files and NIO
+- [x] 7.6 Files and NIO
 - [ ] 7.7 `java.time` — the API that finally got dates right
 
 ## Part 8 — Concurrency

@@ -147,6 +147,12 @@ compilation is separate — but a JVM start costs a good fraction of a second
 before `main` runs. Size the work so the whole thing finishes in about a
 second.
 
+**A program may not create a file larger than 4 MB.** `server/compile.ts` runs
+the JVM under `ulimit -f 8192`, so a sample that writes more than that dies
+with `java.io.IOException: File too large` rather than anything readable. Size
+file-writing samples well under it, and say in the prose that the figure was
+measured at that size — 7.6 is the precedent.
+
 ### Callouts
 
 `:::note` `:::tip` `:::pitfall` `:::warning` `:::standards` `:::history`
