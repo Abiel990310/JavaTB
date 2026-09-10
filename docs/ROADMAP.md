@@ -148,7 +148,7 @@ and reason about a single-file program.
 
 ## Part 9 — Engineering
 
-### Wave I — code other people rely on
+### Wave I — code other people rely on ✅ complete
 
 - [x] 9.1 Testing — and what a test framework actually does
       *(Retitled from "Testing with JUnit": the runner compiles a single file
@@ -160,7 +160,7 @@ and reason about a single-file program.
 - [x] 9.3 Debugging and reading a stack trace properly
 - [x] 9.4 Measuring performance without lying to yourself — warmup, JMH
 - [x] 9.5 API design in Java
-- [ ] 9.6 Packaging and shipping
+- [x] 9.6 Packaging and shipping
 
 ## Part 10 — Problem solving and algorithms
 
