@@ -120,7 +120,7 @@ and reason about a single-file program.
 
 ## Part 7 — The platform
 
-### Wave G — what runs your program
+### Wave G — what runs your program ✅ complete
 
 - [x] 7.1 Object lifetime and garbage collection
 - [x] 7.2 Stack, heap, and escape — where an object actually lives
@@ -128,7 +128,7 @@ and reason about a single-file program.
 - [x] 7.4 Reflection and annotations
 - [x] 7.5 The classpath and the module system
 - [x] 7.6 Files and NIO
-- [ ] 7.7 `java.time` — the API that finally got dates right
+- [x] 7.7 `java.time` — the API that finally got dates right
 
 ## Part 8 — Concurrency
 

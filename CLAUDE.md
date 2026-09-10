@@ -3,11 +3,12 @@
 An interactive Java textbook. Every code sample is compiled by a real compiler
 and every practice problem is auto-graded.
 
-**Status: Parts 1 to 6 are complete.** Wave 0 (the engine), Wave A (1.1–1.7),
+**Status: Parts 1 to 7 are complete.** Wave 0 (the engine), Wave A (1.1–1.7),
 Wave B (2.1–2.12), Wave C (3.1–3.5), Wave D (4.1–4.7) in `docs/ROADMAP.md`,
-Wave E (5.1–5.4) and Wave F (6.1–6.5) are done. Wave G is under way: 7.1–7.6 are
-written, and the next unticked chapter is 7.7, java.time. As of the last
-full run: 254 samples and 92 problems, all verified. The site is live at
+Wave E (5.1–5.4), Wave F (6.1–6.5) and Wave G (7.1–7.7) are done. Part 8
+(Concurrency) is next: the top unticked chapter is 8.1, Threads and shared
+mutable state. As of the last full run: 260 samples and 94 problems, all
+verified. The site is live at
 https://abiel990310.github.io/JavaTB/ — Pages is enabled, so every push to
 `main` republishes it.
 
