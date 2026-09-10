@@ -125,7 +125,7 @@ and reason about a single-file program.
 - [x] 7.1 Object lifetime and garbage collection
 - [x] 7.2 Stack, heap, and escape — where an object actually lives
 - [x] 7.3 Class loading and initialisation order
-- [ ] 7.4 Reflection and annotations
+- [x] 7.4 Reflection and annotations
 - [ ] 7.5 The classpath and the module system
 - [ ] 7.6 Files and NIO
 - [ ] 7.7 `java.time` — the API that finally got dates right
