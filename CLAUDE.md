@@ -3,9 +3,10 @@
 An interactive Java textbook. Every code sample is compiled by a real compiler
 and every practice problem is auto-graded.
 
-**Status: Parts 1 and 2 are complete.** Wave 0 (the engine), Wave A (1.1–1.7)
-and Wave B (2.1–2.12) in `docs/ROADMAP.md` are done. Wave C is under way: 3.1–3.4 are
-written. As of the last full run: 122 samples and 46 problems, all verified. The site is live at
+**Status: Parts 1, 2 and 3 are complete.** Wave 0 (the engine), Wave A
+(1.1–1.7), Wave B (2.1–2.12) and Wave C (3.1–3.5) in `docs/ROADMAP.md` are
+done. The queue continues at Wave D, 4.1. As of the last full run: 124 samples
+and 48 problems, all verified. The site is live at
 https://abiel990310.github.io/JavaTB/ — Pages is enabled, so every push to
 `main` republishes it.
 

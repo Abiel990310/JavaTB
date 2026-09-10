@@ -71,14 +71,14 @@ and reason about a single-file program.
 
 ## Part 3 — When things go wrong
 
-### Wave C — failure as a design problem
+### Wave C — failure as a design problem ✅ complete
 
 - [x] 3.1 Exceptions — `throw`, `catch`, `finally`, and the stack trace
 - [x] 3.2 Checked versus unchecked — the argument, and where each belongs
 - [x] 3.3 `try`-with-resources and `AutoCloseable`
 - [x] 3.4 `null` and `Optional` — the billion-dollar mistake, and the API that
       does not quite undo it
-- [ ] 3.5 Designing failure — exception, `Optional`, or a result type
+- [x] 3.5 Designing failure — exception, `Optional`, or a result type
 
 ## Part 4 — Collections
 
