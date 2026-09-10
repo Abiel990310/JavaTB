@@ -46,7 +46,7 @@ and reason about a single-file program.
 
 ## Part 2 — Objects
 
-### Wave B — modelling with classes
+### Wave B — modelling with classes ✅ complete
 
 - [x] 2.1 Classes and objects — fields, constructors, `this`
 - [x] 2.2 Aliasing — when sharing an object goes wrong, and defensive copying
@@ -66,7 +66,7 @@ and reason about a single-file program.
 - [x] 2.9 Records — the right answer more often than a class
 - [x] 2.10 Enums — constants with behaviour
 - [x] 2.11 Sealed types and pattern matching — modelling a closed set
-- [ ] 2.12 Nested, inner and anonymous classes — and the reference an inner
+- [x] 2.12 Nested, inner and anonymous classes — and the reference an inner
       class quietly holds
 
 ## Part 3 — When things go wrong
