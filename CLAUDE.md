@@ -95,10 +95,19 @@ exist.
 
 ## Scheduling
 
-One Routine is active: **`trig_017zYznE5wwj44ZGRirzmBRL`**, every three hours,
-which resumes the *existing* long-running session rather than spawning a new
-one — so it keeps its context instead of re-reading everything. It used to point
-at CppTB and was retargeted at this book.
+**Maintenance mode, from Parts 1–9 being complete.** The author asked for both
+books to be maintained slowly from here rather than for this one to be written
+at speed: plan in the morning, then do one item.
+
+One Routine is active: **`trig_017zYznE5wwj44ZGRirzmBRL`**, once a day at
+07:00 UTC, which resumes the *existing* long-running session rather than
+spawning a new one — so it keeps its context instead of re-reading everything.
+It has covered CppTB, then this book, and now both.
+
+Each run: read the **Maintenance queue** at the top of Part 10 in
+`docs/ROADMAP.md` here and the standing-work section in CppTB's, take the
+single most valuable item across the two books, finish it, verify it, commit
+and push. One item, not three.
 
 - **Do not create a second Routine** for the same job. Check with
   `list_triggers` first and edit the existing one with `update_trigger`.

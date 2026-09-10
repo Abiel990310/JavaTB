@@ -162,6 +162,27 @@ and reason about a single-file program.
 - [x] 9.5 API design in Java
 - [x] 9.6 Packaging and shipping
 
+## Maintenance mode — one item a morning
+
+Parts 1 to 9 are complete, so this book and **CppTB** are now maintained
+together, slowly. One item per morning run, finished and verified, rather than
+a chapter a session.
+
+Take the top unticked item. Add to the bottom when something turns up.
+
+- [ ] **Plan Part 10 properly.** The collections, generics and stream chapters
+      now exist, so the forty-chapter outline below can be written without
+      forward references. Produce the wave-by-wave list, then stop — planning is
+      the whole item.
+- [ ] Audit chapters 1.1–1.7 against the voice and template the later chapters
+      settled into. They were written first and are the least consistent.
+- [ ] `/reference/` and `/progress/` render from front-matter objectives —
+      check every chapter has them and that none is a blank row.
+- [ ] Resolve forward references now that their targets exist: grep the content
+      for "chapter N.M will" and link or reword.
+- [ ] Count the problems per chapter and add a third to any that would carry
+      one — the early parts are the likely candidates.
+
 ## Part 10 — Problem solving and algorithms
 
 Forty chapters, planned in detail in CppTB's roadmap and written there. The
