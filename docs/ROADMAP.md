@@ -158,7 +158,7 @@ and reason about a single-file program.
       non-runnable blocks. 8.5 is the precedent.)*
 - [x] 9.2 Build tools — what Maven and Gradle are actually doing
 - [x] 9.3 Debugging and reading a stack trace properly
-- [ ] 9.4 Measuring performance without lying to yourself — warmup, JMH
+- [x] 9.4 Measuring performance without lying to yourself — warmup, JMH
 - [ ] 9.5 API design in Java
 - [ ] 9.6 Packaging and shipping
 
