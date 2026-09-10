@@ -3,10 +3,11 @@
 An interactive Java textbook. Every code sample is compiled by a real compiler
 and every practice problem is auto-graded.
 
-**Status: Parts 1 to 4 are complete.** Wave 0 (the engine), Wave A (1.1–1.7),
+**Status: Parts 1 to 5 are complete.** Wave 0 (the engine), Wave A (1.1–1.7),
 Wave B (2.1–2.12), Wave C (3.1–3.5) and Wave D (4.1–4.7) in `docs/ROADMAP.md`
-are done. Wave E is under way: 5.1–5.3 are written. As of the
-last full run: 166 samples and 68 problems, all verified. The site is live at
+and Wave E (5.1–5.4) are done. Part 6 (Functional Java) is next: the top
+unticked chapter is 6.1, Lambdas and functional interfaces. As of the
+last full run: 172 samples and 70 problems, all verified. The site is live at
 https://abiel990310.github.io/JavaTB/ — Pages is enabled, so every push to
 `main` republishes it.
 

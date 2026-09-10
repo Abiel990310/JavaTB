@@ -101,12 +101,12 @@ and reason about a single-file program.
 
 ## Part 5 — Generics
 
-### Wave E — types that take types
+### Wave E — types that take types ✅ complete
 
 - [x] 5.1 Generic classes and methods
 - [x] 5.2 Erasure — what survives to run time, and what does not
 - [x] 5.3 Wildcards — `? extends`, `? super`, and when each reads right
-- [ ] 5.4 The limits — no generic arrays, no primitives, and the workarounds
+- [x] 5.4 The limits — no generic arrays, no primitives, and the workarounds
 
 ## Part 6 — Functional Java
 
