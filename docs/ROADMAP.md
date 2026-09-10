@@ -62,7 +62,7 @@ and reason about a single-file program.
 - [x] 2.5 Inheritance — `extends`, `super`, and overriding
 - [x] 2.6 Polymorphism — what happens at the call site, and what it costs
 - [x] 2.7 Interfaces — including default methods and why they exist
-- [ ] 2.8 Abstract classes — and choosing between the two
+- [x] 2.8 Abstract classes — and choosing between the two
 - [ ] 2.9 Records — the right answer more often than a class
 - [ ] 2.10 Enums — constants with behaviour
 - [ ] 2.11 Sealed types and pattern matching — modelling a closed set
