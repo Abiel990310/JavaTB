@@ -104,7 +104,7 @@ and reason about a single-file program.
 ### Wave E — types that take types
 
 - [x] 5.1 Generic classes and methods
-- [ ] 5.2 Erasure — what survives to run time, and what does not
+- [x] 5.2 Erasure — what survives to run time, and what does not
 - [ ] 5.3 Wildcards — `? extends`, `? super`, and when each reads right
 - [ ] 5.4 The limits — no generic arrays, no primitives, and the workarounds
 
