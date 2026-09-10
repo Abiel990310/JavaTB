@@ -114,7 +114,7 @@ and reason about a single-file program.
 
 - [x] 6.1 Lambdas and functional interfaces
 - [x] 6.2 Method references
-- [ ] 6.3 Streams — the pipeline, and laziness
+- [x] 6.3 Streams — the pipeline, and laziness
 - [ ] 6.4 Collectors — including the ones worth writing yourself
 - [ ] 6.5 When a loop is the better answer
 
