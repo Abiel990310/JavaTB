@@ -132,7 +132,7 @@ and reason about a single-file program.
 
 ## Part 8 — Concurrency
 
-### Wave H — more than one thread
+### Wave H — more than one thread ✅ complete
 
 - [x] 8.1 Threads, and why shared mutable state is the whole problem
 - [x] 8.2 The memory model — `synchronized`, `volatile`, happens-before
@@ -144,7 +144,7 @@ and reason about a single-file program.
       without `--enable-preview`, so nothing about it can be verified. The
       chapter shows its shape in a non-runnable sketch and gives the working
       equivalent. 2.2 is the precedent.)*
-- [ ] 8.6 Parallel streams — and the cases where they lose
+- [x] 8.6 Parallel streams — and the cases where they lose
 
 ## Part 9 — Engineering
 
