@@ -86,7 +86,7 @@ and reason about a single-file program.
 
 - [x] 4.1 The collections framework — the shape of the hierarchy
 - [x] 4.2 `List` — `ArrayList` versus `LinkedList`, measured
-- [ ] 4.3 `Map` — how `HashMap` really stores things, load factor, treeification
+- [x] 4.3 `Map` — how `HashMap` really stores things, load factor, treeification
 - [ ] 4.4 `Set` and ordering — `Comparable`, `Comparator`, `TreeMap`
 - [ ] 4.5 Queues and deques — `ArrayDeque`, `PriorityQueue`
 - [ ] 4.6 Iteration — iterators, `ConcurrentModificationException`, safe removal
