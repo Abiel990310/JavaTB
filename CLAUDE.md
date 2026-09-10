@@ -3,11 +3,11 @@
 An interactive Java textbook. Every code sample is compiled by a real compiler
 and every practice problem is auto-graded.
 
-**Status: Parts 1 to 5 are complete.** Wave 0 (the engine), Wave A (1.1–1.7),
-Wave B (2.1–2.12), Wave C (3.1–3.5) and Wave D (4.1–4.7) in `docs/ROADMAP.md`
-and Wave E (5.1–5.4) are done. Wave F is under way: 6.1–6.4 are written. The next
-unticked chapter is 6.5, When a loop is the better answer. As of the
-last full run: 214 samples and 78 problems, all verified. The site is live at
+**Status: Parts 1 to 6 are complete.** Wave 0 (the engine), Wave A (1.1–1.7),
+Wave B (2.1–2.12), Wave C (3.1–3.5), Wave D (4.1–4.7) in `docs/ROADMAP.md`,
+Wave E (5.1–5.4) and Wave F (6.1–6.5) are done. Part 7 (The platform) is next:
+the top unticked chapter is 7.1, Object lifetime and garbage collection. As of
+the last full run: 221 samples and 80 problems, all verified. The site is live at
 https://abiel990310.github.io/JavaTB/ — Pages is enabled, so every push to
 `main` republishes it.
 

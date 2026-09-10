@@ -133,8 +133,19 @@ public class Main {
     tbReport(Math.abs(a - b) <= eps, tbCaller(), String.valueOf(a), String.valueOf(b));
   }
 
+  /**
+   * A body that may throw anything.
+   *
+   * Runnable would be the obvious parameter type and is the wrong one: its
+   * run() declares no checked exceptions, so a checked exception could never
+   * be the thing under test.
+   */
+  interface TbBody {
+    void run() throws Throwable;
+  }
+
   /** Assert that running the body throws, and that the exception is of this type. */
-  static void checkThrows(Class<? extends Throwable> expected, Runnable body) {
+  static void checkThrows(Class<? extends Throwable> expected, TbBody body) {
     StackTraceElement at = tbCaller();
     try {
       body.run();

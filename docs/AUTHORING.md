@@ -250,7 +250,7 @@ These are available in the Tests section:
 | `check(cond)` | Asserts a boolean |
 | `checkEq(a, b)` | Equality, by value. Numbers compare numerically, arrays by contents |
 | `checkNear(a, b, eps)` | Floating-point comparison with a tolerance |
-| `checkThrows(SomeException.class, () -> …)` | Asserts the body throws that type |
+| `checkThrows(SomeException.class, () -> …)` | Asserts the body throws that type. The body may throw a *checked* exception, so this works on methods declaring `throws`. To assert on the message, catch it yourself — the checks run inside a `main` that declares `throws Exception`. |
 
 `checkEq` takes two `Object`s and compares them by value. Two numbers compare
 numerically, so `checkEq(count(xs), 3)` works whether `count` returns `int` or
