@@ -65,7 +65,7 @@ and reason about a single-file program.
 - [x] 2.8 Abstract classes — and choosing between the two
 - [x] 2.9 Records — the right answer more often than a class
 - [x] 2.10 Enums — constants with behaviour
-- [ ] 2.11 Sealed types and pattern matching — modelling a closed set
+- [x] 2.11 Sealed types and pattern matching — modelling a closed set
 - [ ] 2.12 Nested, inner and anonymous classes — and the reference an inner
       class quietly holds
 
