@@ -115,10 +115,12 @@ long onOwn = timeOn(own, job);
 check(onOwn >= 0);
 own.shutdownNow();
 
-// Plenty of elements and plenty of work each: parallel should win.
-checkEq(compare(100_000, 200), "parallel");
-// Almost nothing to do: parallel cannot pay for itself.
+// Almost nothing to do: parallel cannot pay for its own setup.
 checkEq(compare(20, 1), "sequential");
+// A large CPU-bound workload: whichever wins, both pipelines must agree and
+// the answer must be one of the two. See the notes for why this does not
+// assert "parallel".
+check(List.of("parallel", "sequential").contains(compare(100_000, 200)));
 ```
 
 ## Hints
@@ -239,3 +241,13 @@ either version once measures the interpreter, so the loop runs three rounds and
 keeps the last — chapter 6.5's rule, applied to a decision rather than to a
 claim. And it checks that the two pipelines agree, because a comparison between
 a fast wrong answer and a slow right one is not a comparison at all.
+
+Notice what the tests do **not** assert: that `compare(100_000, 200)` returns
+`"parallel"`. It usually does, and on a machine whose cores are already busy —
+a loaded build agent, or a grader running other exercises — it does not, because
+the common pool has nothing spare to give. An assertion on which side wins is a
+timing assertion, and chapter 9.1 lists those among the tests that lie. What is
+worth asserting is that the tiny case never pays, that both pipelines agree,
+and that the comparison produces an answer at all. The chapter's rules exist
+precisely because the measurement is a property of the machine, not of the
+code.

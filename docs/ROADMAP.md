@@ -150,7 +150,12 @@ and reason about a single-file program.
 
 ### Wave I — code other people rely on
 
-- [ ] 9.1 Testing with JUnit
+- [x] 9.1 Testing — and what a test framework actually does
+      *(Retitled from "Testing with JUnit": the runner compiles a single file
+      with no third-party classpath, so no JUnit code can be verified. The
+      chapter builds a working mini-framework — reusing 7.4's annotation
+      runner — and shows real JUnit 5 alongside it in clearly-marked
+      non-runnable blocks. 8.5 is the precedent.)*
 - [ ] 9.2 Build tools — what Maven and Gradle are actually doing
 - [ ] 9.3 Debugging and reading a stack trace properly
 - [ ] 9.4 Measuring performance without lying to yourself — warmup, JMH
