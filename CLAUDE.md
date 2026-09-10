@@ -5,8 +5,8 @@ and every practice problem is auto-graded.
 
 **Status: Parts 1, 2 and 3 are complete.** Wave 0 (the engine), Wave A
 (1.1–1.7), Wave B (2.1–2.12) and Wave C (3.1–3.5) in `docs/ROADMAP.md` are
-done. The queue continues at Wave D, 4.1. As of the last full run: 124 samples
-and 48 problems, all verified. The site is live at
+done. Wave D is under way: 4.1 is written. As of the
+last full run: 128 samples and 50 problems, all verified. The site is live at
 https://abiel990310.github.io/JavaTB/ — Pages is enabled, so every push to
 `main` republishes it.
 
