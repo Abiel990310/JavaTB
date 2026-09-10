@@ -76,7 +76,7 @@ and reason about a single-file program.
 - [x] 3.1 Exceptions — `throw`, `catch`, `finally`, and the stack trace
 - [x] 3.2 Checked versus unchecked — the argument, and where each belongs
 - [x] 3.3 `try`-with-resources and `AutoCloseable`
-- [ ] 3.4 `null` and `Optional` — the billion-dollar mistake, and the API that
+- [x] 3.4 `null` and `Optional` — the billion-dollar mistake, and the API that
       does not quite undo it
 - [ ] 3.5 Designing failure — exception, `Optional`, or a result type
 
