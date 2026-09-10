@@ -98,30 +98,35 @@ public class Main {
   }
 
   /**
-   * Assert equality. Overloaded on the primitive types rather than taking two
-   * Objects, so that a check on numbers is not quietly defeated by boxing:
-   * Integer.valueOf(3).equals(Long.valueOf(3)) is false, which is true to Java
-   * and useless in a grader.
+   * Assert equality.
+   *
+   * Takes two Objects rather than being overloaded on the primitive types.
+   * Overloads look tidier but make any call mixing a boxed and an unboxed
+   * value ambiguous — checkEq(map.get(key), 2) matches both a (long, long)
+   * and an (Object, Object) candidate and neither is more specific — which
+   * is a compile error in the middle of a problem an author is writing.
+   *
+   * The reason overloads were tempting is that Integer.valueOf(3) does not
+   * equal Long.valueOf(3), so a boxed comparison would fail for reasons that
+   * have nothing to do with the answer. tbEquals below handles that directly
+   * by comparing numbers numerically.
    */
-  static void checkEq(long a, long b) {
-    tbReport(a == b, tbCaller(), String.valueOf(a), String.valueOf(b));
-  }
-
-  static void checkEq(double a, double b) {
-    tbReport(a == b, tbCaller(), String.valueOf(a), String.valueOf(b));
-  }
-
-  static void checkEq(boolean a, boolean b) {
-    tbReport(a == b, tbCaller(), String.valueOf(a), String.valueOf(b));
-  }
-
-  static void checkEq(char a, char b) {
-    tbReport(a == b, tbCaller(), "'" + a + "'", "'" + b + "'");
-  }
-
-  /** Deep equality, so arrays and nested collections compare by value. */
   static void checkEq(Object a, Object b) {
-    tbReport(java.util.Objects.deepEquals(a, b), tbCaller(), tbShow(a), tbShow(b));
+    tbReport(tbEquals(a, b), tbCaller(), tbShow(a), tbShow(b));
+  }
+
+  /** Value equality, with two adjustments a grader needs. */
+  static boolean tbEquals(Object a, Object b) {
+    if (a == null || b == null) return a == b;
+    // Boxing must not decide the answer: 3 and 3L are the same number here.
+    if (a instanceof Number x && b instanceof Number y) {
+      boolean xWhole = !(x instanceof Double || x instanceof Float);
+      boolean yWhole = !(y instanceof Double || y instanceof Float);
+      if (xWhole && yWhole) return x.longValue() == y.longValue();
+      return x.doubleValue() == y.doubleValue();
+    }
+    // Arrays compare by contents, at any depth.
+    return java.util.Objects.deepEquals(a, b);
   }
 
   static void checkNear(double a, double b, double eps) {

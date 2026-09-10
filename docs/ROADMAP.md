@@ -57,7 +57,7 @@ and reason about a single-file program.
       instead: references escaping through constructors and getters, defensive
       copies, and immutability as the alternative to copying.)*
 - [x] 2.3 Encapsulation — access modifiers as a tool for keeping invariants
-- [ ] 2.4 `equals`, `hashCode`, `toString` — the contracts, and what breaks
+- [x] 2.4 `equals`, `hashCode`, `toString` — the contracts, and what breaks
       when you honour one and not the other
 - [ ] 2.5 Inheritance — `extends`, `super`, and overriding
 - [ ] 2.6 Polymorphism — what happens at the call site, and what it costs

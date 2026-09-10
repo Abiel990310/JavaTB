@@ -248,16 +248,23 @@ These are available in the Tests section:
 | Call | What it does |
 |---|---|
 | `check(cond)` | Asserts a boolean |
-| `checkEq(a, b)` | Equality. Overloaded on `long`, `double`, `boolean`, `char`, and `Object` |
+| `checkEq(a, b)` | Equality, by value. Numbers compare numerically, arrays by contents |
 | `checkNear(a, b, eps)` | Floating-point comparison with a tolerance |
 | `checkThrows(SomeException.class, () -> …)` | Asserts the body throws that type |
 
-`checkEq` is overloaded on the primitive types rather than taking two
-`Object`s, so `checkEq(count(xs), 3)` works whether `count` returns `int` or
-`long`. If it took Objects, boxing would make `Integer.valueOf(3)` unequal to
-`Long.valueOf(3)` and the grader would be useless. The `Object` overload
-compares with `Objects.deepEquals`, so arrays and nested collections compare by
-value: `checkEq(sorted(xs), new int[]{1, 2, 3})` is what you want.
+`checkEq` takes two `Object`s and compares them by value. Two numbers compare
+numerically, so `checkEq(count(xs), 3)` works whether `count` returns `int` or
+`long` and whether the value arrives boxed — `Integer.valueOf(3)` and
+`Long.valueOf(3)` are the same number here even though `equals` says otherwise.
+Everything else goes through `Objects.deepEquals`, so arrays and nested
+collections compare by contents: `checkEq(sorted(xs), new int[]{1, 2, 3})` is
+what you want.
+
+It is deliberately *not* overloaded on the primitive types. Overloads read
+better but make any call mixing a boxed and an unboxed value ambiguous —
+`checkEq(map.get(key), 2)` matches both a `(long, long)` and an
+`(Object, Object)` candidate, neither is more specific, and the author gets a
+compile error in the middle of writing a problem. One method, no ambiguity.
 
 There is no preprocessor, so the harness cannot stringify its own arguments the
 way a C++ `CHECK` macro would. Instead it reads its own source back at run time
