@@ -74,7 +74,7 @@ and reason about a single-file program.
 ### Wave C — failure as a design problem
 
 - [x] 3.1 Exceptions — `throw`, `catch`, `finally`, and the stack trace
-- [ ] 3.2 Checked versus unchecked — the argument, and where each belongs
+- [x] 3.2 Checked versus unchecked — the argument, and where each belongs
 - [ ] 3.3 `try`-with-resources and `AutoCloseable`
 - [ ] 3.4 `null` and `Optional` — the billion-dollar mistake, and the API that
       does not quite undo it
