@@ -61,7 +61,7 @@ and reason about a single-file program.
       when you honour one and not the other
 - [x] 2.5 Inheritance — `extends`, `super`, and overriding
 - [x] 2.6 Polymorphism — what happens at the call site, and what it costs
-- [ ] 2.7 Interfaces — including default methods and why they exist
+- [x] 2.7 Interfaces — including default methods and why they exist
 - [ ] 2.8 Abstract classes — and choosing between the two
 - [ ] 2.9 Records — the right answer more often than a class
 - [ ] 2.10 Enums — constants with behaviour
