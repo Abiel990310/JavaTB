@@ -1,0 +1,892 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Practice problems · The Java Textbook</title>
+  <meta name="description" content="Auto-graded Java practice problems, filterable by topic and difficulty.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="/JavaTB/favicon.svg" type="image/svg+xml">
+  <script>(function(){try{var t=localStorage.getItem('tb-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.dataset.theme=t;}catch(e){}})();</script>
+  <link rel="stylesheet" href="/JavaTB/assets/index-DU6-oSWJ.css">
+</head>
+<body class="">
+  <header class="topbar">
+  <button class="topbar__menu" id="menu-toggle" aria-label="Toggle contents" aria-expanded="false">
+    <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>
+  </button>
+  <a class="topbar__brand" href="/JavaTB/">The Java Textbook</a>
+  <div class="topbar__spacer"></div>
+  <button class="search-trigger" id="search-trigger" aria-label="Search the book">
+    <svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M13 13l4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    <span>Search</span><kbd>/</kbd>
+  </button>
+  <button class="icon-button" id="theme-toggle" aria-label="Switch theme" title="Switch theme">
+    <svg viewBox="0 0 20 20" width="17" height="17" aria-hidden="true"><path d="M10 2.5a7.5 7.5 0 1 0 7.5 7.5A6 6 0 0 1 10 2.5Z" fill="currentColor"/></svg>
+  </button>
+</header>
+  <div class="layout">
+    <nav class="sidebar" id="sidebar" aria-label="Book contents">
+  <div class="sidebar__inner">
+    <a class="sidebar__link" href="/JavaTB/">Start here</a>
+    <a class="sidebar__link" href="/JavaTB/practice/">Practice problems</a>
+    <a class="sidebar__link" href="/JavaTB/reference/">Quick reference</a>
+    <a class="sidebar__link" href="/JavaTB/progress/">Progress</a>
+    <hr class="sidebar__rule">
+    <details class="nav__part"><summary><span class="nav__part-num">Part 1</span>Foundations</summary><ul class="nav__list"><li><a href="/JavaTB/foundations/hello-jvm/"><span class="nav__num">1.1</span><span class="nav__text">Hello, JVM</span></a></li><li><a href="/JavaTB/foundations/values-and-variables/"><span class="nav__num">1.2</span><span class="nav__text">Values and variables</span></a></li><li><a href="/JavaTB/foundations/control-flow/"><span class="nav__num">1.3</span><span class="nav__text">Control flow</span></a></li><li><a href="/JavaTB/foundations/methods/"><span class="nav__num">1.4</span><span class="nav__text">Methods</span></a></li><li><a href="/JavaTB/foundations/arrays/"><span class="nav__num">1.5</span><span class="nav__text">Arrays</span></a></li><li><a href="/JavaTB/foundations/strings/"><span class="nav__num">1.6</span><span class="nav__text">Strings</span></a></li><li><a href="/JavaTB/foundations/input-and-output/"><span class="nav__num">1.7</span><span class="nav__text">Input and output</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 2</span>Objects</summary><ul class="nav__list"><li><a href="/JavaTB/objects/classes-and-objects/"><span class="nav__num">2.1</span><span class="nav__text">Classes and objects</span></a></li><li><a href="/JavaTB/objects/aliasing/"><span class="nav__num">2.2</span><span class="nav__text">Aliasing</span></a></li><li><a href="/JavaTB/objects/encapsulation/"><span class="nav__num">2.3</span><span class="nav__text">Encapsulation</span></a></li><li><a href="/JavaTB/objects/equals-hashcode-tostring/"><span class="nav__num">2.4</span><span class="nav__text">equals and hashCode</span></a></li><li><a href="/JavaTB/objects/inheritance/"><span class="nav__num">2.5</span><span class="nav__text">Inheritance</span></a></li><li><a href="/JavaTB/objects/polymorphism/"><span class="nav__num">2.6</span><span class="nav__text">Polymorphism</span></a></li><li><a href="/JavaTB/objects/interfaces/"><span class="nav__num">2.7</span><span class="nav__text">Interfaces</span></a></li><li><a href="/JavaTB/objects/abstract-classes/"><span class="nav__num">2.8</span><span class="nav__text">Abstract classes</span></a></li><li><a href="/JavaTB/objects/records/"><span class="nav__num">2.9</span><span class="nav__text">Records</span></a></li><li><a href="/JavaTB/objects/enums/"><span class="nav__num">2.10</span><span class="nav__text">Enums</span></a></li><li><a href="/JavaTB/objects/sealed-types/"><span class="nav__num">2.11</span><span class="nav__text">Sealed types</span></a></li><li><a href="/JavaTB/objects/nested-classes/"><span class="nav__num">2.12</span><span class="nav__text">Nested classes</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 3</span>When things go wrong</summary><ul class="nav__list"><li><a href="/JavaTB/failure/exceptions/"><span class="nav__num">3.1</span><span class="nav__text">Exceptions</span></a></li><li><a href="/JavaTB/failure/checked-and-unchecked/"><span class="nav__num">3.2</span><span class="nav__text">Checked exceptions</span></a></li><li><a href="/JavaTB/failure/try-with-resources/"><span class="nav__num">3.3</span><span class="nav__text">try-with-resources</span></a></li><li><a href="/JavaTB/failure/null-and-optional/"><span class="nav__num">3.4</span><span class="nav__text">null and Optional</span></a></li><li><a href="/JavaTB/failure/designing-failure/"><span class="nav__num">3.5</span><span class="nav__text">Designing failure</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 4</span>Collections</summary><ul class="nav__list"><li><a href="/JavaTB/collections/the-framework/"><span class="nav__num">4.1</span><span class="nav__text">The framework</span></a></li><li><a href="/JavaTB/collections/list/"><span class="nav__num">4.2</span><span class="nav__text">List</span></a></li><li><a href="/JavaTB/collections/map/"><span class="nav__num">4.3</span><span class="nav__text">Map</span></a></li><li><a href="/JavaTB/collections/set-and-ordering/"><span class="nav__num">4.4</span><span class="nav__text">Set and ordering</span></a></li><li><a href="/JavaTB/collections/queues-and-deques/"><span class="nav__num">4.5</span><span class="nav__text">Queues and deques</span></a></li><li><a href="/JavaTB/collections/iteration/"><span class="nav__num">4.6</span><span class="nav__text">Iteration</span></a></li><li><a href="/JavaTB/collections/immutable-collections/"><span class="nav__num">4.7</span><span class="nav__text">Immutable collections</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 5</span>Generics</summary><ul class="nav__list"><li><a href="/JavaTB/generics/generic-classes-and-methods/"><span class="nav__num">5.1</span><span class="nav__text">Generic classes</span></a></li><li><a href="/JavaTB/generics/erasure/"><span class="nav__num">5.2</span><span class="nav__text">Erasure</span></a></li><li><a href="/JavaTB/generics/wildcards/"><span class="nav__num">5.3</span><span class="nav__text">Wildcards</span></a></li><li><a href="/JavaTB/generics/the-limits/"><span class="nav__num">5.4</span><span class="nav__text">The limits</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 6</span>functional</summary><ul class="nav__list"><li><a href="/JavaTB/functional/lambdas/"><span class="nav__num">6.1</span><span class="nav__text">Lambdas</span></a></li><li><a href="/JavaTB/functional/method-references/"><span class="nav__num">6.2</span><span class="nav__text">Method references</span></a></li><li><a href="/JavaTB/functional/streams/"><span class="nav__num">6.3</span><span class="nav__text">Streams</span></a></li><li><a href="/JavaTB/functional/collectors/"><span class="nav__num">6.4</span><span class="nav__text">Collectors</span></a></li><li><a href="/JavaTB/functional/when-a-loop-is-better/"><span class="nav__num">6.5</span><span class="nav__text">When a loop wins</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 7</span>platform</summary><ul class="nav__list"><li><a href="/JavaTB/platform/lifetime-and-gc/"><span class="nav__num">7.1</span><span class="nav__text">Lifetime and GC</span></a></li><li><a href="/JavaTB/platform/stack-heap-escape/"><span class="nav__num">7.2</span><span class="nav__text">Stack and heap</span></a></li><li><a href="/JavaTB/platform/class-loading/"><span class="nav__num">7.3</span><span class="nav__text">Class loading</span></a></li><li><a href="/JavaTB/platform/reflection/"><span class="nav__num">7.4</span><span class="nav__text">Reflection</span></a></li><li><a href="/JavaTB/platform/classpath-and-modules/"><span class="nav__num">7.5</span><span class="nav__text">Classpath and modules</span></a></li><li><a href="/JavaTB/platform/files-and-nio/"><span class="nav__num">7.6</span><span class="nav__text">Files and NIO</span></a></li><li><a href="/JavaTB/platform/java-time/"><span class="nav__num">7.7</span><span class="nav__text">java.time</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 8</span>concurrency</summary><ul class="nav__list"><li><a href="/JavaTB/concurrency/threads-and-shared-state/"><span class="nav__num">8.1</span><span class="nav__text">Threads</span></a></li><li><a href="/JavaTB/concurrency/the-memory-model/"><span class="nav__num">8.2</span><span class="nav__text">The memory model</span></a></li><li><a href="/JavaTB/concurrency/executors-and-futures/"><span class="nav__num">8.3</span><span class="nav__text">Executors</span></a></li><li><a href="/JavaTB/concurrency/concurrent-collections/"><span class="nav__num">8.4</span><span class="nav__text">Concurrent collections</span></a></li><li><a href="/JavaTB/concurrency/virtual-threads/"><span class="nav__num">8.5</span><span class="nav__text">Virtual threads</span></a></li><li><a href="/JavaTB/concurrency/parallel-streams/"><span class="nav__num">8.6</span><span class="nav__text">Parallel streams</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 9</span>engineering</summary><ul class="nav__list"><li><a href="/JavaTB/engineering/testing/"><span class="nav__num">9.1</span><span class="nav__text">Testing</span></a></li><li><a href="/JavaTB/engineering/build-tools/"><span class="nav__num">9.2</span><span class="nav__text">Build tools</span></a></li><li><a href="/JavaTB/engineering/debugging/"><span class="nav__num">9.3</span><span class="nav__text">Debugging</span></a></li><li><a href="/JavaTB/engineering/measuring/"><span class="nav__num">9.4</span><span class="nav__text">Measuring</span></a></li><li><a href="/JavaTB/engineering/api-design/"><span class="nav__num">9.5</span><span class="nav__text">API design</span></a></li><li><a href="/JavaTB/engineering/packaging/"><span class="nav__num">9.6</span><span class="nav__text">Packaging</span></a></li></ul></details>
+  </div>
+</nav>
+    <main class="content" id="content">
+      <article class="prose prose--wide">
+    <h1>Practice problems</h1>
+    <p class="chapter-lede">Each problem gives you a starting file and a hidden test that compiles against your code. Write, run, and the page tells you exactly which assertion failed. Progress is stored in this browser.</p>
+
+    <div class="filters">
+      <div class="filters__row">
+        <span class="filters__label">Difficulty</span>
+        <button class="chip is-on" data-filter-difficulty="all">All</button>
+        <button class="chip" data-filter-difficulty="intro">Warm-up</button><button class="chip" data-filter-difficulty="core">Core</button><button class="chip" data-filter-difficulty="stretch">Stretch</button><button class="chip" data-filter-difficulty="deep">Deep end</button>
+      </div>
+      <div class="filters__row">
+        <span class="filters__label">Topic</span>
+        <button class="chip is-on" data-filter-topic="all">All</button>
+        <button class="chip" data-filter-topic="AutoCloseable">AutoCloseable</button><button class="chip" data-filter-topic="Optional">Optional</button><button class="chip" data-filter-topic="PECS">PECS</button><button class="chip" data-filter-topic="PriorityQueue">PriorityQueue</button><button class="chip" data-filter-topic="StringBuilder">StringBuilder</button><button class="chip" data-filter-topic="TreeSet">TreeSet</button><button class="chip" data-filter-topic="abstract">abstract</button><button class="chip" data-filter-topic="allocation">allocation</button><button class="chip" data-filter-topic="annotations">annotations</button><button class="chip" data-filter-topic="anonymous classes">anonymous classes</button><button class="chip" data-filter-topic="api-design">api-design</button><button class="chip" data-filter-topic="arrays">arrays</button><button class="chip" data-filter-topic="associativity">associativity</button><button class="chip" data-filter-topic="async">async</button><button class="chip" data-filter-topic="atomicity">atomicity</button><button class="chip" data-filter-topic="backpressure">backpressure</button><button class="chip" data-filter-topic="benchmarking">benchmarking</button><button class="chip" data-filter-topic="blocking">blocking</button><button class="chip" data-filter-topic="blocking-queue">blocking-queue</button><button class="chip" data-filter-topic="bounds">bounds</button><button class="chip" data-filter-topic="boxing">boxing</button><button class="chip" data-filter-topic="bugs">bugs</button><button class="chip" data-filter-topic="build-tools">build-tools</button><button class="chip" data-filter-topic="builders">builders</button><button class="chip" data-filter-topic="caching">caching</button><button class="chip" data-filter-topic="capture">capture</button><button class="chip" data-filter-topic="chaining">chaining</button><button class="chip" data-filter-topic="checked">checked</button><button class="chip" data-filter-topic="checked-exceptions">checked-exceptions</button><button class="chip" data-filter-topic="class-loaders">class-loaders</button><button class="chip" data-filter-topic="class-loading">class-loading</button><button class="chip" data-filter-topic="classes">classes</button><button class="chip" data-filter-topic="classpath">classpath</button><button class="chip" data-filter-topic="clock">clock</button><button class="chip" data-filter-topic="collections">collections</button><button class="chip" data-filter-topic="collectors">collectors</button><button class="chip" data-filter-topic="compact constructor">compact constructor</button><button class="chip" data-filter-topic="comparators">comparators</button><button class="chip" data-filter-topic="comparison">comparison</button><button class="chip" data-filter-topic="compatibility">compatibility</button><button class="chip" data-filter-topic="completablefuture">completablefuture</button><button class="chip" data-filter-topic="composition">composition</button><button class="chip" data-filter-topic="compound-actions">compound-actions</button><button class="chip" data-filter-topic="concurrency">concurrency</button><button class="chip" data-filter-topic="concurrent-collections">concurrent-collections</button><button class="chip" data-filter-topic="configuration">configuration</button><button class="chip" data-filter-topic="constructors">constructors</button><button class="chip" data-filter-topic="context">context</button><button class="chip" data-filter-topic="contracts">contracts</button><button class="chip" data-filter-topic="counting">counting</button><button class="chip" data-filter-topic="dates">dates</button><button class="chip" data-filter-topic="dead-code-elimination">dead-code-elimination</button><button class="chip" data-filter-topic="deadlock">deadlock</button><button class="chip" data-filter-topic="debugging">debugging</button><button class="chip" data-filter-topic="default methods">default methods</button><button class="chip" data-filter-topic="defensive copying">defensive copying</button><button class="chip" data-filter-topic="delegation">delegation</button><button class="chip" data-filter-topic="dependency-injection">dependency-injection</button><button class="chip" data-filter-topic="dependency-resolution">dependency-resolution</button><button class="chip" data-filter-topic="deques">deques</button><button class="chip" data-filter-topic="design">design</button><button class="chip" data-filter-topic="determinism">determinism</button><button class="chip" data-filter-topic="dst">dst</button><button class="chip" data-filter-topic="durations">durations</button><button class="chip" data-filter-topic="encapsulation">encapsulation</button><button class="chip" data-filter-topic="enums">enums</button><button class="chip" data-filter-topic="equals">equals</button><button class="chip" data-filter-topic="erasure">erasure</button><button class="chip" data-filter-topic="error handling">error handling</button><button class="chip" data-filter-topic="error-handling">error-handling</button><button class="chip" data-filter-topic="escape-analysis">escape-analysis</button><button class="chip" data-filter-topic="evaluation">evaluation</button><button class="chip" data-filter-topic="evolution">evolution</button><button class="chip" data-filter-topic="exceptions">exceptions</button><button class="chip" data-filter-topic="executors">executors</button><button class="chip" data-filter-topic="expressions">expressions</button><button class="chip" data-filter-topic="factories">factories</button><button class="chip" data-filter-topic="fakes">fakes</button><button class="chip" data-filter-topic="files">files</button><button class="chip" data-filter-topic="flatmap">flatmap</button><button class="chip" data-filter-topic="floating-point">floating-point</button><button class="chip" data-filter-topic="forkjoin">forkjoin</button><button class="chip" data-filter-topic="formatting">formatting</button><button class="chip" data-filter-topic="functional-interfaces">functional-interfaces</button><button class="chip" data-filter-topic="futures">futures</button><button class="chip" data-filter-topic="garbage-collection">garbage-collection</button><button class="chip" data-filter-topic="generics">generics</button><button class="chip" data-filter-topic="graphs">graphs</button><button class="chip" data-filter-topic="grouping">grouping</button><button class="chip" data-filter-topic="groupingBy">groupingBy</button><button class="chip" data-filter-topic="happens-before">happens-before</button><button class="chip" data-filter-topic="hashCode">hashCode</button><button class="chip" data-filter-topic="heaps">heaps</button><button class="chip" data-filter-topic="immutability">immutability</button><button class="chip" data-filter-topic="inheritance">inheritance</button><button class="chip" data-filter-topic="initialisation">initialisation</button><button class="chip" data-filter-topic="input">input</button><button class="chip" data-filter-topic="integers">integers</button><button class="chip" data-filter-topic="interfaces">interfaces</button><button class="chip" data-filter-topic="invariants">invariants</button><button class="chip" data-filter-topic="iteration">iteration</button><button class="chip" data-filter-topic="jar">jar</button><button class="chip" data-filter-topic="java-time">java-time</button><button class="chip" data-filter-topic="jit">jit</button><button class="chip" data-filter-topic="lambdas">lambdas</button><button class="chip" data-filter-topic="laziness">laziness</button><button class="chip" data-filter-topic="lazy-init">lazy-init</button><button class="chip" data-filter-topic="leaks">leaks</button><button class="chip" data-filter-topic="lifecycle">lifecycle</button><button class="chip" data-filter-topic="lock-ordering">lock-ordering</button><button class="chip" data-filter-topic="locks">locks</button><button class="chip" data-filter-topic="logging">logging</button><button class="chip" data-filter-topic="loops">loops</button><button class="chip" data-filter-topic="manifest">manifest</button><button class="chip" data-filter-topic="maps">maps</button><button class="chip" data-filter-topic="measurement">measurement</button><button class="chip" data-filter-topic="memory-model">memory-model</button><button class="chip" data-filter-topic="method-references">method-references</button><button class="chip" data-filter-topic="methodology">methodology</button><button class="chip" data-filter-topic="methods">methods</button><button class="chip" data-filter-topic="nested classes">nested classes</button><button class="chip" data-filter-topic="nio">nio</button><button class="chip" data-filter-topic="null">null</button><button class="chip" data-filter-topic="optional">optional</button><button class="chip" data-filter-topic="ordering">ordering</button><button class="chip" data-filter-topic="output">output</button><button class="chip" data-filter-topic="overflow">overflow</button><button class="chip" data-filter-topic="overloads">overloads</button><button class="chip" data-filter-topic="overriding">overriding</button><button class="chip" data-filter-topic="packaging">packaging</button><button class="chip" data-filter-topic="parallel">parallel</button><button class="chip" data-filter-topic="parallel-streams">parallel-streams</button><button class="chip" data-filter-topic="paths">paths</button><button class="chip" data-filter-topic="pattern matching">pattern matching</button><button class="chip" data-filter-topic="performance">performance</button><button class="chip" data-filter-topic="pinning">pinning</button><button class="chip" data-filter-topic="plugins">plugins</button><button class="chip" data-filter-topic="polymorphism">polymorphism</button><button class="chip" data-filter-topic="precedence">precedence</button><button class="chip" data-filter-topic="predicates">predicates</button><button class="chip" data-filter-topic="primitive-streams">primitive-streams</button><button class="chip" data-filter-topic="primitives">primitives</button><button class="chip" data-filter-topic="producer-consumer">producer-consumer</button><button class="chip" data-filter-topic="programs">programs</button><button class="chip" data-filter-topic="records">records</button><button class="chip" data-filter-topic="recursion">recursion</button><button class="chip" data-filter-topic="reduction">reduction</button><button class="chip" data-filter-topic="references">references</button><button class="chip" data-filter-topic="reflection">reflection</button><button class="chip" data-filter-topic="resources">resources</button><button class="chip" data-filter-topic="result types">result types</button><button class="chip" data-filter-topic="safe-publication">safe-publication</button><button class="chip" data-filter-topic="sealed">sealed</button><button class="chip" data-filter-topic="security">security</button><button class="chip" data-filter-topic="service-loading">service-loading</button><button class="chip" data-filter-topic="short-circuit">short-circuit</button><button class="chip" data-filter-topic="shutdown">shutdown</button><button class="chip" data-filter-topic="side-effects">side-effects</button><button class="chip" data-filter-topic="singletons">singletons</button><button class="chip" data-filter-topic="soft-references">soft-references</button><button class="chip" data-filter-topic="sorting">sorting</button><button class="chip" data-filter-topic="spliterator">spliterator</button><button class="chip" data-filter-topic="stack">stack</button><button class="chip" data-filter-topic="stack-traces">stack-traces</button><button class="chip" data-filter-topic="stacks">stacks</button><button class="chip" data-filter-topic="state machines">state machines</button><button class="chip" data-filter-topic="static">static</button><button class="chip" data-filter-topic="statistics">statistics</button><button class="chip" data-filter-topic="streams">streams</button><button class="chip" data-filter-topic="strings">strings</button><button class="chip" data-filter-topic="switch">switch</button><button class="chip" data-filter-topic="synchronized">synchronized</button><button class="chip" data-filter-topic="template method">template method</button><button class="chip" data-filter-topic="testing">testing</button><button class="chip" data-filter-topic="this-escape">this-escape</button><button class="chip" data-filter-topic="thread-local">thread-local</button><button class="chip" data-filter-topic="time-zones">time-zones</button><button class="chip" data-filter-topic="toMap">toMap</button><button class="chip" data-filter-topic="try-catch">try-catch</button><button class="chip" data-filter-topic="try-with-resources">try-with-resources</button><button class="chip" data-filter-topic="type-token">type-token</button><button class="chip" data-filter-topic="unchecked">unchecked</button><button class="chip" data-filter-topic="validation">validation</button><button class="chip" data-filter-topic="versioning">versioning</button><button class="chip" data-filter-topic="versions">versions</button><button class="chip" data-filter-topic="virtual-threads">virtual-threads</button><button class="chip" data-filter-topic="visibility">visibility</button><button class="chip" data-filter-topic="volatile">volatile</button><button class="chip" data-filter-topic="warmup">warmup</button><button class="chip" data-filter-topic="weak-references">weak-references</button><button class="chip" data-filter-topic="wildcards">wildcards</button><button class="chip" data-filter-topic="zip">zip</button>
+      </div>
+    </div>
+
+    <ul class="problems" id="problem-list"><li class="problem" data-difficulty="core" data-topics="abstract inheritance" data-id="abstract-payroll">
+        <a href="/JavaTB/practice/abstract-payroll/">
+          <span class="problem__status" data-status-for="abstract-payroll"></span>
+          <span class="problem__title">Make the placeholder impossible</span>
+          <span class="problem__chapter">Abstract classes</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="reflection annotations validation" data-id="annotation-driven-validation">
+        <a href="/JavaTB/practice/annotation-driven-validation/">
+          <span class="problem__status" data-status-for="annotation-driven-validation"></span>
+          <span class="problem__title">Validation from annotations</span>
+          <span class="problem__chapter">Reflection and annotations</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="completablefuture async composition error-handling" data-id="async-pipeline">
+        <a href="/JavaTB/practice/async-pipeline/">
+          <span class="problem__status" data-status-for="async-pipeline"></span>
+          <span class="problem__title">A pipeline that does not block</span>
+          <span class="problem__chapter">executors</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="virtual-threads pinning locks thread-local" data-id="avoid-pinning">
+        <a href="/JavaTB/practice/avoid-pinning/">
+          <span class="problem__status" data-status-for="avoid-pinning"></span>
+          <span class="problem__title">Unpin the carriers</span>
+          <span class="problem__chapter">Virtual threads</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="generics boxing primitives" data-id="avoid-the-boxing">
+        <a href="/JavaTB/practice/avoid-the-boxing/">
+          <span class="problem__status" data-status-for="avoid-the-boxing"></span>
+          <span class="problem__title">A list of int, without the boxing</span>
+          <span class="problem__chapter">The limits of generics</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="intro" data-topics="Optional evaluation" data-id="avoid-the-eager-default">
+        <a href="/JavaTB/practice/avoid-the-eager-default/">
+          <span class="problem__status" data-status-for="avoid-the-eager-default"></span>
+          <span class="problem__title">Do not compute what you will throw away</span>
+          <span class="problem__chapter">null and Optional</span>
+          <span class="problem__difficulty problem__difficulty--intro">Warm-up</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="stacks deques" data-id="balanced-brackets">
+        <a href="/JavaTB/practice/balanced-brackets/">
+          <span class="problem__status" data-status-for="balanced-brackets"></span>
+          <span class="problem__title">Are the brackets balanced?</span>
+          <span class="problem__chapter">Queues and deques</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="collections performance" data-id="batch-remove">
+        <a href="/JavaTB/practice/batch-remove/">
+          <span class="problem__status" data-status-for="batch-remove"></span>
+          <span class="problem__title">Remove without quadratic cost</span>
+          <span class="problem__chapter">List: ArrayList and LinkedList</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="generics bounds" data-id="bounded-max">
+        <a href="/JavaTB/practice/bounded-max/">
+          <span class="problem__status" data-status-for="bounded-max"></span>
+          <span class="problem__title">A maximum that works for any comparable type</span>
+          <span class="problem__chapter">generic-classes</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="blocking-queue producer-consumer backpressure shutdown" data-id="bounded-pipeline">
+        <a href="/JavaTB/practice/bounded-pipeline/">
+          <span class="problem__status" data-status-for="bounded-pipeline"></span>
+          <span class="problem__title">A pipeline with backpressure</span>
+          <span class="problem__chapter">Concurrent collections</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="api-design compatibility evolution versioning" data-id="breaking-changes">
+        <a href="/JavaTB/practice/breaking-changes/">
+          <span class="problem__status" data-status-for="breaking-changes"></span>
+          <span class="problem__title">Will this break them?</span>
+          <span class="problem__chapter">API design in Java</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="intro" data-topics="classes constructors" data-id="build-a-rectangle">
+        <a href="/JavaTB/practice/build-a-rectangle/">
+          <span class="problem__status" data-status-for="build-a-rectangle"></span>
+          <span class="problem__title">A class that holds its own numbers</span>
+          <span class="problem__chapter">Classes and objects</span>
+          <span class="problem__difficulty problem__difficulty--intro">Warm-up</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="method-references constructors generics" data-id="build-a-registry">
+        <a href="/JavaTB/practice/build-a-registry/">
+          <span class="problem__status" data-status-for="build-a-registry"></span>
+          <span class="problem__title">A registry of constructors</span>
+          <span class="problem__chapter">Method references</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="exceptions design" data-id="carry-the-data">
+        <a href="/JavaTB/practice/carry-the-data/">
+          <span class="problem__status" data-status-for="carry-the-data"></span>
+          <span class="problem__title">An exception a handler can act on</span>
+          <span class="problem__chapter">checked-exceptions</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="equals hashCode contracts" data-id="case-insensitive-tag">
+        <a href="/JavaTB/practice/case-insensitive-tag/">
+          <span class="problem__status" data-status-for="case-insensitive-tag"></span>
+          <span class="problem__title">Equality that ignores case</span>
+          <span class="problem__chapter">equals-and-hashcode</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="exceptions chaining" data-id="chain-the-cause">
+        <a href="/JavaTB/practice/chain-the-cause/">
+          <span class="problem__status" data-status-for="chain-the-cause"></span>
+          <span class="problem__title">Do not lose the real problem</span>
+          <span class="problem__chapter">Exceptions</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="exceptions checked design" data-id="checked-or-unchecked">
+        <a href="/JavaTB/practice/checked-or-unchecked/">
+          <span class="problem__status" data-status-for="checked-or-unchecked"></span>
+          <span class="problem__title">Pick the right kind of failure</span>
+          <span class="problem__chapter">checked-exceptions</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="intro" data-topics="nested classes references" data-id="choose-the-nesting">
+        <a href="/JavaTB/practice/choose-the-nesting/">
+          <span class="problem__status" data-status-for="choose-the-nesting"></span>
+          <span class="problem__title">Static, or attached to an instance?</span>
+          <span class="problem__chapter">Nested, inner and anonymous classes</span>
+          <span class="problem__difficulty problem__difficulty--intro">Warm-up</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="design exceptions Optional" data-id="choose-the-signature">
+        <a href="/JavaTB/practice/choose-the-signature/">
+          <span class="problem__status" data-status-for="choose-the-signature"></span>
+          <span class="problem__title">Three failures, three mechanisms</span>
+          <span class="problem__chapter">Designing failure</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="intro" data-topics="encapsulation invariants" data-id="clamped-volume">
+        <a href="/JavaTB/practice/clamped-volume/">
+          <span class="problem__status" data-status-for="clamped-volume"></span>
+          <span class="problem__title">A volume control that cannot break</span>
+          <span class="problem__chapter">Encapsulation</span>
+          <span class="problem__difficulty problem__difficulty--intro">Warm-up</span>
+        </a>
+      </li><li class="problem" data-difficulty="intro" data-topics="try-with-resources AutoCloseable" data-id="closing-in-order">
+        <a href="/JavaTB/practice/closing-in-order/">
+          <span class="problem__status" data-status-for="closing-in-order"></span>
+          <span class="problem__title">Close them, and in the right order</span>
+          <span class="problem__chapter">try-with-resources</span>
+          <span class="problem__difficulty problem__difficulty--intro">Warm-up</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="anonymous classes lambdas sorting" data-id="comparator-by-anonymous-class">
+        <a href="/JavaTB/practice/comparator-by-anonymous-class/">
+          <span class="problem__status" data-status-for="comparator-by-anonymous-class"></span>
+          <span class="problem__title">Sort by two keys</span>
+          <span class="problem__chapter">Nested, inner and anonymous classes</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="lambdas functional-interfaces composition" data-id="composable-validation">
+        <a href="/JavaTB/practice/composable-validation/">
+          <span class="problem__status" data-status-for="composable-validation"></span>
+          <span class="problem__title">Validation you can compose</span>
+          <span class="problem__chapter">Lambdas and functional interfaces</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="concurrent-collections atomicity compound-actions" data-id="concurrent-index">
+        <a href="/JavaTB/practice/concurrent-index/">
+          <span class="problem__status" data-status-for="concurrent-index"></span>
+          <span class="problem__title">An index many threads can write</span>
+          <span class="problem__chapter">Concurrent collections</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="concurrency atomicity visibility synchronized" data-id="count-safely">
+        <a href="/JavaTB/practice/count-safely/">
+          <span class="problem__status" data-status-for="count-safely"></span>
+          <span class="problem__title">Four ways to count</span>
+          <span class="problem__chapter">threads</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="intro" data-topics="loops switch strings" data-id="count-vowels">
+        <a href="/JavaTB/practice/count-vowels/">
+          <span class="problem__status" data-status-for="count-vowels"></span>
+          <span class="problem__title">Count the vowels</span>
+          <span class="problem__chapter">Control flow</span>
+          <span class="problem__difficulty problem__difficulty--intro">Warm-up</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="classes static" data-id="counter-of-instances">
+        <a href="/JavaTB/practice/counter-of-instances/">
+          <span class="problem__status" data-status-for="counter-of-instances"></span>
+          <span class="problem__title">Count how many you made</span>
+          <span class="problem__chapter">Classes and objects</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="enums formatting" data-id="currency-enum">
+        <a href="/JavaTB/practice/currency-enum/">
+          <span class="problem__status" data-status-for="currency-enum"></span>
+          <span class="problem__title">Constants that know their own rules</span>
+          <span class="problem__chapter">Enums</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="switch expressions" data-id="days-in-month">
+        <a href="/JavaTB/practice/days-in-month/">
+          <span class="problem__status" data-status-for="days-in-month"></span>
+          <span class="problem__title">Days in a month</span>
+          <span class="problem__chapter">Control flow</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="interfaces default methods" data-id="default-method-audit">
+        <a href="/JavaTB/practice/default-method-audit/">
+          <span class="problem__status" data-status-for="default-method-audit"></span>
+          <span class="problem__title">Resolve the collision</span>
+          <span class="problem__chapter">Interfaces</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="encapsulation arrays references" data-id="defend-the-inventory">
+        <a href="/JavaTB/practice/defend-the-inventory/">
+          <span class="problem__status" data-status-for="defend-the-inventory"></span>
+          <span class="problem__title">Shut both doors</span>
+          <span class="problem__chapter">Aliasing and defensive copying</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="api-design factories builders optional overloads" data-id="design-the-api">
+        <a href="/JavaTB/practice/design-the-api/">
+          <span class="problem__status" data-status-for="design-the-api"></span>
+          <span class="problem__title">Redesign the API</span>
+          <span class="problem__chapter">API design in Java</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="debugging exceptions logging context" data-id="diagnose-and-wrap">
+        <a href="/JavaTB/practice/diagnose-and-wrap/">
+          <span class="problem__status" data-status-for="diagnose-and-wrap"></span>
+          <span class="problem__title">Wrap it so the next reader can tell</span>
+          <span class="problem__chapter">Debugging and reading a stack trace properly</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="recursion methods" data-id="digit-sum">
+        <a href="/JavaTB/practice/digit-sum/">
+          <span class="problem__status" data-status-for="digit-sum"></span>
+          <span class="problem__title">Sum of the digits</span>
+          <span class="problem__chapter">Methods and what gets copied</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="erasure generics reflection" data-id="erasure-predictions">
+        <a href="/JavaTB/practice/erasure-predictions/">
+          <span class="problem__status" data-status-for="erasure-predictions"></span>
+          <span class="problem__title">What survives to run time</span>
+          <span class="problem__chapter">Erasure</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="sealed pattern matching records" data-id="expression-evaluator">
+        <a href="/JavaTB/practice/expression-evaluator/">
+          <span class="problem__status" data-status-for="expression-evaluator"></span>
+          <span class="problem__title">Evaluate an expression tree</span>
+          <span class="problem__chapter">Sealed types and pattern matching</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="inheritance overriding" data-id="extend-the-account">
+        <a href="/JavaTB/practice/extend-the-account/">
+          <span class="problem__status" data-status-for="extend-the-account"></span>
+          <span class="problem__title">A savings account built on an account</span>
+          <span class="problem__chapter">Inheritance</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="virtual-threads executors blocking" data-id="fan-out-blocking">
+        <a href="/JavaTB/practice/fan-out-blocking/">
+          <span class="problem__status" data-status-for="fan-out-blocking"></span>
+          <span class="problem__title">Five hundred blocking calls at once</span>
+          <span class="problem__chapter">Virtual threads</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="maps iteration" data-id="filter-a-map">
+        <a href="/JavaTB/practice/filter-a-map/">
+          <span class="problem__status" data-status-for="filter-a-map"></span>
+          <span class="problem__title">Change a map while reading it</span>
+          <span class="problem__chapter">Iteration and modification</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="intro" data-topics="programs output" data-id="first-program">
+        <a href="/JavaTB/practice/first-program/">
+          <span class="problem__status" data-status-for="first-program"></span>
+          <span class="problem__title">A whole program of your own</span>
+          <span class="problem__chapter">Hello, JVM</span>
+          <span class="problem__difficulty problem__difficulty--intro">Warm-up</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="concurrency deadlock lock-ordering invariants" data-id="fix-the-transfer">
+        <a href="/JavaTB/practice/fix-the-transfer/">
+          <span class="problem__status" data-status-for="fix-the-transfer"></span>
+          <span class="problem__title">Transfers that neither lose money nor deadlock</span>
+          <span class="problem__chapter">threads</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="polymorphism design" data-id="flatten-the-instanceof">
+        <a href="/JavaTB/practice/flatten-the-instanceof/">
+          <span class="problem__status" data-status-for="flatten-the-instanceof"></span>
+          <span class="problem__title">Let dispatch ask the question</span>
+          <span class="problem__chapter">Polymorphism</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="generics wildcards predicates" data-id="flexible-transfer">
+        <a href="/JavaTB/practice/flexible-transfer/">
+          <span class="problem__status" data-status-for="flexible-transfer"></span>
+          <span class="problem__title">Move matching items between collections</span>
+          <span class="problem__chapter">Wildcards</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="output formatting strings" data-id="format-a-row">
+        <a href="/JavaTB/practice/format-a-row/">
+          <span class="problem__status" data-status-for="format-a-row"></span>
+          <span class="problem__title">Line up a table</span>
+          <span class="problem__chapter">Input and output</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="intro" data-topics="generics" data-id="generic-pair">
+        <a href="/JavaTB/practice/generic-pair/">
+          <span class="problem__status" data-status-for="generic-pair"></span>
+          <span class="problem__title">A pair of two different types</span>
+          <span class="problem__chapter">generic-classes</span>
+          <span class="problem__difficulty problem__difficulty--intro">Warm-up</span>
+        </a>
+      </li><li class="problem" data-difficulty="intro" data-topics="methods strings" data-id="greet-by-name">
+        <a href="/JavaTB/practice/greet-by-name/">
+          <span class="problem__status" data-status-for="greet-by-name"></span>
+          <span class="problem__title">Greet by name</span>
+          <span class="problem__chapter">Hello, JVM</span>
+          <span class="problem__difficulty problem__difficulty--intro">Warm-up</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="collectors groupingBy toMap" data-id="group-the-orders">
+        <a href="/JavaTB/practice/group-the-orders/">
+          <span class="problem__status" data-status-for="group-the-orders"></span>
+          <span class="problem__title">Reports from a list of orders</span>
+          <span class="problem__chapter">Collectors</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="memory-model happens-before volatile synchronized" data-id="happens-before-quiz">
+        <a href="/JavaTB/practice/happens-before-quiz/">
+          <span class="problem__status" data-status-for="happens-before-quiz"></span>
+          <span class="problem__title">Which edge is doing the work?</span>
+          <span class="problem__chapter">The memory model — synchronized, volatile, happens-before</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="benchmarking warmup statistics jit" data-id="honest-benchmark">
+        <a href="/JavaTB/practice/honest-benchmark/">
+          <span class="problem__status" data-status-for="honest-benchmark"></span>
+          <span class="problem__title">A benchmark harness that does not lie</span>
+          <span class="problem__chapter">Measuring performance without lying to yourself</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="immutability classes" data-id="immutable-money">
+        <a href="/JavaTB/practice/immutable-money/">
+          <span class="problem__status" data-status-for="immutable-money"></span>
+          <span class="problem__title">Money that cannot change</span>
+          <span class="problem__chapter">Aliasing and defensive copying</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="maps grouping" data-id="index-by-key">
+        <a href="/JavaTB/practice/index-by-key/">
+          <span class="problem__status" data-status-for="index-by-key"></span>
+          <span class="problem__title">Group items under a key</span>
+          <span class="problem__chapter">Map</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="intro" data-topics="strings comparison" data-id="is-palindrome">
+        <a href="/JavaTB/practice/is-palindrome/">
+          <span class="problem__status" data-status-for="is-palindrome"></span>
+          <span class="problem__title">Palindrome, ignoring the noise</span>
+          <span class="problem__chapter">Strings</span>
+          <span class="problem__difficulty problem__difficulty--intro">Warm-up</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="class-loaders delegation reflection" data-id="isolating-loader">
+        <a href="/JavaTB/practice/isolating-loader/">
+          <span class="problem__status" data-status-for="isolating-loader"></span>
+          <span class="problem__title">Two loaders, two types</span>
+          <span class="problem__chapter">The classpath and the module system</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="lambdas functional-interfaces boxing" data-id="lambda-target-types">
+        <a href="/JavaTB/practice/lambda-target-types/">
+          <span class="problem__status" data-status-for="lambda-target-types"></span>
+          <span class="problem__title">Pick the target type</span>
+          <span class="problem__chapter">Lambdas and functional interfaces</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="configuration packaging precedence validation" data-id="layered-config">
+        <a href="/JavaTB/practice/layered-config/">
+          <span class="problem__status" data-status-for="layered-config"></span>
+          <span class="problem__title">Configuration that resolves the way you meant</span>
+          <span class="problem__chapter">Packaging and shipping</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="intro" data-topics="collections interfaces design" data-id="least-specific-parameter">
+        <a href="/JavaTB/practice/least-specific-parameter/">
+          <span class="problem__status" data-status-for="least-specific-parameter"></span>
+          <span class="problem__title">Ask for the least you need</span>
+          <span class="problem__chapter">The collections framework</span>
+          <span class="problem__difficulty problem__difficulty--intro">Warm-up</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="nio files streams try-with-resources" data-id="line-index">
+        <a href="/JavaTB/practice/line-index/">
+          <span class="problem__status" data-status-for="line-index"></span>
+          <span class="problem__title">Read it, index it, put it back atomically</span>
+          <span class="problem__chapter">Files and NIO</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="streams loops checked-exceptions" data-id="loop-or-pipeline">
+        <a href="/JavaTB/practice/loop-or-pipeline/">
+          <span class="problem__status" data-status-for="loop-or-pipeline"></span>
+          <span class="problem__title">Five that resist a pipeline</span>
+          <span class="problem__chapter">when-a-loop-wins</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="testing design dependency-injection fakes" data-id="make-it-testable">
+        <a href="/JavaTB/practice/make-it-testable/">
+          <span class="problem__status" data-status-for="make-it-testable"></span>
+          <span class="problem__title">Make it testable</span>
+          <span class="problem__chapter">Testing — and what a test framework actually does</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="testing reflection annotations lifecycle" data-id="mini-test-framework">
+        <a href="/JavaTB/practice/mini-test-framework/">
+          <span class="problem__status" data-status-for="mini-test-framework"></span>
+          <span class="problem__title">Finish the test framework</span>
+          <span class="problem__chapter">Testing — and what a test framework actually does</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="intro" data-topics="floating-point comparison" data-id="nearly-equal">
+        <a href="/JavaTB/practice/nearly-equal/">
+          <span class="problem__status" data-status-for="nearly-equal"></span>
+          <span class="problem__title">Comparing doubles honestly</span>
+          <span class="problem__chapter">Values and variables</span>
+          <span class="problem__difficulty problem__difficulty--intro">Warm-up</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="records invariants compact constructor" data-id="normalise-on-construction">
+        <a href="/JavaTB/practice/normalise-on-construction/">
+          <span class="problem__status" data-status-for="normalise-on-construction"></span>
+          <span class="problem__title">No fraction may exist unreduced</span>
+          <span class="problem__chapter">Records</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="Optional null" data-id="optional-lookup">
+        <a href="/JavaTB/practice/optional-lookup/">
+          <span class="problem__status" data-status-for="optional-lookup"></span>
+          <span class="problem__title">Absence in the signature</span>
+          <span class="problem__chapter">null and Optional</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="enums switch state machines" data-id="order-state-machine">
+        <a href="/JavaTB/practice/order-state-machine/">
+          <span class="problem__status" data-status-for="order-state-machine"></span>
+          <span class="problem__title">Only the legal transitions</span>
+          <span class="problem__chapter">Enums</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="integers overflow" data-id="overflow-safe-midpoint">
+        <a href="/JavaTB/practice/overflow-safe-midpoint/">
+          <span class="problem__status" data-status-for="overflow-safe-midpoint"></span>
+          <span class="problem__title">A midpoint that survives large inputs</span>
+          <span class="problem__chapter">Values and variables</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="parallel-streams reduction associativity side-effects" data-id="parallel-correctness">
+        <a href="/JavaTB/practice/parallel-correctness/">
+          <span class="problem__status" data-status-for="parallel-correctness"></span>
+          <span class="problem__title">Make it safe to parallelise</span>
+          <span class="problem__chapter">Parallel streams — and the cases where they lose</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="generics wildcards PECS" data-id="pecs-signatures">
+        <a href="/JavaTB/practice/pecs-signatures/">
+          <span class="problem__status" data-status-for="pecs-signatures"></span>
+          <span class="problem__title">Widen the signatures</span>
+          <span class="problem__chapter">Wildcards</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="collections performance design" data-id="pick-the-list">
+        <a href="/JavaTB/practice/pick-the-list/">
+          <span class="problem__status" data-status-for="pick-the-list"></span>
+          <span class="problem__title">Build a history that only grows at one end</span>
+          <span class="problem__chapter">List: ArrayList and LinkedList</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="streams laziness short-circuit" data-id="pipeline-order">
+        <a href="/JavaTB/practice/pipeline-order/">
+          <span class="problem__status" data-status-for="pipeline-order"></span>
+          <span class="problem__title">What runs, and how often</span>
+          <span class="problem__chapter">Streams — the pipeline, and laziness</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="garbage-collection leaks references" data-id="plug-the-leak">
+        <a href="/JavaTB/practice/plug-the-leak/">
+          <span class="problem__status" data-status-for="plug-the-leak"></span>
+          <span class="problem__title">Plug the leak</span>
+          <span class="problem__chapter">Object lifetime and garbage collection</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="service-loading plugins reflection packaging" data-id="plugin-registry">
+        <a href="/JavaTB/practice/plugin-registry/">
+          <span class="problem__status" data-status-for="plugin-registry"></span>
+          <span class="problem__title">Load the plugins, survive the bad ones</span>
+          <span class="problem__chapter">Packaging and shipping</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="polymorphism inheritance" data-id="polymorphic-payroll">
+        <a href="/JavaTB/practice/polymorphic-payroll/">
+          <span class="problem__status" data-status-for="polymorphic-payroll"></span>
+          <span class="problem__title">One loop, three kinds of staff</span>
+          <span class="problem__chapter">Polymorphism</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="executors futures exceptions" data-id="pool-the-work">
+        <a href="/JavaTB/practice/pool-the-work/">
+          <span class="problem__status" data-status-for="pool-the-work"></span>
+          <span class="problem__title">Run it on a pool, and lose nothing</span>
+          <span class="problem__chapter">executors</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="class-loading initialisation constructors" data-id="predict-the-order">
+        <a href="/JavaTB/practice/predict-the-order/">
+          <span class="problem__status" data-status-for="predict-the-order"></span>
+          <span class="problem__title">Predict the order</span>
+          <span class="problem__chapter">Class loading and initialisation order</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="memory-model safe-publication immutability lazy-init" data-id="publish-safely">
+        <a href="/JavaTB/practice/publish-safely/">
+          <span class="problem__status" data-status-for="publish-safely"></span>
+          <span class="problem__title">Publish it so everyone sees it</span>
+          <span class="problem__chapter">The memory model — synchronized, volatile, happens-before</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="jar manifest packaging zip" data-id="read-a-jar">
+        <a href="/JavaTB/practice/read-a-jar/">
+          <span class="problem__status" data-status-for="read-a-jar"></span>
+          <span class="problem__title">Build a jar, then take it apart</span>
+          <span class="problem__chapter">Build tools — what Maven and Gradle are actually doing</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="debugging exceptions stack-traces" data-id="read-the-trace">
+        <a href="/JavaTB/practice/read-the-trace/">
+          <span class="problem__status" data-status-for="read-the-trace"></span>
+          <span class="problem__title">Find the real failure</span>
+          <span class="problem__chapter">Debugging and reading a stack trace properly</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="intro" data-topics="records equals" data-id="record-the-point">
+        <a href="/JavaTB/practice/record-the-point/">
+          <span class="problem__status" data-status-for="record-the-point"></span>
+          <span class="problem__title">Delete thirty lines</span>
+          <span class="problem__chapter">Records</span>
+          <span class="problem__difficulty problem__difficulty--intro">Warm-up</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="stack recursion iteration" data-id="recursion-to-iteration">
+        <a href="/JavaTB/practice/recursion-to-iteration/">
+          <span class="problem__status" data-status-for="recursion-to-iteration"></span>
+          <span class="problem__title">Off the stack and onto the heap</span>
+          <span class="problem__chapter">stack-and-heap</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="method-references lambdas capture" data-id="reference-or-lambda">
+        <a href="/JavaTB/practice/reference-or-lambda/">
+          <span class="problem__status" data-status-for="reference-or-lambda"></span>
+          <span class="problem__title">When the reference is wrong</span>
+          <span class="problem__chapter">Method references</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="intro" data-topics="iteration collections" data-id="remove-while-looping">
+        <a href="/JavaTB/practice/remove-while-looping/">
+          <span class="problem__status" data-status-for="remove-while-looping"></span>
+          <span class="problem__title">Remove during a loop, correctly</span>
+          <span class="problem__chapter">Iteration and modification</span>
+          <span class="problem__difficulty problem__difficulty--intro">Warm-up</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="build-tools dependency-resolution versions graphs" data-id="resolve-dependencies">
+        <a href="/JavaTB/practice/resolve-dependencies/">
+          <span class="problem__status" data-status-for="resolve-dependencies"></span>
+          <span class="problem__title">Resolve the graph</span>
+          <span class="problem__chapter">Build tools — what Maven and Gradle are actually doing</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="classpath resources class-loaders" data-id="resource-lookup">
+        <a href="/JavaTB/practice/resource-lookup/">
+          <span class="problem__status" data-status-for="resource-lookup"></span>
+          <span class="problem__title">Find the resource</span>
+          <span class="problem__chapter">The classpath and the module system</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="sealed pattern matching error handling" data-id="result-or-error">
+        <a href="/JavaTB/practice/result-or-error/">
+          <span class="problem__status" data-status-for="result-or-error"></span>
+          <span class="problem__title">A result that is one thing or the other</span>
+          <span class="problem__chapter">Sealed types and pattern matching</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="intro" data-topics="arrays loops" data-id="reverse-in-place">
+        <a href="/JavaTB/practice/reverse-in-place/">
+          <span class="problem__status" data-status-for="reverse-in-place"></span>
+          <span class="problem__title">Reverse an array in place</span>
+          <span class="problem__chapter">Arrays</span>
+          <span class="problem__difficulty problem__difficulty--intro">Warm-up</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="streams loops performance parallel" data-id="rewrite-the-report">
+        <a href="/JavaTB/practice/rewrite-the-report/">
+          <span class="problem__status" data-status-for="rewrite-the-report"></span>
+          <span class="problem__title">Rewrite the report</span>
+          <span class="problem__chapter">when-a-loop-wins</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="strings StringBuilder loops" data-id="run-length-encode">
+        <a href="/JavaTB/practice/run-length-encode/">
+          <span class="problem__status" data-status-for="run-length-encode"></span>
+          <span class="problem__title">Run-length encoding</span>
+          <span class="problem__chapter">Strings</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="constructors this-escape initialisation singletons" data-id="safe-construction-order">
+        <a href="/JavaTB/practice/safe-construction-order/">
+          <span class="problem__status" data-status-for="safe-construction-order"></span>
+          <span class="problem__title">A constructor that finishes first</span>
+          <span class="problem__chapter">Class loading and initialisation order</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="inheritance constructors" data-id="safe-construction">
+        <a href="/JavaTB/practice/safe-construction/">
+          <span class="problem__status" data-status-for="safe-construction"></span>
+          <span class="problem__title">Fix the half-built object</span>
+          <span class="problem__chapter">Inheritance</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="intro" data-topics="exceptions try-catch" data-id="safe-divide">
+        <a href="/JavaTB/practice/safe-divide/">
+          <span class="problem__status" data-status-for="safe-divide"></span>
+          <span class="problem__title">Divide without crashing the caller</span>
+          <span class="problem__chapter">Exceptions</span>
+          <span class="problem__difficulty problem__difficulty--intro">Warm-up</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="erasure generics unchecked" data-id="safe-generic-container">
+        <a href="/JavaTB/practice/safe-generic-container/">
+          <span class="problem__status" data-status-for="safe-generic-container"></span>
+          <span class="problem__title">A container over an Object array</span>
+          <span class="problem__chapter">Erasure</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="paths security nio" data-id="safe-paths">
+        <a href="/JavaTB/practice/safe-paths/">
+          <span class="problem__status" data-status-for="safe-paths"></span>
+          <span class="problem__title">A path you can hand to a stranger</span>
+          <span class="problem__chapter">Files and NIO</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="java-time time-zones clock dst" data-id="schedule-across-zones">
+        <a href="/JavaTB/practice/schedule-across-zones/">
+          <span class="problem__status" data-status-for="schedule-across-zones"></span>
+          <span class="problem__title">A meeting everyone can attend</span>
+          <span class="problem__chapter">java.time — the API that finally got dates right</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="arrays loops" data-id="second-largest">
+        <a href="/JavaTB/practice/second-largest/">
+          <span class="problem__status" data-status-for="second-largest"></span>
+          <span class="problem__title">The second largest value</span>
+          <span class="problem__chapter">Arrays</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="collections immutability defensive copying" data-id="snapshot-not-view">
+        <a href="/JavaTB/practice/snapshot-not-view/">
+          <span class="problem__status" data-status-for="snapshot-not-view"></span>
+          <span class="problem__title">A getter that cannot change under the caller</span>
+          <span class="problem__chapter">The collections framework</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="intro" data-topics="comparators sorting" data-id="sort-by-two-keys">
+        <a href="/JavaTB/practice/sort-by-two-keys/">
+          <span class="problem__status" data-status-for="sort-by-two-keys"></span>
+          <span class="problem__title">Sort by one key, then another</span>
+          <span class="problem__chapter">Set and ordering</span>
+          <span class="problem__difficulty problem__difficulty--intro">Warm-up</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="interfaces polymorphism" data-id="sortable-by-interface">
+        <a href="/JavaTB/practice/sortable-by-interface/">
+          <span class="problem__status" data-status-for="sortable-by-interface"></span>
+          <span class="problem__title">Sort anything that can be ranked</span>
+          <span class="problem__chapter">Interfaces</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="benchmarking jit dead-code-elimination methodology" data-id="spot-the-flaw">
+        <a href="/JavaTB/practice/spot-the-flaw/">
+          <span class="problem__status" data-status-for="spot-the-flaw"></span>
+          <span class="problem__title">Six benchmarks, five of them wrong</span>
+          <span class="problem__chapter">Measuring performance without lying to yourself</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="intro" data-topics="collections ordering determinism" data-id="stable-output">
+        <a href="/JavaTB/practice/stable-output/">
+          <span class="problem__status" data-status-for="stable-output"></span>
+          <span class="problem__title">Output that does not depend on the JVM</span>
+          <span class="problem__chapter">Immutable collections in practice</span>
+          <span class="problem__difficulty problem__difficulty--intro">Warm-up</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="streams flatmap optional primitive-streams" data-id="stream-the-log">
+        <a href="/JavaTB/practice/stream-the-log/">
+          <span class="problem__status" data-status-for="stream-the-log"></span>
+          <span class="problem__title">Reading a log with streams</span>
+          <span class="problem__chapter">Streams — the pipeline, and laziness</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="intro" data-topics="input loops" data-id="sum-the-input">
+        <a href="/JavaTB/practice/sum-the-input/">
+          <span class="problem__status" data-status-for="sum-the-input"></span>
+          <span class="problem__title">Add up everything you are given</span>
+          <span class="problem__chapter">Input and output</span>
+          <span class="problem__difficulty problem__difficulty--intro">Warm-up</span>
+        </a>
+      </li><li class="problem" data-difficulty="intro" data-topics="methods arrays references" data-id="swap-elements">
+        <a href="/JavaTB/practice/swap-elements/">
+          <span class="problem__status" data-status-for="swap-elements"></span>
+          <span class="problem__title">Swap two elements</span>
+          <span class="problem__chapter">Methods and what gets copied</span>
+          <span class="problem__difficulty problem__difficulty--intro">Warm-up</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="abstract template method design" data-id="template-method-import">
+        <a href="/JavaTB/practice/template-method-import/">
+          <span class="problem__status" data-status-for="template-method-import"></span>
+          <span class="problem__title">Fix the sequence, vary the steps</span>
+          <span class="problem__chapter">Abstract classes</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="TreeSet comparators bugs" data-id="the-vanishing-elements">
+        <a href="/JavaTB/practice/the-vanishing-elements/">
+          <span class="problem__status" data-status-for="the-vanishing-elements"></span>
+          <span class="problem__title">Why did half the set disappear?</span>
+          <span class="problem__chapter">Set and ordering</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="java-time dates durations" data-id="time-arithmetic">
+        <a href="/JavaTB/practice/time-arithmetic/">
+          <span class="problem__status" data-status-for="time-arithmetic"></span>
+          <span class="problem__title">Period or Duration</span>
+          <span class="problem__chapter">java.time — the API that finally got dates right</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="reflection annotations constructors dependency-injection" data-id="tiny-injector">
+        <a href="/JavaTB/practice/tiny-injector/">
+          <span class="problem__status" data-status-for="tiny-injector"></span>
+          <span class="problem__title">A dependency injector in one class</span>
+          <span class="problem__chapter">Reflection and annotations</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="PriorityQueue heaps" data-id="top-k-scores">
+        <a href="/JavaTB/practice/top-k-scores/">
+          <span class="problem__status" data-status-for="top-k-scores"></span>
+          <span class="problem__title">Keep only the best k</span>
+          <span class="problem__chapter">Queues and deques</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="try-with-resources AutoCloseable design" data-id="transactional-resource">
+        <a href="/JavaTB/practice/transactional-resource/">
+          <span class="problem__status" data-status-for="transactional-resource"></span>
+          <span class="problem__title">Commit, or roll back automatically</span>
+          <span class="problem__chapter">try-with-resources</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="immutability records collections" data-id="truly-immutable-order">
+        <a href="/JavaTB/practice/truly-immutable-order/">
+          <span class="problem__status" data-status-for="truly-immutable-order"></span>
+          <span class="problem__title">Immutable all the way down</span>
+          <span class="problem__chapter">Immutable collections in practice</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="generics erasure type-token reflection" data-id="type-token-factory">
+        <a href="/JavaTB/practice/type-token-factory/">
+          <span class="problem__status" data-status-for="type-token-factory"></span>
+          <span class="problem__title">Passing the type as a value</span>
+          <span class="problem__chapter">The limits of generics</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="design result types validation" data-id="validate-a-form">
+        <a href="/JavaTB/practice/validate-a-form/">
+          <span class="problem__status" data-status-for="validate-a-form"></span>
+          <span class="problem__title">Report every problem, not just the first</span>
+          <span class="problem__chapter">Designing failure</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="encapsulation invariants immutability" data-id="validated-fraction">
+        <a href="/JavaTB/practice/validated-fraction/">
+          <span class="problem__status" data-status-for="validated-fraction"></span>
+          <span class="problem__title">A fraction that is always in lowest terms</span>
+          <span class="problem__chapter">Encapsulation</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="core" data-topics="equals hashCode contracts" data-id="value-equality">
+        <a href="/JavaTB/practice/value-equality/">
+          <span class="problem__status" data-status-for="value-equality"></span>
+          <span class="problem__title">Make a value type behave like one</span>
+          <span class="problem__chapter">equals-and-hashcode</span>
+          <span class="problem__difficulty problem__difficulty--core">Core</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="garbage-collection weak-references soft-references caching" data-id="weak-cache">
+        <a href="/JavaTB/practice/weak-cache/">
+          <span class="problem__status" data-status-for="weak-cache"></span>
+          <span class="problem__title">A cache the collector can empty</span>
+          <span class="problem__chapter">Object lifetime and garbage collection</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="parallel-streams spliterator measurement forkjoin" data-id="when-parallel-pays">
+        <a href="/JavaTB/practice/when-parallel-pays/">
+          <span class="problem__status" data-status-for="when-parallel-pays"></span>
+          <span class="problem__title">Decide whether to go parallel</span>
+          <span class="problem__chapter">Parallel streams — and the cases where they lose</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="escape-analysis encapsulation allocation" data-id="where-does-it-live">
+        <a href="/JavaTB/practice/where-does-it-live/">
+          <span class="problem__status" data-status-for="where-does-it-live"></span>
+          <span class="problem__title">Stop publishing it</span>
+          <span class="problem__chapter">stack-and-heap</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li><li class="problem" data-difficulty="intro" data-topics="maps counting" data-id="word-frequency">
+        <a href="/JavaTB/practice/word-frequency/">
+          <span class="problem__status" data-status-for="word-frequency"></span>
+          <span class="problem__title">Count without get-check-put</span>
+          <span class="problem__chapter">Map</span>
+          <span class="problem__difficulty problem__difficulty--intro">Warm-up</span>
+        </a>
+      </li><li class="problem" data-difficulty="stretch" data-topics="collectors reduction generics" data-id="write-a-collector">
+        <a href="/JavaTB/practice/write-a-collector/">
+          <span class="problem__status" data-status-for="write-a-collector"></span>
+          <span class="problem__title">Four functions and a result</span>
+          <span class="problem__chapter">Collectors</span>
+          <span class="problem__difficulty problem__difficulty--stretch">Stretch</span>
+        </a>
+      </li></ul>
+    <p class="problems__empty" id="problem-empty" hidden>No problems match those filters yet.</p>
+  </article>
+    </main>
+    <div class="rail" aria-hidden="true"></div>
+  </div>
+  <div class="scrim" id="scrim" hidden></div>
+  <script type="module" src="/JavaTB/assets/index-DTPhoH-i.js"></script>
+</body>
+</html>
