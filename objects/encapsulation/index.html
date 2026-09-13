@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Encapsulation · The Java Textbook</title>
+  <meta name="description" content="Access levels as a tool rather than a ritual: deciding what a class promises, and writing methods that cannot leave it in a state it promised never to be in.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="/JavaTB/favicon.svg" type="image/svg+xml">
+  <script>(function(){try{var t=localStorage.getItem('tb-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.dataset.theme=t;}catch(e){}})();</script>
+  <link rel="stylesheet" href="/JavaTB/assets/index-DU6-oSWJ.css">
+</head>
+<body class="">
+  <header class="topbar">
+  <button class="topbar__menu" id="menu-toggle" aria-label="Toggle contents" aria-expanded="false">
+    <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>
+  </button>
+  <a class="topbar__brand" href="/JavaTB/">The Java Textbook</a>
+  <div class="topbar__spacer"></div>
+  <button class="search-trigger" id="search-trigger" aria-label="Search the book">
+    <svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M13 13l4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    <span>Search</span><kbd>/</kbd>
+  </button>
+  <button class="icon-button" id="theme-toggle" aria-label="Switch theme" title="Switch theme">
+    <svg viewBox="0 0 20 20" width="17" height="17" aria-hidden="true"><path d="M10 2.5a7.5 7.5 0 1 0 7.5 7.5A6 6 0 0 1 10 2.5Z" fill="currentColor"/></svg>
+  </button>
+</header>
+  <div class="layout">
+    <nav class="sidebar" id="sidebar" aria-label="Book contents">
+  <div class="sidebar__inner">
+    <a class="sidebar__link" href="/JavaTB/">Start here</a>
+    <a class="sidebar__link" href="/JavaTB/practice/">Practice problems</a>
+    <a class="sidebar__link" href="/JavaTB/reference/">Quick reference</a>
+    <a class="sidebar__link" href="/JavaTB/progress/">Progress</a>
+    <hr class="sidebar__rule">
+    <details class="nav__part"><summary><span class="nav__part-num">Part 1</span>Foundations</summary><ul class="nav__list"><li><a href="/JavaTB/foundations/hello-jvm/"><span class="nav__num">1.1</span><span class="nav__text">Hello, JVM</span></a></li><li><a href="/JavaTB/foundations/values-and-variables/"><span class="nav__num">1.2</span><span class="nav__text">Values and variables</span></a></li><li><a href="/JavaTB/foundations/control-flow/"><span class="nav__num">1.3</span><span class="nav__text">Control flow</span></a></li><li><a href="/JavaTB/foundations/methods/"><span class="nav__num">1.4</span><span class="nav__text">Methods</span></a></li><li><a href="/JavaTB/foundations/arrays/"><span class="nav__num">1.5</span><span class="nav__text">Arrays</span></a></li><li><a href="/JavaTB/foundations/strings/"><span class="nav__num">1.6</span><span class="nav__text">Strings</span></a></li><li><a href="/JavaTB/foundations/input-and-output/"><span class="nav__num">1.7</span><span class="nav__text">Input and output</span></a></li></ul></details><details class="nav__part" open><summary><span class="nav__part-num">Part 2</span>Objects</summary><ul class="nav__list"><li><a href="/JavaTB/objects/classes-and-objects/"><span class="nav__num">2.1</span><span class="nav__text">Classes and objects</span></a></li><li><a href="/JavaTB/objects/aliasing/"><span class="nav__num">2.2</span><span class="nav__text">Aliasing</span></a></li><li><a href="/JavaTB/objects/encapsulation/" class="is-active" aria-current="page"><span class="nav__num">2.3</span><span class="nav__text">Encapsulation</span></a></li><li><a href="/JavaTB/objects/equals-hashcode-tostring/"><span class="nav__num">2.4</span><span class="nav__text">equals and hashCode</span></a></li><li><a href="/JavaTB/objects/inheritance/"><span class="nav__num">2.5</span><span class="nav__text">Inheritance</span></a></li><li><a href="/JavaTB/objects/polymorphism/"><span class="nav__num">2.6</span><span class="nav__text">Polymorphism</span></a></li><li><a href="/JavaTB/objects/interfaces/"><span class="nav__num">2.7</span><span class="nav__text">Interfaces</span></a></li><li><a href="/JavaTB/objects/abstract-classes/"><span class="nav__num">2.8</span><span class="nav__text">Abstract classes</span></a></li><li><a href="/JavaTB/objects/records/"><span class="nav__num">2.9</span><span class="nav__text">Records</span></a></li><li><a href="/JavaTB/objects/enums/"><span class="nav__num">2.10</span><span class="nav__text">Enums</span></a></li><li><a href="/JavaTB/objects/sealed-types/"><span class="nav__num">2.11</span><span class="nav__text">Sealed types</span></a></li><li><a href="/JavaTB/objects/nested-classes/"><span class="nav__num">2.12</span><span class="nav__text">Nested classes</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 3</span>When things go wrong</summary><ul class="nav__list"><li><a href="/JavaTB/failure/exceptions/"><span class="nav__num">3.1</span><span class="nav__text">Exceptions</span></a></li><li><a href="/JavaTB/failure/checked-and-unchecked/"><span class="nav__num">3.2</span><span class="nav__text">Checked exceptions</span></a></li><li><a href="/JavaTB/failure/try-with-resources/"><span class="nav__num">3.3</span><span class="nav__text">try-with-resources</span></a></li><li><a href="/JavaTB/failure/null-and-optional/"><span class="nav__num">3.4</span><span class="nav__text">null and Optional</span></a></li><li><a href="/JavaTB/failure/designing-failure/"><span class="nav__num">3.5</span><span class="nav__text">Designing failure</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 4</span>Collections</summary><ul class="nav__list"><li><a href="/JavaTB/collections/the-framework/"><span class="nav__num">4.1</span><span class="nav__text">The framework</span></a></li><li><a href="/JavaTB/collections/list/"><span class="nav__num">4.2</span><span class="nav__text">List</span></a></li><li><a href="/JavaTB/collections/map/"><span class="nav__num">4.3</span><span class="nav__text">Map</span></a></li><li><a href="/JavaTB/collections/set-and-ordering/"><span class="nav__num">4.4</span><span class="nav__text">Set and ordering</span></a></li><li><a href="/JavaTB/collections/queues-and-deques/"><span class="nav__num">4.5</span><span class="nav__text">Queues and deques</span></a></li><li><a href="/JavaTB/collections/iteration/"><span class="nav__num">4.6</span><span class="nav__text">Iteration</span></a></li><li><a href="/JavaTB/collections/immutable-collections/"><span class="nav__num">4.7</span><span class="nav__text">Immutable collections</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 5</span>Generics</summary><ul class="nav__list"><li><a href="/JavaTB/generics/generic-classes-and-methods/"><span class="nav__num">5.1</span><span class="nav__text">Generic classes</span></a></li><li><a href="/JavaTB/generics/erasure/"><span class="nav__num">5.2</span><span class="nav__text">Erasure</span></a></li><li><a href="/JavaTB/generics/wildcards/"><span class="nav__num">5.3</span><span class="nav__text">Wildcards</span></a></li><li><a href="/JavaTB/generics/the-limits/"><span class="nav__num">5.4</span><span class="nav__text">The limits</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 6</span>functional</summary><ul class="nav__list"><li><a href="/JavaTB/functional/lambdas/"><span class="nav__num">6.1</span><span class="nav__text">Lambdas</span></a></li><li><a href="/JavaTB/functional/method-references/"><span class="nav__num">6.2</span><span class="nav__text">Method references</span></a></li><li><a href="/JavaTB/functional/streams/"><span class="nav__num">6.3</span><span class="nav__text">Streams</span></a></li><li><a href="/JavaTB/functional/collectors/"><span class="nav__num">6.4</span><span class="nav__text">Collectors</span></a></li><li><a href="/JavaTB/functional/when-a-loop-is-better/"><span class="nav__num">6.5</span><span class="nav__text">When a loop wins</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 7</span>platform</summary><ul class="nav__list"><li><a href="/JavaTB/platform/lifetime-and-gc/"><span class="nav__num">7.1</span><span class="nav__text">Lifetime and GC</span></a></li><li><a href="/JavaTB/platform/stack-heap-escape/"><span class="nav__num">7.2</span><span class="nav__text">Stack and heap</span></a></li><li><a href="/JavaTB/platform/class-loading/"><span class="nav__num">7.3</span><span class="nav__text">Class loading</span></a></li><li><a href="/JavaTB/platform/reflection/"><span class="nav__num">7.4</span><span class="nav__text">Reflection</span></a></li><li><a href="/JavaTB/platform/classpath-and-modules/"><span class="nav__num">7.5</span><span class="nav__text">Classpath and modules</span></a></li><li><a href="/JavaTB/platform/files-and-nio/"><span class="nav__num">7.6</span><span class="nav__text">Files and NIO</span></a></li><li><a href="/JavaTB/platform/java-time/"><span class="nav__num">7.7</span><span class="nav__text">java.time</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 8</span>concurrency</summary><ul class="nav__list"><li><a href="/JavaTB/concurrency/threads-and-shared-state/"><span class="nav__num">8.1</span><span class="nav__text">Threads</span></a></li><li><a href="/JavaTB/concurrency/the-memory-model/"><span class="nav__num">8.2</span><span class="nav__text">The memory model</span></a></li><li><a href="/JavaTB/concurrency/executors-and-futures/"><span class="nav__num">8.3</span><span class="nav__text">Executors</span></a></li><li><a href="/JavaTB/concurrency/concurrent-collections/"><span class="nav__num">8.4</span><span class="nav__text">Concurrent collections</span></a></li><li><a href="/JavaTB/concurrency/virtual-threads/"><span class="nav__num">8.5</span><span class="nav__text">Virtual threads</span></a></li><li><a href="/JavaTB/concurrency/parallel-streams/"><span class="nav__num">8.6</span><span class="nav__text">Parallel streams</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 9</span>engineering</summary><ul class="nav__list"><li><a href="/JavaTB/engineering/testing/"><span class="nav__num">9.1</span><span class="nav__text">Testing</span></a></li><li><a href="/JavaTB/engineering/build-tools/"><span class="nav__num">9.2</span><span class="nav__text">Build tools</span></a></li><li><a href="/JavaTB/engineering/debugging/"><span class="nav__num">9.3</span><span class="nav__text">Debugging</span></a></li><li><a href="/JavaTB/engineering/measuring/"><span class="nav__num">9.4</span><span class="nav__text">Measuring</span></a></li><li><a href="/JavaTB/engineering/api-design/"><span class="nav__num">9.5</span><span class="nav__text">API design</span></a></li><li><a href="/JavaTB/engineering/packaging/"><span class="nav__num">9.6</span><span class="nav__text">Packaging</span></a></li></ul></details>
+  </div>
+</nav>
+    <main class="content" id="content">
+      <article class="prose" data-chapter="encapsulation">
+    <div class="chapter-head">
+      <p class="chapter-eyebrow"><a href="/JavaTB/objects/">Part 2 · Objects</a></p>
+      <h1>Encapsulation</h1>
+      <p class="chapter-lede">Access levels as a tool rather than a ritual: deciding what a class promises, and writing methods that cannot leave it in a state it promised never to be in.</p>
+    </div>
+    
+    <section class="objectives">
+    <h2 class="objectives__title">By the end of this chapter you can</h2>
+    <ul><li>Choose an access level and say what it actually protects</li><li>Establish an invariant in a constructor and preserve it in every method</li><li>Say why a getter and setter for every field is not encapsulation</li></ul>
+  </section>
+    <p>Chapter 2.2 ended somewhere uncomfortable: <code>private</code> did not stop anybody
+changing the array. It is worth being precise about what it does do, because
+the conclusion is not that access levels are useless — it is that they protect
+something narrower and more valuable than people assume.</p>
+<p><code>private</code> controls <strong>which code can mention a name</strong>. That is all. It does not
+follow references, it does not copy anything, and it does not travel with an
+object. What it buys you is that every change to a field happens in code you
+wrote, in one file, which is what makes it possible to promise anything about
+that field at all.</p>
+<h2 id="an-invariant-is-a-promise" tabindex="-1">An invariant is a promise</h2>
+<figure class="widget"><tb-runner data-run="1"><figcaption class="code__title">A class that cannot go negative</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Account</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    private</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> long</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> pence</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#59873A;--sh-dark:#80A665">    Account</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">long</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> opening</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        if</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">opening </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">&#x3C;</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            throw</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> IllegalArgumentException</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">opening balance cannot be negative: </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> opening</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#A65E2B;--sh-dark:#C99076">        this</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">pence</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> opening</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    long</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> balance</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> pence</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> deposit</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">long</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> amount</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        if</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">amount </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">&#x3C;=</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            throw</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> IllegalArgumentException</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">deposit must be positive: </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> amount</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">        pence </span><span style="--sh-light:#999999;--sh-dark:#666666">+=</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> amount</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    boolean</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> withdraw</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">long</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> amount</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        if</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">amount </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">&#x3C;=</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> ||</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> amount </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">></span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> pence</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            return</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> false</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">        pence </span><span style="--sh-light:#999999;--sh-dark:#666666">-=</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> amount</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> true</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">        Account</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> acc</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Account</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">1000</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        acc</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">deposit</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">500</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">balance </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> acc</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">balance</span><span style="--sh-light:#999999;--sh-dark:#666666">());</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">withdraw 2000 -> </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> acc</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">withdraw</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">2000</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">, balance still </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> acc</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">balance</span><span style="--sh-light:#999999;--sh-dark:#666666">());</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        try</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Account</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">-</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">5</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> catch</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">IllegalArgumentException </span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">e</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">            System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">rejected: </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> e</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">getMessage</span><span style="--sh-light:#999999;--sh-dark:#666666">());</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">class Account {
+    private long pence;
+
+    Account(long opening) {
+        if (opening &lt; 0) {
+            throw new IllegalArgumentException(&quot;opening balance cannot be negative: &quot; + opening);
+        }
+        this.pence = opening;
+    }
+
+    long balance() {
+        return pence;
+    }
+
+    void deposit(long amount) {
+        if (amount &lt;= 0) {
+            throw new IllegalArgumentException(&quot;deposit must be positive: &quot; + amount);
+        }
+        pence += amount;
+    }
+
+    boolean withdraw(long amount) {
+        if (amount &lt;= 0 || amount &gt; pence) {
+            return false;
+        }
+        pence -= amount;
+        return true;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Account acc = new Account(1000);
+        acc.deposit(500);
+        System.out.println(&quot;balance &quot; + acc.balance());
+
+        System.out.println(&quot;withdraw 2000 -&gt; &quot; + acc.withdraw(2000) + &quot;, balance still &quot; + acc.balance());
+
+        try {
+            new Account(-5);
+        } catch (IllegalArgumentException e) {
+            System.out.println(&quot;rejected: &quot; + e.getMessage());
+        }
+    }
+}</template></tb-runner></figure>
+<p>The promise this class makes is: <strong>a balance is never negative.</strong> Three pieces
+of code could break it — the constructor and the two mutators — and each of
+them checks. Because <code>pence</code> is private, those three are the <em>only</em> pieces of
+code that could break it, and that is what makes the promise checkable at all.
+Make the field public and the promise becomes a hope.</p>
+<p>That is the whole idea. An <strong>invariant</strong> is something true of an object from
+the moment its constructor finishes until it is collected. Encapsulation is the
+mechanism that makes an invariant enforceable: establish it in the constructor,
+and let no method leave the object in a state that violates it.</p>
+<aside class="callout callout--note"><p class="callout__label">Note</p>
+<p><code>Account</code> is a second top-level class in the same file. Java allows any number
+of those as long as only one is <code>public</code>, and it is how these samples show one
+class being unable to reach another’s privates — a nested class could not,
+since nesting grants access to the enclosing class’s members.</p>
+</aside>
+<h2 id="what-each-level-means" tabindex="-1">What each level means</h2>
+<table>
+<thead>
+<tr>
+<th>Modifier</th>
+<th>Reachable from</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>private</code></td>
+<td>inside the same top-level class only</td>
+</tr>
+<tr>
+<td><em>(none)</em></td>
+<td>any class in the same package — “package-private”</td>
+</tr>
+<tr>
+<td><code>protected</code></td>
+<td>the same package, plus subclasses anywhere</td>
+</tr>
+<tr>
+<td><code>public</code></td>
+<td>everywhere</td>
+</tr>
+</tbody>
+</table>
+<figure class="widget"><tb-runner data-run="1" data-expect-error="1"><figcaption class="code__title">private really does stop the name</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Account</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    private</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> long</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> pence</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 500</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">        Account</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> acc</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Account</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">acc</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">pence</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">class Account {
+    private long pence = 500;
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Account acc = new Account();
+        System.out.println(acc.pence);
+    }
+}</template></tb-runner></figure>
+<p><em>pence has private access in Account.</em> Note what the compiler protected: the
+<strong>name</strong>. Chapter 2.2’s array escaped not because <code>private</code> failed but because
+a method handed out the reference, and once it is out it is an ordinary
+reference like any other.</p>
+<p>The default — no modifier at all — is package-private, and it is a genuinely
+useful level that people forget exists. Classes that collaborate closely can
+live in one package and see each other’s internals without exposing them to the
+world. <code>protected</code> is narrower than it looks and is best deferred until
+inheritance, in chapter 2.5.</p>
+<p>The rule of thumb: <strong>start private, and widen only when something concrete
+needs it.</strong> Widening later is easy; narrowing later means finding every caller.</p>
+<h2 id="getters-and-setters-are-not-the-point" tabindex="-1">Getters and setters are not the point</h2>
+<figure class="widget"><tb-runner data-run="1"><figcaption class="code__title">Two classes with identical fields and different promises</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Exposed</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> hour</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#A0ADA0;--sh-dark:#758575DD">          // 0-23, allegedly</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Guarded</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    private</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> hour</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> setHour</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> hour</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        if</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">hour </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">&#x3C;</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> ||</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> hour </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">></span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 23</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            throw</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> IllegalArgumentException</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">hour out of range: </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> hour</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#A65E2B;--sh-dark:#C99076">        this</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">hour</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> hour</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    int</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> getHour</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> hour</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">        Exposed</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> e</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Exposed</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        e</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">hour</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 99</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">exposed accepted </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> e</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">hour</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">        Guarded</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> g</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Guarded</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        g</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">setHour</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">9</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">guarded accepted </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> g</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">getHour</span><span style="--sh-light:#999999;--sh-dark:#666666">());</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        try</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">            g</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">setHour</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">99</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> catch</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">IllegalArgumentException </span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">ex</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">            System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">guarded rejected: </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> ex</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">getMessage</span><span style="--sh-light:#999999;--sh-dark:#666666">());</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">class Exposed {
+    public int hour;          // 0-23, allegedly
+}
+
+class Guarded {
+    private int hour;
+
+    void setHour(int hour) {
+        if (hour &lt; 0 || hour &gt; 23) {
+            throw new IllegalArgumentException(&quot;hour out of range: &quot; + hour);
+        }
+        this.hour = hour;
+    }
+
+    int getHour() {
+        return hour;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Exposed e = new Exposed();
+        e.hour = 99;
+        System.out.println(&quot;exposed accepted &quot; + e.hour);
+
+        Guarded g = new Guarded();
+        g.setHour(9);
+        System.out.println(&quot;guarded accepted &quot; + g.getHour());
+        try {
+            g.setHour(99);
+        } catch (IllegalArgumentException ex) {
+            System.out.println(&quot;guarded rejected: &quot; + ex.getMessage());
+        }
+    }
+}</template></tb-runner></figure>
+<p>A setter that only assigns is a public field with more typing. It is not
+<em>wrong</em> — it leaves room to add a check later without changing callers — but a
+class whose every field has a matching getter and setter has encapsulated
+nothing. The fields are still public; there is just a longer route to them.</p>
+<p>Encapsulation is about which <strong>operations</strong> a type offers, not about routing
+field access through methods. <code>withdraw(amount)</code> is an operation: it expresses
+something the domain does and it can refuse. <code>setBalance(long)</code> is not; it
+hands the caller the field and asks them to be careful.</p>
+<aside class="callout callout--tip"><p class="callout__label">Tip</p>
+<p>When you find yourself writing a getter and a setter for a field, ask what the
+caller is going to <em>do</em> with the value. Very often the answer is an operation
+that belongs on the class — and moving it there deletes both accessors and puts
+the rule in one place instead of every call site.</p>
+</aside>
+<h2 id="refusing-loudly-or-quietly" tabindex="-1">Refusing, loudly or quietly</h2>
+<p>The <code>Account</code> above rejects a bad deposit by throwing and a bad withdrawal by
+returning <code>false</code>. That is a deliberate split, and it is worth being able to
+justify:</p>
+<ul>
+<li><strong>Throw when the caller made a mistake.</strong> A negative deposit is not a
+situation, it is a bug in the calling code. Failing loudly puts a stack trace
+at the line responsible.</li>
+<li><strong>Return a value when refusal is a normal outcome.</strong> Trying to withdraw more
+than the balance is something users do all day. It is an answer, not an error,
+and the caller is expected to handle it.</li>
+</ul>
+<p>Getting this backwards is a common design mistake in both directions: an
+exception for an everyday outcome forces callers to write <code>try</code>/<code>catch</code> around
+ordinary control flow, and a <code>false</code> for a programming error lets the bug travel
+somewhere else before it surfaces. Chapter 3.5 comes back to this properly.</p>
+<aside class="callout callout--warning"><p class="callout__label">Undefined behaviour</p>
+<p>An invariant that the constructor establishes can still be broken later by a
+method that forgets to check — and by the escaping references of chapter 2.2. A
+class that validates a <code>Date</code> in its constructor and then hands the same
+mutable <code>Date</code> out of a getter has an invariant that holds for exactly as long
+as nobody looks at it.</p>
+</aside>
+<tb-quiz><template data-role="spec">{
+  &quot;question&quot;: &quot;A class has `private int size` with `getSize()` and `setSize(int)` that only assigns. What has encapsulation achieved here?&quot;,
+  &quot;options&quot;: [
+    { &quot;text&quot;: &quot;Almost nothing — it is a public field reached through two methods&quot;, &quot;correct&quot;: true, &quot;why&quot;: &quot;Right. Any value can still be stored from anywhere. The one real gain is that a check could be added later without changing callers, which is a reason to keep the option, not an achievement in itself.&quot; },
+    { &quot;text&quot;: &quot;The field is now protected from outside modification&quot;, &quot;correct&quot;: false, &quot;why&quot;: &quot;setSize accepts anything from anyone. The route is longer; the access is identical.&quot; },
+    { &quot;text&quot;: &quot;The class now has an invariant&quot;, &quot;correct&quot;: false, &quot;why&quot;: &quot;An invariant is something guaranteed true of every instance. Nothing here guarantees anything about size — the setter enforces no rule.&quot; },
+    { &quot;text&quot;: &quot;Other classes can no longer read the value&quot;, &quot;correct&quot;: false, &quot;why&quot;: &quot;getSize() returns it to anyone who asks. Reading was never the problem; unchecked writing was.&quot; }
+  ]
+}</template></tb-quiz>
+<h2 id="practice" tabindex="-1">Practice</h2>
+<tb-exercise data-id="clamped-volume"></tb-exercise>
+
+    <nav class="pager" aria-label="Chapter navigation"><a class="pager__link pager__link--prev" href="/JavaTB/objects/aliasing/">
+           <span class="pager__dir">Previous</span>
+           <span class="pager__title">Aliasing and defensive copying</span>
+         </a><a class="pager__link pager__link--next" href="/JavaTB/objects/equals-hashcode-tostring/">
+           <span class="pager__dir">Next</span>
+           <span class="pager__title">equals, hashCode and toString</span>
+         </a></nav>
+  </article>
+    </main>
+    <aside class="rail">
+    <div class="rail__inner">
+      <p class="rail__title">On this page</p><ul class="rail__list" id="rail-list"><li class="rail__item rail__item--h2"><a href="#an-invariant-is-a-promise">An invariant is a promise</a></li><li class="rail__item rail__item--h2"><a href="#what-each-level-means">What each level means</a></li><li class="rail__item rail__item--h2"><a href="#getters-and-setters-are-not-the-point">Getters and setters are not the point</a></li><li class="rail__item rail__item--h2"><a href="#refusing-loudly-or-quietly">Refusing, loudly or quietly</a></li><li class="rail__item rail__item--h2"><a href="#practice">Practice</a></li></ul>
+      <div class="rail__meta">
+        <p><span>Standard</span><code>java21</code></p>
+        <p><span>Reading</span>6 min</p>
+        <p><span>Problems</span>2</p>
+      </div>
+      <button class="rail__done" data-chapter="encapsulation" id="mark-done">Mark as read</button>
+    </div>
+  </aside>
+  </div>
+  <div class="scrim" id="scrim" hidden></div>
+  <script type="module" src="/JavaTB/assets/index-DTPhoH-i.js"></script>
+</body>
+</html>

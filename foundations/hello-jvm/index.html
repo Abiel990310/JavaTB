@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hello, JVM · The Java Textbook</title>
+  <meta name="description" content="How source text becomes a class file, what runs that class file, and which of the three stages an error came from.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="/JavaTB/favicon.svg" type="image/svg+xml">
+  <script>(function(){try{var t=localStorage.getItem('tb-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.dataset.theme=t;}catch(e){}})();</script>
+  <link rel="stylesheet" href="/JavaTB/assets/index-DU6-oSWJ.css">
+</head>
+<body class="">
+  <header class="topbar">
+  <button class="topbar__menu" id="menu-toggle" aria-label="Toggle contents" aria-expanded="false">
+    <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>
+  </button>
+  <a class="topbar__brand" href="/JavaTB/">The Java Textbook</a>
+  <div class="topbar__spacer"></div>
+  <button class="search-trigger" id="search-trigger" aria-label="Search the book">
+    <svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M13 13l4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    <span>Search</span><kbd>/</kbd>
+  </button>
+  <button class="icon-button" id="theme-toggle" aria-label="Switch theme" title="Switch theme">
+    <svg viewBox="0 0 20 20" width="17" height="17" aria-hidden="true"><path d="M10 2.5a7.5 7.5 0 1 0 7.5 7.5A6 6 0 0 1 10 2.5Z" fill="currentColor"/></svg>
+  </button>
+</header>
+  <div class="layout">
+    <nav class="sidebar" id="sidebar" aria-label="Book contents">
+  <div class="sidebar__inner">
+    <a class="sidebar__link" href="/JavaTB/">Start here</a>
+    <a class="sidebar__link" href="/JavaTB/practice/">Practice problems</a>
+    <a class="sidebar__link" href="/JavaTB/reference/">Quick reference</a>
+    <a class="sidebar__link" href="/JavaTB/progress/">Progress</a>
+    <hr class="sidebar__rule">
+    <details class="nav__part" open><summary><span class="nav__part-num">Part 1</span>Foundations</summary><ul class="nav__list"><li><a href="/JavaTB/foundations/hello-jvm/" class="is-active" aria-current="page"><span class="nav__num">1.1</span><span class="nav__text">Hello, JVM</span></a></li><li><a href="/JavaTB/foundations/values-and-variables/"><span class="nav__num">1.2</span><span class="nav__text">Values and variables</span></a></li><li><a href="/JavaTB/foundations/control-flow/"><span class="nav__num">1.3</span><span class="nav__text">Control flow</span></a></li><li><a href="/JavaTB/foundations/methods/"><span class="nav__num">1.4</span><span class="nav__text">Methods</span></a></li><li><a href="/JavaTB/foundations/arrays/"><span class="nav__num">1.5</span><span class="nav__text">Arrays</span></a></li><li><a href="/JavaTB/foundations/strings/"><span class="nav__num">1.6</span><span class="nav__text">Strings</span></a></li><li><a href="/JavaTB/foundations/input-and-output/"><span class="nav__num">1.7</span><span class="nav__text">Input and output</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 2</span>Objects</summary><ul class="nav__list"><li><a href="/JavaTB/objects/classes-and-objects/"><span class="nav__num">2.1</span><span class="nav__text">Classes and objects</span></a></li><li><a href="/JavaTB/objects/aliasing/"><span class="nav__num">2.2</span><span class="nav__text">Aliasing</span></a></li><li><a href="/JavaTB/objects/encapsulation/"><span class="nav__num">2.3</span><span class="nav__text">Encapsulation</span></a></li><li><a href="/JavaTB/objects/equals-hashcode-tostring/"><span class="nav__num">2.4</span><span class="nav__text">equals and hashCode</span></a></li><li><a href="/JavaTB/objects/inheritance/"><span class="nav__num">2.5</span><span class="nav__text">Inheritance</span></a></li><li><a href="/JavaTB/objects/polymorphism/"><span class="nav__num">2.6</span><span class="nav__text">Polymorphism</span></a></li><li><a href="/JavaTB/objects/interfaces/"><span class="nav__num">2.7</span><span class="nav__text">Interfaces</span></a></li><li><a href="/JavaTB/objects/abstract-classes/"><span class="nav__num">2.8</span><span class="nav__text">Abstract classes</span></a></li><li><a href="/JavaTB/objects/records/"><span class="nav__num">2.9</span><span class="nav__text">Records</span></a></li><li><a href="/JavaTB/objects/enums/"><span class="nav__num">2.10</span><span class="nav__text">Enums</span></a></li><li><a href="/JavaTB/objects/sealed-types/"><span class="nav__num">2.11</span><span class="nav__text">Sealed types</span></a></li><li><a href="/JavaTB/objects/nested-classes/"><span class="nav__num">2.12</span><span class="nav__text">Nested classes</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 3</span>When things go wrong</summary><ul class="nav__list"><li><a href="/JavaTB/failure/exceptions/"><span class="nav__num">3.1</span><span class="nav__text">Exceptions</span></a></li><li><a href="/JavaTB/failure/checked-and-unchecked/"><span class="nav__num">3.2</span><span class="nav__text">Checked exceptions</span></a></li><li><a href="/JavaTB/failure/try-with-resources/"><span class="nav__num">3.3</span><span class="nav__text">try-with-resources</span></a></li><li><a href="/JavaTB/failure/null-and-optional/"><span class="nav__num">3.4</span><span class="nav__text">null and Optional</span></a></li><li><a href="/JavaTB/failure/designing-failure/"><span class="nav__num">3.5</span><span class="nav__text">Designing failure</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 4</span>Collections</summary><ul class="nav__list"><li><a href="/JavaTB/collections/the-framework/"><span class="nav__num">4.1</span><span class="nav__text">The framework</span></a></li><li><a href="/JavaTB/collections/list/"><span class="nav__num">4.2</span><span class="nav__text">List</span></a></li><li><a href="/JavaTB/collections/map/"><span class="nav__num">4.3</span><span class="nav__text">Map</span></a></li><li><a href="/JavaTB/collections/set-and-ordering/"><span class="nav__num">4.4</span><span class="nav__text">Set and ordering</span></a></li><li><a href="/JavaTB/collections/queues-and-deques/"><span class="nav__num">4.5</span><span class="nav__text">Queues and deques</span></a></li><li><a href="/JavaTB/collections/iteration/"><span class="nav__num">4.6</span><span class="nav__text">Iteration</span></a></li><li><a href="/JavaTB/collections/immutable-collections/"><span class="nav__num">4.7</span><span class="nav__text">Immutable collections</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 5</span>Generics</summary><ul class="nav__list"><li><a href="/JavaTB/generics/generic-classes-and-methods/"><span class="nav__num">5.1</span><span class="nav__text">Generic classes</span></a></li><li><a href="/JavaTB/generics/erasure/"><span class="nav__num">5.2</span><span class="nav__text">Erasure</span></a></li><li><a href="/JavaTB/generics/wildcards/"><span class="nav__num">5.3</span><span class="nav__text">Wildcards</span></a></li><li><a href="/JavaTB/generics/the-limits/"><span class="nav__num">5.4</span><span class="nav__text">The limits</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 6</span>functional</summary><ul class="nav__list"><li><a href="/JavaTB/functional/lambdas/"><span class="nav__num">6.1</span><span class="nav__text">Lambdas</span></a></li><li><a href="/JavaTB/functional/method-references/"><span class="nav__num">6.2</span><span class="nav__text">Method references</span></a></li><li><a href="/JavaTB/functional/streams/"><span class="nav__num">6.3</span><span class="nav__text">Streams</span></a></li><li><a href="/JavaTB/functional/collectors/"><span class="nav__num">6.4</span><span class="nav__text">Collectors</span></a></li><li><a href="/JavaTB/functional/when-a-loop-is-better/"><span class="nav__num">6.5</span><span class="nav__text">When a loop wins</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 7</span>platform</summary><ul class="nav__list"><li><a href="/JavaTB/platform/lifetime-and-gc/"><span class="nav__num">7.1</span><span class="nav__text">Lifetime and GC</span></a></li><li><a href="/JavaTB/platform/stack-heap-escape/"><span class="nav__num">7.2</span><span class="nav__text">Stack and heap</span></a></li><li><a href="/JavaTB/platform/class-loading/"><span class="nav__num">7.3</span><span class="nav__text">Class loading</span></a></li><li><a href="/JavaTB/platform/reflection/"><span class="nav__num">7.4</span><span class="nav__text">Reflection</span></a></li><li><a href="/JavaTB/platform/classpath-and-modules/"><span class="nav__num">7.5</span><span class="nav__text">Classpath and modules</span></a></li><li><a href="/JavaTB/platform/files-and-nio/"><span class="nav__num">7.6</span><span class="nav__text">Files and NIO</span></a></li><li><a href="/JavaTB/platform/java-time/"><span class="nav__num">7.7</span><span class="nav__text">java.time</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 8</span>concurrency</summary><ul class="nav__list"><li><a href="/JavaTB/concurrency/threads-and-shared-state/"><span class="nav__num">8.1</span><span class="nav__text">Threads</span></a></li><li><a href="/JavaTB/concurrency/the-memory-model/"><span class="nav__num">8.2</span><span class="nav__text">The memory model</span></a></li><li><a href="/JavaTB/concurrency/executors-and-futures/"><span class="nav__num">8.3</span><span class="nav__text">Executors</span></a></li><li><a href="/JavaTB/concurrency/concurrent-collections/"><span class="nav__num">8.4</span><span class="nav__text">Concurrent collections</span></a></li><li><a href="/JavaTB/concurrency/virtual-threads/"><span class="nav__num">8.5</span><span class="nav__text">Virtual threads</span></a></li><li><a href="/JavaTB/concurrency/parallel-streams/"><span class="nav__num">8.6</span><span class="nav__text">Parallel streams</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 9</span>engineering</summary><ul class="nav__list"><li><a href="/JavaTB/engineering/testing/"><span class="nav__num">9.1</span><span class="nav__text">Testing</span></a></li><li><a href="/JavaTB/engineering/build-tools/"><span class="nav__num">9.2</span><span class="nav__text">Build tools</span></a></li><li><a href="/JavaTB/engineering/debugging/"><span class="nav__num">9.3</span><span class="nav__text">Debugging</span></a></li><li><a href="/JavaTB/engineering/measuring/"><span class="nav__num">9.4</span><span class="nav__text">Measuring</span></a></li><li><a href="/JavaTB/engineering/api-design/"><span class="nav__num">9.5</span><span class="nav__text">API design</span></a></li><li><a href="/JavaTB/engineering/packaging/"><span class="nav__num">9.6</span><span class="nav__text">Packaging</span></a></li></ul></details>
+  </div>
+</nav>
+    <main class="content" id="content">
+      <article class="prose" data-chapter="hello-jvm">
+    <div class="chapter-head">
+      <p class="chapter-eyebrow"><a href="/JavaTB/foundations/">Part 1 · Foundations</a></p>
+      <h1>Hello, JVM</h1>
+      <p class="chapter-lede">How source text becomes a class file, what runs that class file, and which of the three stages an error came from.</p>
+    </div>
+    
+    <section class="objectives">
+    <h2 class="objectives__title">By the end of this chapter you can</h2>
+    <ul><li>Explain what javac and java each do, and what a class file holds</li><li>Tell from an error message which stage produced it</li><li>Compile and run a Java program from source</li></ul>
+  </section>
+    <p>A Java program starts life as text you can read and ends as instructions
+something can execute. Unlike C or Go, that something is not your processor. It
+is another program — a virtual machine — and everything that makes Java feel
+the way it does follows from that one decision.</p>
+<p>The cost is an extra step you have to understand. The benefit is that the same
+compiled file runs unchanged on a laptop, a phone and a server with a different
+processor architecture. This chapter is about that step: what each tool does,
+what sits between them, and how to tell which of them is complaining at you.</p>
+<p>Here is the whole thing. Press <strong>Run</strong>.</p>
+<figure class="widget"><tb-runner data-run="1"><figcaption class="code__title">The smallest useful program</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">Hello, JVM</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">public class Main {
+    public static void main(String[] args) {
+        System.out.println(&quot;Hello, JVM&quot;);
+    }
+}</template></tb-runner></figure>
+<p>That worked, so a lot of machinery worked. Let us take it apart.</p>
+<h2 id="what-each-part-is-doing" tabindex="-1">What each part is doing</h2>
+<p><code>public class Main</code> declares a class named <code>Main</code>. In Java every method lives
+inside a class — there is no such thing as a free-standing function — so even a
+one-line program needs one. The name is not arbitrary: a <code>public</code> class must
+live in a file with a matching name. Ours is in <code>Main.java</code>, so the class must
+be <code>Main</code>. Rename one without the other and the compiler stops you before
+anything else happens.</p>
+<p><code>public static void main(String[] args)</code> is the method the launcher calls. It
+is special only because the JVM is written to look for a method with exactly
+this shape: public, static, returning nothing, taking an array of strings. Get
+any part of it wrong and the class still compiles perfectly — it simply cannot
+be started, which is a distinction worth holding on to.</p>
+<p><code>System.out.println(...)</code> reaches into the <code>System</code> class, takes its <code>out</code>
+field — an output stream connected to your terminal — and calls <code>println</code> on
+it. There is no built-in print statement in Java. Printing is an ordinary
+method call on an ordinary object, and you could replace <code>System.out</code> with
+something else and every <code>println</code> in your program would go there instead.</p>
+<aside class="callout callout--note"><p class="callout__label">Note</p>
+<p>Every runnable sample on this site is compiled as <code>Main.java</code>, so they all
+declare <code>public class Main</code>. In your own projects you will name classes after
+what they do; here the name is fixed by the machinery that runs them for you.</p>
+</aside>
+<h2 id="two-tools-two-stages" tabindex="-1">Two tools, two stages</h2>
+<p>Running that program actually took two steps.</p>
+<p>The first is <strong><code>javac</code></strong>, the compiler. It reads <code>Main.java</code> and writes
+<code>Main.class</code>. That file is not text and it is not machine code for your
+processor. It is <em>bytecode</em>: instructions for an idealised machine that does
+not physically exist.</p>
+<p>You can see that it is a real, structured format. Every class file starts with
+the same four bytes:</p>
+<figure class="widget"><tb-runner data-run="1"><figcaption class="code__title">What a class file starts with</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#A0ADA0;--sh-dark:#758575DD">        // The first four bytes of every .class file ever produced.</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">        int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> magic</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0xCAFEBABE</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">printf</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">magic   = %08X%n</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> magic</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">version = </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> Runtime</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">version</span><span style="--sh-light:#999999;--sh-dark:#666666">().</span><span style="--sh-light:#59873A;--sh-dark:#80A665">feature</span><span style="--sh-light:#999999;--sh-dark:#666666">());</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">public class Main {
+    public static void main(String[] args) {
+        // The first four bytes of every .class file ever produced.
+        int magic = 0xCAFEBABE;
+        System.out.printf(&quot;magic   = %08X%n&quot;, magic);
+        System.out.println(&quot;version = &quot; + Runtime.version().feature());
+    }
+}</template></tb-runner></figure>
+<p>The second step is <strong><code>java</code></strong>, the launcher. It starts a Java Virtual Machine,
+loads <code>Main.class</code>, verifies that the bytecode is well formed, finds <code>main</code>,
+and calls it. While the program runs, the JVM watches which methods are used
+most and compiles those to real machine code on the fly. A method that runs
+once stays interpreted; a method in a hot loop becomes machine code within
+milliseconds. This is why Java benchmarks written naively are almost always
+wrong, and why a whole chapter later in this book is about measuring properly.</p>
+<p>You can look at the bytecode. Press <strong>Bytecode</strong> on this sample rather than
+<strong>Run</strong>:</p>
+<figure class="widget"><tb-runner data-run="1" data-bytecode="1"><figcaption class="code__title">The same program, as the JVM sees it</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">Hello, JVM</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">public class Main {
+    public static void main(String[] args) {
+        System.out.println(&quot;Hello, JVM&quot;);
+    }
+}</template></tb-runner></figure>
+<p>Four instructions do the work. <code>getstatic</code> pushes <code>System.out</code> onto a stack;
+<code>ldc</code> pushes the string constant; <code>invokevirtual</code> calls <code>println</code> with them;
+<code>return</code> ends the method. The JVM is a <em>stack machine</em> — it has no registers in
+its instruction set, only a working stack that operands are pushed onto and
+popped off. That is a deliberate choice: a stack machine’s instructions do not
+mention register names, so the same bytecode is equally valid on a processor
+with sixteen registers and one with thirty-two.</p>
+<figure class="widget"><tb-memviz><template data-role="spec">{
+  &quot;title&quot;: &quot;System.out.println(\&quot;Hello, JVM\&quot;) as four instructions&quot;,
+  &quot;steps&quot;: [
+    {
+      &quot;caption&quot;: &quot;getstatic pushes a reference to System.out onto the operand stack.&quot;,
+      &quot;line&quot;: 1,
+      &quot;stack&quot;: [
+        { &quot;id&quot;: &quot;op1&quot;, &quot;name&quot;: &quot;operand stack&quot;, &quot;type&quot;: &quot;&quot;,
+          &quot;fields&quot;: [{ &quot;k&quot;: &quot;top&quot;, &quot;v&quot;: &quot;→ System.out&quot;, &quot;anchor&quot;: &quot;op1.top&quot; }] }
+      ],
+      &quot;heap&quot;: [ { &quot;id&quot;: &quot;out&quot;, &quot;value&quot;: &quot;PrintStream&quot;, &quot;state&quot;: &quot;new&quot; } ],
+      &quot;arrows&quot;: [ { &quot;from&quot;: &quot;op1.top&quot;, &quot;to&quot;: &quot;out&quot; } ]
+    },
+    {
+      &quot;caption&quot;: &quot;ldc pushes the string constant, read from the class file's constant pool.&quot;,
+      &quot;line&quot;: 2,
+      &quot;stack&quot;: [
+        { &quot;id&quot;: &quot;op1&quot;, &quot;name&quot;: &quot;operand stack&quot;, &quot;type&quot;: &quot;&quot;,
+          &quot;fields&quot;: [
+            { &quot;k&quot;: &quot;top&quot;, &quot;v&quot;: &quot;→ \&quot;Hello, JVM\&quot;&quot;, &quot;anchor&quot;: &quot;op1.top&quot; },
+            { &quot;k&quot;: &quot;&quot;, &quot;v&quot;: &quot;→ System.out&quot;, &quot;anchor&quot;: &quot;op1.below&quot; }
+          ] }
+      ],
+      &quot;heap&quot;: [
+        { &quot;id&quot;: &quot;str&quot;, &quot;value&quot;: &quot;\&quot;Hello, JVM\&quot;&quot;, &quot;state&quot;: &quot;new&quot; },
+        { &quot;id&quot;: &quot;out&quot;, &quot;value&quot;: &quot;PrintStream&quot; }
+      ],
+      &quot;arrows&quot;: [
+        { &quot;from&quot;: &quot;op1.top&quot;, &quot;to&quot;: &quot;str&quot; },
+        { &quot;from&quot;: &quot;op1.below&quot;, &quot;to&quot;: &quot;out&quot; }
+      ]
+    },
+    {
+      &quot;caption&quot;: &quot;invokevirtual pops both, calls println on the stream with the string, and pushes nothing back — println returns void.&quot;,
+      &quot;line&quot;: 3,
+      &quot;stack&quot;: [
+        { &quot;id&quot;: &quot;op1&quot;, &quot;name&quot;: &quot;operand stack&quot;, &quot;type&quot;: &quot;&quot;,
+          &quot;fields&quot;: [{ &quot;k&quot;: &quot;&quot;, &quot;v&quot;: &quot;(empty)&quot; }] }
+      ],
+      &quot;heap&quot;: [
+        { &quot;id&quot;: &quot;str&quot;, &quot;value&quot;: &quot;\&quot;Hello, JVM\&quot;&quot; },
+        { &quot;id&quot;: &quot;out&quot;, &quot;value&quot;: &quot;PrintStream&quot; }
+      ],
+      &quot;arrows&quot;: []
+    },
+    {
+      &quot;caption&quot;: &quot;return ends main. With no frames left, the JVM shuts down.&quot;,
+      &quot;line&quot;: 4,
+      &quot;stack&quot;: [],
+      &quot;heap&quot;: [
+        { &quot;id&quot;: &quot;str&quot;, &quot;value&quot;: &quot;\&quot;Hello, JVM\&quot;&quot;, &quot;state&quot;: &quot;freed&quot; },
+        { &quot;id&quot;: &quot;out&quot;, &quot;value&quot;: &quot;PrintStream&quot; }
+      ],
+      &quot;arrows&quot;: []
+    }
+  ]
+}</template></tb-memviz></figure>
+<h2 id="errors-come-from-one-of-three-places" tabindex="-1">Errors come from one of three places</h2>
+<p>Almost every confusing Java message becomes obvious once you know which stage
+produced it. There are three, and they happen in order.</p>
+<p><strong>The compiler rejects the source.</strong> Nothing is produced, no class file is
+written, and the message names a file and a line:</p>
+<figure class="widget"><tb-runner data-run="1" data-expect-error="1"><figcaption class="code__title">javac will not accept this</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">        int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> count</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">seven</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">count</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">public class Main {
+    public static void main(String[] args) {
+        int count = &quot;seven&quot;;
+        System.out.println(count);
+    }
+}</template></tb-runner></figure>
+<p>That is <code>incompatible types: String cannot be converted to int</code>. The compiler
+knows <code>count</code> is an <code>int</code> and that <code>&quot;seven&quot;</code> is not one, and it says so before
+your program has any chance to run. Errors at this stage are the cheap ones.</p>
+<p><strong>The launcher cannot start the class.</strong> The file compiled, so <code>javac</code> was
+happy, but the JVM could not find what it needed:</p>
+<figure class="code"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span>Error: Main method not found in class Greeter, please define the main method as:</span></span>
+<span class="line"><span>   public static void main(String[] args)</span></span></code></pre></figure>
+<p>Spell <code>main</code> as <code>Main</code>, leave off <code>static</code>, or return <code>int</code> instead of <code>void</code>,
+and this is what you get: a perfectly valid class that simply is not a program.
+Note there is no line number, because nothing of yours ever ran.</p>
+<p><strong>The program throws while running.</strong> Now you get a stack trace:</p>
+<figure class="widget"><tb-runner data-run="1" data-expect-throw="1"><figcaption class="code__title">An exception nobody caught</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">        String</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> name</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> null</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">name</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">length</span><span style="--sh-light:#999999;--sh-dark:#666666">());</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">public class Main {
+    public static void main(String[] args) {
+        String name = null;
+        System.out.println(name.length());
+    }
+}</template></tb-runner></figure>
+<p>Read a stack trace from the top. The first line names the exception type and,
+since Java 14, describes precisely which part of the expression was null —
+<code>Cannot invoke &quot;String.length()&quot; because &quot;name&quot; is null</code>. The lines under it
+are the call stack at the moment of failure, innermost first, each with the
+file and line number. The one nearest the top that names <em>your</em> file is almost
+always where to look.</p>
+<aside class="callout callout--pitfall"><p class="callout__label">Pitfall</p>
+<p>A stack trace is not a crash log to be skimmed for the word “error”. It is a
+precise statement of what was being done, on which line, on behalf of which
+caller. Reading the top three lines carefully is faster than any amount of
+adding print statements.</p>
+</aside>
+<h2 id="why-the-extra-step-exists" tabindex="-1">Why the extra step exists</h2>
+<p>A C++ compiler produces machine code for one processor architecture, which is
+why software is shipped as separate downloads per platform. <code>javac</code> produces
+bytecode for a machine that does not exist, and every real platform ships a JVM
+that knows how to run it. The portability is not a property of the language; it
+is a property of having agreed on that intermediate format.</p>
+<p>You pay for it in two ways. Starting a JVM takes tens of milliseconds before
+your <code>main</code> begins, which matters for short-lived command-line tools and not at
+all for a server that runs for weeks. And your program’s speed depends on
+decisions made while it runs, which makes performance harder to reason about
+than in a language that compiles once, ahead of time.</p>
+<p>You gain more than portability, though. Because the JVM is watching the program
+execute, it can optimise using facts a static compiler could never prove — that
+a particular method is, in this run, never overridden; that a branch is always
+taken. That is why long-running Java can be genuinely fast, and why it is slow
+for the first few thousand iterations of anything.</p>
+<tb-quiz><template data-role="spec">{
+  &quot;question&quot;: &quot;You compile a class successfully, then run it and see `Error: Main method not found`. What went wrong?&quot;,
+  &quot;options&quot;: [
+    { &quot;text&quot;: &quot;The source has a syntax error&quot;, &quot;correct&quot;: false, &quot;why&quot;: &quot;No — the compiler would have refused to produce a class file at all, and you would have seen a message naming a line.&quot; },
+    { &quot;text&quot;: &quot;The class compiled fine but has no method with the exact shape the launcher looks for&quot;, &quot;correct&quot;: true, &quot;why&quot;: &quot;Right. `public static void main(String[] args)` is a shape, not just a name. Miss `static`, return `int`, or capitalise `Main`, and the class is valid but not startable.&quot; },
+    { &quot;text&quot;: &quot;The JVM version is too old to run the class file&quot;, &quot;correct&quot;: false, &quot;why&quot;: &quot;That is a real error, but it says so: `UnsupportedClassVersionError`, naming the class file version it found and the one it supports.&quot; },
+    { &quot;text&quot;: &quot;The program threw an exception before printing anything&quot;, &quot;correct&quot;: false, &quot;why&quot;: &quot;An exception thrown from `main` prints a stack trace beginning `Exception in thread \&quot;main\&quot;`. This message appears before any of your code runs.&quot; }
+  ]
+}</template></tb-quiz>
+<h2 id="practice" tabindex="-1">Practice</h2>
+<tb-exercise data-id="greet-by-name"></tb-exercise>
+
+    <nav class="pager" aria-label="Chapter navigation"><span></span><a class="pager__link pager__link--next" href="/JavaTB/foundations/values-and-variables/">
+           <span class="pager__dir">Next</span>
+           <span class="pager__title">Values and variables</span>
+         </a></nav>
+  </article>
+    </main>
+    <aside class="rail">
+    <div class="rail__inner">
+      <p class="rail__title">On this page</p><ul class="rail__list" id="rail-list"><li class="rail__item rail__item--h2"><a href="#what-each-part-is-doing">What each part is doing</a></li><li class="rail__item rail__item--h2"><a href="#two-tools-two-stages">Two tools, two stages</a></li><li class="rail__item rail__item--h2"><a href="#errors-come-from-one-of-three-places">Errors come from one of three places</a></li><li class="rail__item rail__item--h2"><a href="#why-the-extra-step-exists">Why the extra step exists</a></li><li class="rail__item rail__item--h2"><a href="#practice">Practice</a></li></ul>
+      <div class="rail__meta">
+        <p><span>Standard</span><code>java21</code></p>
+        <p><span>Reading</span>9 min</p>
+        <p><span>Problems</span>2</p>
+      </div>
+      <button class="rail__done" data-chapter="hello-jvm" id="mark-done">Mark as read</button>
+    </div>
+  </aside>
+  </div>
+  <div class="scrim" id="scrim" hidden></div>
+  <script type="module" src="/JavaTB/assets/index-DTPhoH-i.js"></script>
+</body>
+</html>

@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Debugging and reading a stack trace properly · The Java Textbook</title>
+  <meta name="description" content="The first line is not the problem, the last `Caused by` usually is, and after a hundred thousand throws the JVM stops giving you a trace at all.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="/JavaTB/favicon.svg" type="image/svg+xml">
+  <script>(function(){try{var t=localStorage.getItem('tb-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.dataset.theme=t;}catch(e){}})();</script>
+  <link rel="stylesheet" href="/JavaTB/assets/index-DU6-oSWJ.css">
+</head>
+<body class="">
+  <header class="topbar">
+  <button class="topbar__menu" id="menu-toggle" aria-label="Toggle contents" aria-expanded="false">
+    <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>
+  </button>
+  <a class="topbar__brand" href="/JavaTB/">The Java Textbook</a>
+  <div class="topbar__spacer"></div>
+  <button class="search-trigger" id="search-trigger" aria-label="Search the book">
+    <svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M13 13l4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    <span>Search</span><kbd>/</kbd>
+  </button>
+  <button class="icon-button" id="theme-toggle" aria-label="Switch theme" title="Switch theme">
+    <svg viewBox="0 0 20 20" width="17" height="17" aria-hidden="true"><path d="M10 2.5a7.5 7.5 0 1 0 7.5 7.5A6 6 0 0 1 10 2.5Z" fill="currentColor"/></svg>
+  </button>
+</header>
+  <div class="layout">
+    <nav class="sidebar" id="sidebar" aria-label="Book contents">
+  <div class="sidebar__inner">
+    <a class="sidebar__link" href="/JavaTB/">Start here</a>
+    <a class="sidebar__link" href="/JavaTB/practice/">Practice problems</a>
+    <a class="sidebar__link" href="/JavaTB/reference/">Quick reference</a>
+    <a class="sidebar__link" href="/JavaTB/progress/">Progress</a>
+    <hr class="sidebar__rule">
+    <details class="nav__part"><summary><span class="nav__part-num">Part 1</span>Foundations</summary><ul class="nav__list"><li><a href="/JavaTB/foundations/hello-jvm/"><span class="nav__num">1.1</span><span class="nav__text">Hello, JVM</span></a></li><li><a href="/JavaTB/foundations/values-and-variables/"><span class="nav__num">1.2</span><span class="nav__text">Values and variables</span></a></li><li><a href="/JavaTB/foundations/control-flow/"><span class="nav__num">1.3</span><span class="nav__text">Control flow</span></a></li><li><a href="/JavaTB/foundations/methods/"><span class="nav__num">1.4</span><span class="nav__text">Methods</span></a></li><li><a href="/JavaTB/foundations/arrays/"><span class="nav__num">1.5</span><span class="nav__text">Arrays</span></a></li><li><a href="/JavaTB/foundations/strings/"><span class="nav__num">1.6</span><span class="nav__text">Strings</span></a></li><li><a href="/JavaTB/foundations/input-and-output/"><span class="nav__num">1.7</span><span class="nav__text">Input and output</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 2</span>Objects</summary><ul class="nav__list"><li><a href="/JavaTB/objects/classes-and-objects/"><span class="nav__num">2.1</span><span class="nav__text">Classes and objects</span></a></li><li><a href="/JavaTB/objects/aliasing/"><span class="nav__num">2.2</span><span class="nav__text">Aliasing</span></a></li><li><a href="/JavaTB/objects/encapsulation/"><span class="nav__num">2.3</span><span class="nav__text">Encapsulation</span></a></li><li><a href="/JavaTB/objects/equals-hashcode-tostring/"><span class="nav__num">2.4</span><span class="nav__text">equals and hashCode</span></a></li><li><a href="/JavaTB/objects/inheritance/"><span class="nav__num">2.5</span><span class="nav__text">Inheritance</span></a></li><li><a href="/JavaTB/objects/polymorphism/"><span class="nav__num">2.6</span><span class="nav__text">Polymorphism</span></a></li><li><a href="/JavaTB/objects/interfaces/"><span class="nav__num">2.7</span><span class="nav__text">Interfaces</span></a></li><li><a href="/JavaTB/objects/abstract-classes/"><span class="nav__num">2.8</span><span class="nav__text">Abstract classes</span></a></li><li><a href="/JavaTB/objects/records/"><span class="nav__num">2.9</span><span class="nav__text">Records</span></a></li><li><a href="/JavaTB/objects/enums/"><span class="nav__num">2.10</span><span class="nav__text">Enums</span></a></li><li><a href="/JavaTB/objects/sealed-types/"><span class="nav__num">2.11</span><span class="nav__text">Sealed types</span></a></li><li><a href="/JavaTB/objects/nested-classes/"><span class="nav__num">2.12</span><span class="nav__text">Nested classes</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 3</span>When things go wrong</summary><ul class="nav__list"><li><a href="/JavaTB/failure/exceptions/"><span class="nav__num">3.1</span><span class="nav__text">Exceptions</span></a></li><li><a href="/JavaTB/failure/checked-and-unchecked/"><span class="nav__num">3.2</span><span class="nav__text">Checked exceptions</span></a></li><li><a href="/JavaTB/failure/try-with-resources/"><span class="nav__num">3.3</span><span class="nav__text">try-with-resources</span></a></li><li><a href="/JavaTB/failure/null-and-optional/"><span class="nav__num">3.4</span><span class="nav__text">null and Optional</span></a></li><li><a href="/JavaTB/failure/designing-failure/"><span class="nav__num">3.5</span><span class="nav__text">Designing failure</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 4</span>Collections</summary><ul class="nav__list"><li><a href="/JavaTB/collections/the-framework/"><span class="nav__num">4.1</span><span class="nav__text">The framework</span></a></li><li><a href="/JavaTB/collections/list/"><span class="nav__num">4.2</span><span class="nav__text">List</span></a></li><li><a href="/JavaTB/collections/map/"><span class="nav__num">4.3</span><span class="nav__text">Map</span></a></li><li><a href="/JavaTB/collections/set-and-ordering/"><span class="nav__num">4.4</span><span class="nav__text">Set and ordering</span></a></li><li><a href="/JavaTB/collections/queues-and-deques/"><span class="nav__num">4.5</span><span class="nav__text">Queues and deques</span></a></li><li><a href="/JavaTB/collections/iteration/"><span class="nav__num">4.6</span><span class="nav__text">Iteration</span></a></li><li><a href="/JavaTB/collections/immutable-collections/"><span class="nav__num">4.7</span><span class="nav__text">Immutable collections</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 5</span>Generics</summary><ul class="nav__list"><li><a href="/JavaTB/generics/generic-classes-and-methods/"><span class="nav__num">5.1</span><span class="nav__text">Generic classes</span></a></li><li><a href="/JavaTB/generics/erasure/"><span class="nav__num">5.2</span><span class="nav__text">Erasure</span></a></li><li><a href="/JavaTB/generics/wildcards/"><span class="nav__num">5.3</span><span class="nav__text">Wildcards</span></a></li><li><a href="/JavaTB/generics/the-limits/"><span class="nav__num">5.4</span><span class="nav__text">The limits</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 6</span>functional</summary><ul class="nav__list"><li><a href="/JavaTB/functional/lambdas/"><span class="nav__num">6.1</span><span class="nav__text">Lambdas</span></a></li><li><a href="/JavaTB/functional/method-references/"><span class="nav__num">6.2</span><span class="nav__text">Method references</span></a></li><li><a href="/JavaTB/functional/streams/"><span class="nav__num">6.3</span><span class="nav__text">Streams</span></a></li><li><a href="/JavaTB/functional/collectors/"><span class="nav__num">6.4</span><span class="nav__text">Collectors</span></a></li><li><a href="/JavaTB/functional/when-a-loop-is-better/"><span class="nav__num">6.5</span><span class="nav__text">When a loop wins</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 7</span>platform</summary><ul class="nav__list"><li><a href="/JavaTB/platform/lifetime-and-gc/"><span class="nav__num">7.1</span><span class="nav__text">Lifetime and GC</span></a></li><li><a href="/JavaTB/platform/stack-heap-escape/"><span class="nav__num">7.2</span><span class="nav__text">Stack and heap</span></a></li><li><a href="/JavaTB/platform/class-loading/"><span class="nav__num">7.3</span><span class="nav__text">Class loading</span></a></li><li><a href="/JavaTB/platform/reflection/"><span class="nav__num">7.4</span><span class="nav__text">Reflection</span></a></li><li><a href="/JavaTB/platform/classpath-and-modules/"><span class="nav__num">7.5</span><span class="nav__text">Classpath and modules</span></a></li><li><a href="/JavaTB/platform/files-and-nio/"><span class="nav__num">7.6</span><span class="nav__text">Files and NIO</span></a></li><li><a href="/JavaTB/platform/java-time/"><span class="nav__num">7.7</span><span class="nav__text">java.time</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 8</span>concurrency</summary><ul class="nav__list"><li><a href="/JavaTB/concurrency/threads-and-shared-state/"><span class="nav__num">8.1</span><span class="nav__text">Threads</span></a></li><li><a href="/JavaTB/concurrency/the-memory-model/"><span class="nav__num">8.2</span><span class="nav__text">The memory model</span></a></li><li><a href="/JavaTB/concurrency/executors-and-futures/"><span class="nav__num">8.3</span><span class="nav__text">Executors</span></a></li><li><a href="/JavaTB/concurrency/concurrent-collections/"><span class="nav__num">8.4</span><span class="nav__text">Concurrent collections</span></a></li><li><a href="/JavaTB/concurrency/virtual-threads/"><span class="nav__num">8.5</span><span class="nav__text">Virtual threads</span></a></li><li><a href="/JavaTB/concurrency/parallel-streams/"><span class="nav__num">8.6</span><span class="nav__text">Parallel streams</span></a></li></ul></details><details class="nav__part" open><summary><span class="nav__part-num">Part 9</span>engineering</summary><ul class="nav__list"><li><a href="/JavaTB/engineering/testing/"><span class="nav__num">9.1</span><span class="nav__text">Testing</span></a></li><li><a href="/JavaTB/engineering/build-tools/"><span class="nav__num">9.2</span><span class="nav__text">Build tools</span></a></li><li><a href="/JavaTB/engineering/debugging/" class="is-active" aria-current="page"><span class="nav__num">9.3</span><span class="nav__text">Debugging</span></a></li><li><a href="/JavaTB/engineering/measuring/"><span class="nav__num">9.4</span><span class="nav__text">Measuring</span></a></li><li><a href="/JavaTB/engineering/api-design/"><span class="nav__num">9.5</span><span class="nav__text">API design</span></a></li><li><a href="/JavaTB/engineering/packaging/"><span class="nav__num">9.6</span><span class="nav__text">Packaging</span></a></li></ul></details>
+  </div>
+</nav>
+    <main class="content" id="content">
+      <article class="prose" data-chapter="debugging">
+    <div class="chapter-head">
+      <p class="chapter-eyebrow"><a href="/JavaTB/engineering/">Part 9 · engineering</a></p>
+      <h1>Debugging and reading a stack trace properly</h1>
+      <p class="chapter-lede">The first line is not the problem, the last `Caused by` usually is, and after a hundred thousand throws the JVM stops giving you a trace at all.</p>
+    </div>
+    
+    <section class="objectives">
+    <h2 class="objectives__title">By the end of this chapter you can</h2>
+    <ul><li>Read a chained stack trace and find the real failure</li><li>Explain suppressed exceptions and truncated async traces</li><li>Measure what a thrown exception costs</li><li>Recognise the traces the JVM stops producing</li></ul>
+  </section>
+    <p>Most debugging is reading. A stack trace contains the answer far more often
+than people expect, and the reason it seems not to is that it is usually read
+in the wrong order.</p>
+<h2 id="the-shape-of-a-trace" tabindex="-1">The shape of a trace</h2>
+<figure class="widget"><tb-runner data-run="1" data-expect-throw="1"><figcaption class="code__title">Three layers, one problem</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> parseField</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        throw</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> IllegalArgumentException</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">expected a number, found 'abc'</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> loadRecord</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        try</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#59873A;--sh-dark:#80A665">            parseField</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> catch</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">RuntimeException </span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">failure</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            throw</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> IllegalStateException</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">could not load record 42</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> failure</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> handleRequest</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        try</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#59873A;--sh-dark:#80A665">            loadRecord</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> catch</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">RuntimeException </span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">failure</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            throw</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> RuntimeException</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">request failed</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> failure</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#59873A;--sh-dark:#80A665">        handleRequest</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">public class Main {
+    static void parseField() {
+        throw new IllegalArgumentException(&quot;expected a number, found 'abc'&quot;);
+    }
+
+    static void loadRecord() {
+        try {
+            parseField();
+        } catch (RuntimeException failure) {
+            throw new IllegalStateException(&quot;could not load record 42&quot;, failure);
+        }
+    }
+
+    static void handleRequest() {
+        try {
+            loadRecord();
+        } catch (RuntimeException failure) {
+            throw new RuntimeException(&quot;request failed&quot;, failure);
+        }
+    }
+
+    public static void main(String[] args) {
+        handleRequest();
+    }
+}</template></tb-runner></figure>
+<p>The output has three sections and reads bottom-up in two different senses at
+once:</p>
+<figure class="code"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span>Exception in thread "main" java.lang.RuntimeException: request failed</span></span>
+<span class="line"><span>	at Main.handleRequest(Main.java:18)</span></span>
+<span class="line"><span>	at Main.main(Main.java:23)</span></span>
+<span class="line"><span>Caused by: java.lang.IllegalStateException: could not load record 42</span></span>
+<span class="line"><span>	at Main.loadRecord(Main.java:10)</span></span>
+<span class="line"><span>	at Main.handleRequest(Main.java:16)</span></span>
+<span class="line"><span>	... 1 more</span></span>
+<span class="line"><span>Caused by: java.lang.IllegalArgumentException: expected a number, found 'abc'</span></span>
+<span class="line"><span>	at Main.parseField(Main.java:3)</span></span>
+<span class="line"><span>	at Main.loadRecord(Main.java:8)</span></span>
+<span class="line"><span>	... 2 more</span></span></code></pre></figure>
+<p><strong>Within one section</strong>, the top frame is where the exception was created and
+the bottom is the entry point. So <code>parseField</code> threw and <code>main</code> was the caller —
+read down to find how you got there.</p>
+<p><strong>Between sections</strong>, the order is outermost first. The first line is the
+exception your code caught last, which is usually the least informative one
+(<em>request failed</em> tells you nothing). The <strong>last <code>Caused by</code> is normally the
+real failure</strong>, and it is the one people scroll past because it is at the
+bottom.</p>
+<p><code>... 2 more</code> means “the remaining frames are identical to the section above”.
+It is not truncation and nothing is hidden: the last section shows the two
+frames unique to it — where the exception was created, and where the call came
+from — and elides <code>handleRequest</code> and <code>main</code>, which you have already read
+twice. Count the numbers if you like; each section’s own frames plus its
+<code>... N more</code> always add up to the same total.</p>
+<h2 id="suppressed-exceptions" tabindex="-1">Suppressed exceptions</h2>
+<figure class="widget"><tb-runner data-run="1"><figcaption class="code__title">When closing fails too</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">import</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> java</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">io</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">IOException</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    record</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Resource</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">String name</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> implements</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> AutoCloseable</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        @</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">Override</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">        public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> close</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            throw</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> IllegalStateException</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">close failed: </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> name</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        try</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">Resource</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> first</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Resource</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">first</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">             Resource</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> second</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Resource</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">second</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">))</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            throw</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> IOException</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">the body failed</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> catch</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">Exception </span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">failure</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">            System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">primary:    </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> failure</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            for</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">Throwable</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> suppressed</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> :</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> failure</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">getSuppressed</span><span style="--sh-light:#999999;--sh-dark:#666666">())</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">                System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">suppressed: </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> suppressed</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">            }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">import java.io.IOException;
+
+public class Main {
+    record Resource(String name) implements AutoCloseable {
+        @Override
+        public void close() {
+            throw new IllegalStateException(&quot;close failed: &quot; + name);
+        }
+    }
+
+    public static void main(String[] args) {
+        try (Resource first = new Resource(&quot;first&quot;);
+             Resource second = new Resource(&quot;second&quot;)) {
+            throw new IOException(&quot;the body failed&quot;);
+        } catch (Exception failure) {
+            System.out.println(&quot;primary:    &quot; + failure);
+            for (Throwable suppressed : failure.getSuppressed()) {
+                System.out.println(&quot;suppressed: &quot; + suppressed);
+            }
+        }
+    }
+}</template></tb-runner></figure>
+<p><code>try</code>-with-resources closes in reverse order, and a failure in <code>close()</code>
+cannot replace the failure in the body — it would hide the real problem
+(chapter 3.5). So it is attached to the primary exception as a <strong>suppressed</strong>
+exception, and <code>printStackTrace</code> shows it as a <code>Suppressed:</code> section.</p>
+<p>Two consequences. <code>getSuppressed()</code> is where the resource failures live, so a
+handler that logs only <code>failure.getMessage()</code> loses them. And if the body
+succeeds and only <code>close</code> fails, the close failure becomes the primary
+exception with nothing suppressed — which is why a silent <code>close</code> failure is
+the one you should worry about, not the loud one.</p>
+<h2 id="the-trace-that-stops-at-the-pool" tabindex="-1">The trace that stops at the pool</h2>
+<figure class="widget"><tb-runner data-run="1"><figcaption class="code__title">An exception in a worker thread</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">import</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> java</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">util</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">Arrays</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">import</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> java</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">util</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">concurrent</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#A65E2B;--sh-dark:#C99076">*</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> deepInside</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        throw</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> IllegalStateException</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">something broke in the worker</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> throws</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> Exception </span><span style="--sh-light:#999999;--sh-dark:#666666">{</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        try</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">ExecutorService</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> pool</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> Executors</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">newFixedThreadPool</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">1</span><span style="--sh-light:#999999;--sh-dark:#666666">))</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">            Future</span><span style="--sh-light:#999999;--sh-dark:#666666">&#x3C;</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">?</span><span style="--sh-light:#999999;--sh-dark:#666666">></span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> future</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> pool</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">submit</span><span style="--sh-light:#999999;--sh-dark:#666666">(()</span><span style="--sh-light:#999999;--sh-dark:#666666"> -></span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#59873A;--sh-dark:#80A665">                deepInside</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">                return</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> null</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">            });</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            try</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">                future</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">get</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">            }</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> catch</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">ExecutionException </span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">wrapped</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">                Throwable</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> cause</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> wrapped</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">getCause</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">                System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">cause:            </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> cause</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">                System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">frames in cause:  </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> cause</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">getStackTrace</span><span style="--sh-light:#999999;--sh-dark:#666666">().</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">length</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">                System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">mentions main():  </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> Arrays</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">stream</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">cause</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">getStackTrace</span><span style="--sh-light:#999999;--sh-dark:#666666">())</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">                    .</span><span style="--sh-light:#59873A;--sh-dark:#80A665">anyMatch</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">frame </span><span style="--sh-light:#999999;--sh-dark:#666666">-></span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> frame</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">getMethodName</span><span style="--sh-light:#999999;--sh-dark:#666666">().</span><span style="--sh-light:#59873A;--sh-dark:#80A665">equals</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">main</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">)));</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">                System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">frames in wrapper:</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> wrapped</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">getStackTrace</span><span style="--sh-light:#999999;--sh-dark:#666666">().</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">length</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">                System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">wrapper mentions main(): </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> Arrays</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">stream</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">wrapped</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">getStackTrace</span><span style="--sh-light:#999999;--sh-dark:#666666">())</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">                    .</span><span style="--sh-light:#59873A;--sh-dark:#80A665">anyMatch</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">frame </span><span style="--sh-light:#999999;--sh-dark:#666666">-></span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> frame</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">getMethodName</span><span style="--sh-light:#999999;--sh-dark:#666666">().</span><span style="--sh-light:#59873A;--sh-dark:#80A665">equals</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">main</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">)));</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">            }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">import java.util.Arrays;
+import java.util.concurrent.*;
+
+public class Main {
+    static void deepInside() {
+        throw new IllegalStateException(&quot;something broke in the worker&quot;);
+    }
+
+    public static void main(String[] args) throws Exception {
+        try (ExecutorService pool = Executors.newFixedThreadPool(1)) {
+            Future&lt;?&gt; future = pool.submit(() -&gt; {
+                deepInside();
+                return null;
+            });
+
+            try {
+                future.get();
+            } catch (ExecutionException wrapped) {
+                Throwable cause = wrapped.getCause();
+                System.out.println(&quot;cause:            &quot; + cause);
+                System.out.println(&quot;frames in cause:  &quot; + cause.getStackTrace().length);
+                System.out.println(&quot;mentions main():  &quot; + Arrays.stream(cause.getStackTrace())
+                    .anyMatch(frame -&gt; frame.getMethodName().equals(&quot;main&quot;)));
+                System.out.println(&quot;frames in wrapper:&quot; + wrapped.getStackTrace().length);
+                System.out.println(&quot;wrapper mentions main(): &quot; + Arrays.stream(wrapped.getStackTrace())
+                    .anyMatch(frame -&gt; frame.getMethodName().equals(&quot;main&quot;)));
+            }
+        }
+    }
+}</template></tb-runner></figure>
+<p>The cause’s trace runs from <code>deepInside</code> down to the worker thread’s <code>run</code> and
+<strong>stops</strong>. It never mentions <code>main</code>, because the stack it recorded is the
+worker’s, and the worker has no memory of who submitted the task.</p>
+<p>That is why asynchronous stack traces are so much less useful, and why the
+<code>ExecutionException</code> wrapper matters: <em>its</em> trace is the calling thread’s, so
+between the two you can reconstruct both halves. Log the wrapper, not just the
+cause, and you keep both.</p>
+<h2 id="what-an-exception-costs" tabindex="-1">What an exception costs</h2>
+<figure class="widget"><tb-runner data-run="1"><figcaption class="code__title">Measured: a hundred thousand throws</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> final</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Lightweight</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> extends</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> RuntimeException</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#59873A;--sh-dark:#80A665">        Lightweight</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">String </span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">message</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#A65E2B;--sh-dark:#C99076">            super</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">message</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> null</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> false</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> false</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span><span style="--sh-light:#A0ADA0;--sh-dark:#758575DD">   // no suppression, no stack trace</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> long</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> sink</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> int</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> throwing</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> depth</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        if</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">depth </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">==</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            throw</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> IllegalStateException</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">failed</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> throwing</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">depth </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">-</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 1</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 1</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> int</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> throwingLight</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> depth</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        if</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">depth </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">==</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            throw</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Lightweight</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">failed</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> throwingLight</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">depth </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">-</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 1</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 1</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> int</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> returning</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> depth</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> depth </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">==</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> ?</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> :</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> returning</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">depth </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">-</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 1</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 1</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">        int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> iterations</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 100_000</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        for</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> round</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 1</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> round </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">&#x3C;=</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 3</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> round</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">++</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">            long</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> start</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">nanoTime</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            for</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> i</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">&#x3C;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> iterations</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">++</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">                try</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#59873A;--sh-dark:#80A665">                    throwing</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">40</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">                }</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> catch</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">RuntimeException </span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">failure</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">                    sink </span><span style="--sh-light:#999999;--sh-dark:#666666">+=</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> failure</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">getMessage</span><span style="--sh-light:#999999;--sh-dark:#666666">().</span><span style="--sh-light:#59873A;--sh-dark:#80A665">length</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">                }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">            }</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">            long</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> withTrace</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">nanoTime</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> -</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> start</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> /</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 1_000_000</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">            start </span><span style="--sh-light:#999999;--sh-dark:#666666">=</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">nanoTime</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            for</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> i</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">&#x3C;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> iterations</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">++</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">                try</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#59873A;--sh-dark:#80A665">                    throwingLight</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">40</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">                }</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> catch</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">RuntimeException </span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">failure</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">                    sink </span><span style="--sh-light:#999999;--sh-dark:#666666">+=</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> failure</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">getMessage</span><span style="--sh-light:#999999;--sh-dark:#666666">().</span><span style="--sh-light:#59873A;--sh-dark:#80A665">length</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">                }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">            }</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">            long</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> withoutTrace</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">nanoTime</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> -</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> start</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> /</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 1_000_000</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">            start </span><span style="--sh-light:#999999;--sh-dark:#666666">=</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">nanoTime</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">            long</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> total</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            for</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> i</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">&#x3C;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> iterations</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">++</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">                total </span><span style="--sh-light:#999999;--sh-dark:#666666">+=</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> returning</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">40</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">            }</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">            long</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> noException</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">nanoTime</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> -</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> start</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> /</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 1_000_000</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">            System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">round </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> round</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">                +</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">:  with a stack trace </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> withTrace </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">+</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D"> ms</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">                +</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">   without one </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> withoutTrace </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">+</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D"> ms</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">                +</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">   no exception at all </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> noException </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">+</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D"> ms</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">                +</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">   (</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">sink </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">></span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> &#x26;&#x26;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> total </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">></span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">)</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">public class Main {
+    static final class Lightweight extends RuntimeException {
+        Lightweight(String message) {
+            super(message, null, false, false);   // no suppression, no stack trace
+        }
+    }
+
+    static long sink;
+
+    static int throwing(int depth) {
+        if (depth == 0) {
+            throw new IllegalStateException(&quot;failed&quot;);
+        }
+        return throwing(depth - 1) + 1;
+    }
+
+    static int throwingLight(int depth) {
+        if (depth == 0) {
+            throw new Lightweight(&quot;failed&quot;);
+        }
+        return throwingLight(depth - 1) + 1;
+    }
+
+    static int returning(int depth) {
+        return depth == 0 ? 0 : returning(depth - 1) + 1;
+    }
+
+    public static void main(String[] args) {
+        int iterations = 100_000;
+
+        for (int round = 1; round &lt;= 3; round++) {
+            long start = System.nanoTime();
+            for (int i = 0; i &lt; iterations; i++) {
+                try {
+                    throwing(40);
+                } catch (RuntimeException failure) {
+                    sink += failure.getMessage().length();
+                }
+            }
+            long withTrace = (System.nanoTime() - start) / 1_000_000;
+
+            start = System.nanoTime();
+            for (int i = 0; i &lt; iterations; i++) {
+                try {
+                    throwingLight(40);
+                } catch (RuntimeException failure) {
+                    sink += failure.getMessage().length();
+                }
+            }
+            long withoutTrace = (System.nanoTime() - start) / 1_000_000;
+
+            start = System.nanoTime();
+            long total = 0;
+            for (int i = 0; i &lt; iterations; i++) {
+                total += returning(40);
+            }
+            long noException = (System.nanoTime() - start) / 1_000_000;
+
+            System.out.println(&quot;round &quot; + round
+                + &quot;:  with a stack trace &quot; + withTrace + &quot; ms&quot;
+                + &quot;   without one &quot; + withoutTrace + &quot; ms&quot;
+                + &quot;   no exception at all &quot; + noException + &quot; ms&quot;
+                + &quot;   (&quot; + (sink &gt; 0 &amp;&amp; total &gt; 0) + &quot;)&quot;);
+        }
+    }
+}</template></tb-runner></figure>
+<p>Warm, over a forty-frame stack: <strong>273 ms with a trace, 115 ms without, and
+under 3 ms for the same work returning normally</strong> — a hundred times the cost of
+a plain return.</p>
+<p>Two readings. <strong>Capturing the stack is most of the cost</strong> — the four-argument
+<code>RuntimeException</code> constructor turning it off roughly halves it. And an
+exception is <em>hundreds of times</em> more expensive than a return, which is why
+chapter 3.1’s rule about exceptions being for exceptional cases is a
+performance argument as well as a design one.</p>
+<p>The <code>super(message, null, false, false)</code> constructor is worth knowing. It is
+right for a control-flow exception in a hot path — a parser’s “not this rule”
+signal — and wrong for anything a human will ever have to diagnose, because
+you have thrown away the only evidence.</p>
+<h2 id="the-trace-that-disappears" tabindex="-1">The trace that disappears</h2>
+<figure class="widget"><tb-runner data-run="1"><figcaption class="code__title">After enough throws, no trace at all</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> final</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> int</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> SMALL</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> int</span><span style="--sh-light:#999999;--sh-dark:#666666">[</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">1</span><span style="--sh-light:#999999;--sh-dark:#666666">];</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">        int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> withTrace</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">        int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> withoutTrace</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        for</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> i</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">&#x3C;</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 100_000</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">++</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            try</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">                int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> ignored</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> SMALL</span><span style="--sh-light:#999999;--sh-dark:#666666">[</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">5</span><span style="--sh-light:#999999;--sh-dark:#666666">];</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">            }</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> catch</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">ArrayIndexOutOfBoundsException </span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">failure</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">                if</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">failure</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">getStackTrace</span><span style="--sh-light:#999999;--sh-dark:#666666">().</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">length</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> ==</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">                    withoutTrace</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">++</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">                }</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> else</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">                    withTrace</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">++</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">                }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">            }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">of 100,000 throws: </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> withTrace </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">+</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D"> had a stack trace, </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">            +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> withoutTrace </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">+</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D"> had none</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">public class Main {
+    static final int[] SMALL = new int[1];
+
+    public static void main(String[] args) {
+        int withTrace = 0;
+        int withoutTrace = 0;
+
+        for (int i = 0; i &lt; 100_000; i++) {
+            try {
+                int ignored = SMALL[5];
+            } catch (ArrayIndexOutOfBoundsException failure) {
+                if (failure.getStackTrace().length == 0) {
+                    withoutTrace++;
+                } else {
+                    withTrace++;
+                }
+            }
+        }
+
+        System.out.println(&quot;of 100,000 throws: &quot; + withTrace + &quot; had a stack trace, &quot;
+            + withoutTrace + &quot; had none&quot;);
+    }
+}</template></tb-runner></figure>
+<p>Around ninety-nine thousand of them carry a trace, and then several hundred do
+not. Once the JIT has compiled a method that keeps throwing the same built-in
+exception at the same place, it replaces the throw with a <strong>preallocated,
+shared exception object</strong> that has no stack trace and, on older releases, no
+message either. This optimisation is called <em>fast throw</em>, and it is the reason
+for one of the most disorienting production reports there is: “the same
+exception appears in the log, and after a while it has no stack trace.”</p>
+<p>The fix when you meet it is a flag: <code>-XX:-OmitStackTraceInFastThrow</code>. The
+better fix is that a code path throwing a <code>NullPointerException</code> a hundred
+thousand times is a bug you should be fixing anyway.</p>
+<h2 id="reading-a-nullpointerexception" tabindex="-1">Reading a <code>NullPointerException</code></h2>
+<figure class="widget"><tb-runner data-run="1" data-expect-throw="1"><figcaption class="code__title">Which thing was null?</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">import</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> java</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">util</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#A65E2B;--sh-dark:#C99076">*</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    record</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Address</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">String city</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {}</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    record</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Person</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">String name</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> Address address</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">        Map</span><span style="--sh-light:#999999;--sh-dark:#666666">&#x3C;</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> Person</span><span style="--sh-light:#999999;--sh-dark:#666666">></span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> directory</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> HashMap</span><span style="--sh-light:#999999;--sh-dark:#666666">&#x3C;>();</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        directory</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">put</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">ada</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Person</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">Ada</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> null</span><span style="--sh-light:#999999;--sh-dark:#666666">));</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">directory</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">get</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">ada</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">).</span><span style="--sh-light:#59873A;--sh-dark:#80A665">address</span><span style="--sh-light:#999999;--sh-dark:#666666">().</span><span style="--sh-light:#59873A;--sh-dark:#80A665">city</span><span style="--sh-light:#999999;--sh-dark:#666666">().</span><span style="--sh-light:#59873A;--sh-dark:#80A665">length</span><span style="--sh-light:#999999;--sh-dark:#666666">());</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">import java.util.*;
+
+public class Main {
+    record Address(String city) {}
+    record Person(String name, Address address) {}
+
+    public static void main(String[] args) {
+        Map&lt;String, Person&gt; directory = new HashMap&lt;&gt;();
+        directory.put(&quot;ada&quot;, new Person(&quot;Ada&quot;, null));
+
+        System.out.println(directory.get(&quot;ada&quot;).address().city().length());
+    }
+}</template></tb-runner></figure>
+<p>The message names the exact expression: <em>Cannot invoke “String.length()”
+because the return value of “Main$Address.city()” is null</em>. Java 14 added these
+<strong>helpful NullPointerException</strong> messages and Java 15 turned them on by
+default, and they turn the worst line in Java debugging — one line, four calls,
+which was null? — into a sentence.</p>
+<p>Two things to know about them. They need local variable names to describe
+locals, which come from <code>javac -g</code>; Maven and Gradle both pass it, and a build
+that does not gives you <code>&lt;local3&gt;</code> instead of a name (chapter 1.1). And the
+message is computed when it is <em>printed</em>, not when it is thrown, so it costs
+nothing until something asks.</p>
+<h2 id="habits" tabindex="-1">Habits</h2>
+<p><strong>Log the exception, not its message.</strong> <code>log.error(&quot;failed: &quot; + e.getMessage())</code>
+throws away the trace, the cause chain and the suppressed exceptions —
+everything except the least informative line. <code>log.error(&quot;failed&quot;, e)</code> keeps
+all of it.</p>
+<p><strong>Never swallow.</strong> An empty <code>catch</code> block converts a failure into wrong
+behaviour later, somewhere else. If you genuinely mean to ignore it, say so in
+a comment and name the variable <code>ignored</code>.</p>
+<p><strong>Wrap with context, keep the cause.</strong> <code>new IllegalStateException(&quot;loading record &quot; + id, failure)</code> adds the one thing the original could not know. Drop
+the second argument and you have destroyed the evidence — which is what makes
+the three-layer trace above readable rather than a mystery.</p>
+<p><strong>Reach for the debugger sooner.</strong> A conditional breakpoint on <code>id == 42</code> finds
+in one run what twenty printed lines find in five. Set one, run to it, and
+inspect the whole frame rather than the fields you thought to print.</p>
+<p><strong>When it is stuck rather than broken</strong>, take a thread dump — <code>jstack &lt;pid&gt;</code>,
+or <code>jcmd &lt;pid&gt; Thread.print</code>. Chapter 8.1’s deadlock shows up in one as two
+threads <code>BLOCKED</code> on monitors each other holds, and the JVM will even name the
+cycle for you.</p>
+<tb-quiz><template data-role="spec">{
+  &quot;question&quot;: &quot;A log shows `java.lang.NullPointerException` with no message and an empty stack trace, from a line that has thrown thousands of times. What happened?&quot;,
+  &quot;options&quot;: [
+    { &quot;text&quot;: &quot;The JIT replaced the throw with a shared preallocated exception — the fast-throw optimisation — which carries no trace&quot;, &quot;correct&quot;: true, &quot;why&quot;: &quot;Right. It kicks in after a method has been compiled and keeps throwing the same built-in exception; `-XX:-OmitStackTraceInFastThrow` disables it.&quot; },
+    { &quot;text&quot;: &quot;The logging framework truncated the trace to save space&quot;, &quot;correct&quot;: false, &quot;why&quot;: &quot;A truncating logger would still show some frames and usually says so; here `getStackTrace()` genuinely returns an empty array.&quot; },
+    { &quot;text&quot;: &quot;The exception was created with `super(message, null, false, false)`&quot;, &quot;correct&quot;: false, &quot;why&quot;: &quot;That would explain a custom exception, but `NullPointerException` is the JDK's and is not constructed that way by your code.&quot; },
+    { &quot;text&quot;: &quot;The exception crossed a thread boundary and lost its frames&quot;, &quot;correct&quot;: false, &quot;why&quot;: &quot;Crossing threads truncates the trace at the worker's entry point; it does not empty it.&quot; }
+  ]
+}</template></tb-quiz>
+<h2 id="practice" tabindex="-1">Practice</h2>
+<tb-exercise data-id="read-the-trace"></tb-exercise>
+
+    <nav class="pager" aria-label="Chapter navigation"><a class="pager__link pager__link--prev" href="/JavaTB/engineering/build-tools/">
+           <span class="pager__dir">Previous</span>
+           <span class="pager__title">Build tools — what Maven and Gradle are actually doing</span>
+         </a><a class="pager__link pager__link--next" href="/JavaTB/engineering/measuring/">
+           <span class="pager__dir">Next</span>
+           <span class="pager__title">Measuring performance without lying to yourself</span>
+         </a></nav>
+  </article>
+    </main>
+    <aside class="rail">
+    <div class="rail__inner">
+      <p class="rail__title">On this page</p><ul class="rail__list" id="rail-list"><li class="rail__item rail__item--h2"><a href="#the-shape-of-a-trace">The shape of a trace</a></li><li class="rail__item rail__item--h2"><a href="#suppressed-exceptions">Suppressed exceptions</a></li><li class="rail__item rail__item--h2"><a href="#the-trace-that-stops-at-the-pool">The trace that stops at the pool</a></li><li class="rail__item rail__item--h2"><a href="#what-an-exception-costs">What an exception costs</a></li><li class="rail__item rail__item--h2"><a href="#the-trace-that-disappears">The trace that disappears</a></li><li class="rail__item rail__item--h2"><a href="#reading-a-nullpointerexception">Reading a NullPointerException</a></li><li class="rail__item rail__item--h2"><a href="#habits">Habits</a></li><li class="rail__item rail__item--h2"><a href="#practice">Practice</a></li></ul>
+      <div class="rail__meta">
+        <p><span>Standard</span><code>java21</code></p>
+        <p><span>Reading</span>7 min</p>
+        <p><span>Problems</span>2</p>
+      </div>
+      <button class="rail__done" data-chapter="debugging" id="mark-done">Mark as read</button>
+    </div>
+  </aside>
+  </div>
+  <div class="scrim" id="scrim" hidden></div>
+  <script type="module" src="/JavaTB/assets/index-DTPhoH-i.js"></script>
+</body>
+</html>

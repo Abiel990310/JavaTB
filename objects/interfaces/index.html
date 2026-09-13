@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Interfaces · The Java Textbook</title>
+  <meta name="description" content="Declaring what a type can do without saying how, taking on several roles at once, and the compromise that let the library add methods to interfaces already in use.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="/JavaTB/favicon.svg" type="image/svg+xml">
+  <script>(function(){try{var t=localStorage.getItem('tb-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.dataset.theme=t;}catch(e){}})();</script>
+  <link rel="stylesheet" href="/JavaTB/assets/index-DU6-oSWJ.css">
+</head>
+<body class="">
+  <header class="topbar">
+  <button class="topbar__menu" id="menu-toggle" aria-label="Toggle contents" aria-expanded="false">
+    <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>
+  </button>
+  <a class="topbar__brand" href="/JavaTB/">The Java Textbook</a>
+  <div class="topbar__spacer"></div>
+  <button class="search-trigger" id="search-trigger" aria-label="Search the book">
+    <svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M13 13l4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    <span>Search</span><kbd>/</kbd>
+  </button>
+  <button class="icon-button" id="theme-toggle" aria-label="Switch theme" title="Switch theme">
+    <svg viewBox="0 0 20 20" width="17" height="17" aria-hidden="true"><path d="M10 2.5a7.5 7.5 0 1 0 7.5 7.5A6 6 0 0 1 10 2.5Z" fill="currentColor"/></svg>
+  </button>
+</header>
+  <div class="layout">
+    <nav class="sidebar" id="sidebar" aria-label="Book contents">
+  <div class="sidebar__inner">
+    <a class="sidebar__link" href="/JavaTB/">Start here</a>
+    <a class="sidebar__link" href="/JavaTB/practice/">Practice problems</a>
+    <a class="sidebar__link" href="/JavaTB/reference/">Quick reference</a>
+    <a class="sidebar__link" href="/JavaTB/progress/">Progress</a>
+    <hr class="sidebar__rule">
+    <details class="nav__part"><summary><span class="nav__part-num">Part 1</span>Foundations</summary><ul class="nav__list"><li><a href="/JavaTB/foundations/hello-jvm/"><span class="nav__num">1.1</span><span class="nav__text">Hello, JVM</span></a></li><li><a href="/JavaTB/foundations/values-and-variables/"><span class="nav__num">1.2</span><span class="nav__text">Values and variables</span></a></li><li><a href="/JavaTB/foundations/control-flow/"><span class="nav__num">1.3</span><span class="nav__text">Control flow</span></a></li><li><a href="/JavaTB/foundations/methods/"><span class="nav__num">1.4</span><span class="nav__text">Methods</span></a></li><li><a href="/JavaTB/foundations/arrays/"><span class="nav__num">1.5</span><span class="nav__text">Arrays</span></a></li><li><a href="/JavaTB/foundations/strings/"><span class="nav__num">1.6</span><span class="nav__text">Strings</span></a></li><li><a href="/JavaTB/foundations/input-and-output/"><span class="nav__num">1.7</span><span class="nav__text">Input and output</span></a></li></ul></details><details class="nav__part" open><summary><span class="nav__part-num">Part 2</span>Objects</summary><ul class="nav__list"><li><a href="/JavaTB/objects/classes-and-objects/"><span class="nav__num">2.1</span><span class="nav__text">Classes and objects</span></a></li><li><a href="/JavaTB/objects/aliasing/"><span class="nav__num">2.2</span><span class="nav__text">Aliasing</span></a></li><li><a href="/JavaTB/objects/encapsulation/"><span class="nav__num">2.3</span><span class="nav__text">Encapsulation</span></a></li><li><a href="/JavaTB/objects/equals-hashcode-tostring/"><span class="nav__num">2.4</span><span class="nav__text">equals and hashCode</span></a></li><li><a href="/JavaTB/objects/inheritance/"><span class="nav__num">2.5</span><span class="nav__text">Inheritance</span></a></li><li><a href="/JavaTB/objects/polymorphism/"><span class="nav__num">2.6</span><span class="nav__text">Polymorphism</span></a></li><li><a href="/JavaTB/objects/interfaces/" class="is-active" aria-current="page"><span class="nav__num">2.7</span><span class="nav__text">Interfaces</span></a></li><li><a href="/JavaTB/objects/abstract-classes/"><span class="nav__num">2.8</span><span class="nav__text">Abstract classes</span></a></li><li><a href="/JavaTB/objects/records/"><span class="nav__num">2.9</span><span class="nav__text">Records</span></a></li><li><a href="/JavaTB/objects/enums/"><span class="nav__num">2.10</span><span class="nav__text">Enums</span></a></li><li><a href="/JavaTB/objects/sealed-types/"><span class="nav__num">2.11</span><span class="nav__text">Sealed types</span></a></li><li><a href="/JavaTB/objects/nested-classes/"><span class="nav__num">2.12</span><span class="nav__text">Nested classes</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 3</span>When things go wrong</summary><ul class="nav__list"><li><a href="/JavaTB/failure/exceptions/"><span class="nav__num">3.1</span><span class="nav__text">Exceptions</span></a></li><li><a href="/JavaTB/failure/checked-and-unchecked/"><span class="nav__num">3.2</span><span class="nav__text">Checked exceptions</span></a></li><li><a href="/JavaTB/failure/try-with-resources/"><span class="nav__num">3.3</span><span class="nav__text">try-with-resources</span></a></li><li><a href="/JavaTB/failure/null-and-optional/"><span class="nav__num">3.4</span><span class="nav__text">null and Optional</span></a></li><li><a href="/JavaTB/failure/designing-failure/"><span class="nav__num">3.5</span><span class="nav__text">Designing failure</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 4</span>Collections</summary><ul class="nav__list"><li><a href="/JavaTB/collections/the-framework/"><span class="nav__num">4.1</span><span class="nav__text">The framework</span></a></li><li><a href="/JavaTB/collections/list/"><span class="nav__num">4.2</span><span class="nav__text">List</span></a></li><li><a href="/JavaTB/collections/map/"><span class="nav__num">4.3</span><span class="nav__text">Map</span></a></li><li><a href="/JavaTB/collections/set-and-ordering/"><span class="nav__num">4.4</span><span class="nav__text">Set and ordering</span></a></li><li><a href="/JavaTB/collections/queues-and-deques/"><span class="nav__num">4.5</span><span class="nav__text">Queues and deques</span></a></li><li><a href="/JavaTB/collections/iteration/"><span class="nav__num">4.6</span><span class="nav__text">Iteration</span></a></li><li><a href="/JavaTB/collections/immutable-collections/"><span class="nav__num">4.7</span><span class="nav__text">Immutable collections</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 5</span>Generics</summary><ul class="nav__list"><li><a href="/JavaTB/generics/generic-classes-and-methods/"><span class="nav__num">5.1</span><span class="nav__text">Generic classes</span></a></li><li><a href="/JavaTB/generics/erasure/"><span class="nav__num">5.2</span><span class="nav__text">Erasure</span></a></li><li><a href="/JavaTB/generics/wildcards/"><span class="nav__num">5.3</span><span class="nav__text">Wildcards</span></a></li><li><a href="/JavaTB/generics/the-limits/"><span class="nav__num">5.4</span><span class="nav__text">The limits</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 6</span>functional</summary><ul class="nav__list"><li><a href="/JavaTB/functional/lambdas/"><span class="nav__num">6.1</span><span class="nav__text">Lambdas</span></a></li><li><a href="/JavaTB/functional/method-references/"><span class="nav__num">6.2</span><span class="nav__text">Method references</span></a></li><li><a href="/JavaTB/functional/streams/"><span class="nav__num">6.3</span><span class="nav__text">Streams</span></a></li><li><a href="/JavaTB/functional/collectors/"><span class="nav__num">6.4</span><span class="nav__text">Collectors</span></a></li><li><a href="/JavaTB/functional/when-a-loop-is-better/"><span class="nav__num">6.5</span><span class="nav__text">When a loop wins</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 7</span>platform</summary><ul class="nav__list"><li><a href="/JavaTB/platform/lifetime-and-gc/"><span class="nav__num">7.1</span><span class="nav__text">Lifetime and GC</span></a></li><li><a href="/JavaTB/platform/stack-heap-escape/"><span class="nav__num">7.2</span><span class="nav__text">Stack and heap</span></a></li><li><a href="/JavaTB/platform/class-loading/"><span class="nav__num">7.3</span><span class="nav__text">Class loading</span></a></li><li><a href="/JavaTB/platform/reflection/"><span class="nav__num">7.4</span><span class="nav__text">Reflection</span></a></li><li><a href="/JavaTB/platform/classpath-and-modules/"><span class="nav__num">7.5</span><span class="nav__text">Classpath and modules</span></a></li><li><a href="/JavaTB/platform/files-and-nio/"><span class="nav__num">7.6</span><span class="nav__text">Files and NIO</span></a></li><li><a href="/JavaTB/platform/java-time/"><span class="nav__num">7.7</span><span class="nav__text">java.time</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 8</span>concurrency</summary><ul class="nav__list"><li><a href="/JavaTB/concurrency/threads-and-shared-state/"><span class="nav__num">8.1</span><span class="nav__text">Threads</span></a></li><li><a href="/JavaTB/concurrency/the-memory-model/"><span class="nav__num">8.2</span><span class="nav__text">The memory model</span></a></li><li><a href="/JavaTB/concurrency/executors-and-futures/"><span class="nav__num">8.3</span><span class="nav__text">Executors</span></a></li><li><a href="/JavaTB/concurrency/concurrent-collections/"><span class="nav__num">8.4</span><span class="nav__text">Concurrent collections</span></a></li><li><a href="/JavaTB/concurrency/virtual-threads/"><span class="nav__num">8.5</span><span class="nav__text">Virtual threads</span></a></li><li><a href="/JavaTB/concurrency/parallel-streams/"><span class="nav__num">8.6</span><span class="nav__text">Parallel streams</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 9</span>engineering</summary><ul class="nav__list"><li><a href="/JavaTB/engineering/testing/"><span class="nav__num">9.1</span><span class="nav__text">Testing</span></a></li><li><a href="/JavaTB/engineering/build-tools/"><span class="nav__num">9.2</span><span class="nav__text">Build tools</span></a></li><li><a href="/JavaTB/engineering/debugging/"><span class="nav__num">9.3</span><span class="nav__text">Debugging</span></a></li><li><a href="/JavaTB/engineering/measuring/"><span class="nav__num">9.4</span><span class="nav__text">Measuring</span></a></li><li><a href="/JavaTB/engineering/api-design/"><span class="nav__num">9.5</span><span class="nav__text">API design</span></a></li><li><a href="/JavaTB/engineering/packaging/"><span class="nav__num">9.6</span><span class="nav__text">Packaging</span></a></li></ul></details>
+  </div>
+</nav>
+    <main class="content" id="content">
+      <article class="prose" data-chapter="interfaces">
+    <div class="chapter-head">
+      <p class="chapter-eyebrow"><a href="/JavaTB/objects/">Part 2 · Objects</a></p>
+      <h1>Interfaces</h1>
+      <p class="chapter-lede">Declaring what a type can do without saying how, taking on several roles at once, and the compromise that let the library add methods to interfaces already in use.</p>
+    </div>
+    
+    <section class="objectives">
+    <h2 class="objectives__title">By the end of this chapter you can</h2>
+    <ul><li>Declare and implement an interface, and say how it differs from a class</li><li>Explain why default methods exist and what they cost</li><li>Resolve a conflict when two interfaces supply the same default</li></ul>
+  </section>
+    <p>A class says what something <em>is</em> and how it works. An interface says only what
+it can <em>do</em>, and leaves the how to whoever implements it. That sounds like a
+small distinction and it is the one that makes large Java systems possible: code
+written against an interface is written against a promise, and any type that
+keeps the promise can be handed to it — including types that did not exist when
+that code was written.</p>
+<h2 id="declaring-a-capability" tabindex="-1">Declaring a capability</h2>
+<figure class="widget"><tb-runner data-run="1"><figcaption class="code__title">One interface, two unrelated implementations</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">interface</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Priced</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    long</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> pricePence</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Book</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> implements</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Priced</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    private</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> final</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> String</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> title</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    private</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> final</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> long</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> pence</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#59873A;--sh-dark:#80A665">    Book</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">String </span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">title</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> long</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> pence</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#A65E2B;--sh-dark:#C99076">        this</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">title</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> title</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#A65E2B;--sh-dark:#C99076">        this</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">pence</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> pence</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    @</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">Override</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> long</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> pricePence</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> pence</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    @</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">Override</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> String </span><span style="--sh-light:#59873A;--sh-dark:#80A665">toString</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> title</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> DeliverySlot</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> implements</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Priced</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    private</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> final</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> minutes</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#59873A;--sh-dark:#80A665">    DeliverySlot</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> minutes</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#A65E2B;--sh-dark:#C99076">        this</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">minutes</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> minutes</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    @</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">Override</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> long</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> pricePence</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> minutes </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">&#x3C;</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 60</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> ?</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 499</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> :</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 199</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#A0ADA0;--sh-dark:#758575DD">   // faster costs more</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    @</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">Override</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> String </span><span style="--sh-light:#59873A;--sh-dark:#80A665">toString</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> minutes </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">+</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">-minute delivery</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> long</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> total</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">Priced</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> items</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">        long</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> sum</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        for</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">Priced</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> p</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> :</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> items</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">            sum </span><span style="--sh-light:#999999;--sh-dark:#666666">+=</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> p</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">pricePence</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> sum</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">        Priced</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> basket</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Book</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">Dune</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 899</span><span style="--sh-light:#999999;--sh-dark:#666666">),</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> DeliverySlot</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">30</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> };</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        for</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">Priced</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> p</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> :</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> basket</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">            System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">p </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">+</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D"> — </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> p</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">pricePence</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">p</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">total </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> total</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">basket</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">p</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">interface Priced {
+    long pricePence();
+}
+
+class Book implements Priced {
+    private final String title;
+    private final long pence;
+
+    Book(String title, long pence) {
+        this.title = title;
+        this.pence = pence;
+    }
+
+    @Override
+    public long pricePence() {
+        return pence;
+    }
+
+    @Override
+    public String toString() {
+        return title;
+    }
+}
+
+class DeliverySlot implements Priced {
+    private final int minutes;
+
+    DeliverySlot(int minutes) {
+        this.minutes = minutes;
+    }
+
+    @Override
+    public long pricePence() {
+        return minutes &lt; 60 ? 499 : 199;   // faster costs more
+    }
+
+    @Override
+    public String toString() {
+        return minutes + &quot;-minute delivery&quot;;
+    }
+}
+
+public class Main {
+    static long total(Priced[] items) {
+        long sum = 0;
+        for (Priced p : items) {
+            sum += p.pricePence();
+        }
+        return sum;
+    }
+
+    public static void main(String[] args) {
+        Priced[] basket = { new Book(&quot;Dune&quot;, 899), new DeliverySlot(30) };
+
+        for (Priced p : basket) {
+            System.out.println(p + &quot; — &quot; + p.pricePence() + &quot;p&quot;);
+        }
+        System.out.println(&quot;total &quot; + total(basket) + &quot;p&quot;);
+    }
+}</template></tb-runner></figure>
+<p>A <code>Book</code> and a <code>DeliverySlot</code> have nothing in common and no useful shared
+parent. They can still be totalled together, because <code>total</code> does not ask what
+they are — only that they can be priced.</p>
+<p>Interface methods are implicitly <code>public</code>, which is why the implementations say
+<code>public long pricePence()</code>. Leaving it off is a compile error about attempting
+to assign weaker access, and it catches everyone once.</p>
+<h2 id="several-roles-at-once" tabindex="-1">Several roles at once</h2>
+<p>A class has exactly one parent and may implement any number of interfaces:</p>
+<figure class="widget"><tb-runner data-run="1"><figcaption class="code__title">Two capabilities, one class</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">interface</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Priced</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    long</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> pricePence</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">interface</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Discountable</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    long</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> discountPence</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Book</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> implements</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Priced</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Discountable</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    private</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> final</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> long</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> pence</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#59873A;--sh-dark:#80A665">    Book</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">long</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> pence</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#A65E2B;--sh-dark:#C99076">        this</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">pence</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> pence</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    @</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">Override</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> long</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> pricePence</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> pence</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    @</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">Override</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> long</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> discountPence</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> pence </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">/</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 10</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">        Book</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> b</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Book</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">1000</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">        Priced</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> asPriced</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> b</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">        Discountable</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> asDiscountable</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> b</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">asPriced</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">pricePence</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">p, save </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> asDiscountable</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">discountPence</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">p</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">one object, both types: </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">                           +</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">b </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">instanceof</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> Priced</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D"> / </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">b </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">instanceof</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> Discountable</span><span style="--sh-light:#999999;--sh-dark:#666666">));</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">interface Priced {
+    long pricePence();
+}
+
+interface Discountable {
+    long discountPence();
+}
+
+class Book implements Priced, Discountable {
+    private final long pence;
+
+    Book(long pence) {
+        this.pence = pence;
+    }
+
+    @Override
+    public long pricePence() {
+        return pence;
+    }
+
+    @Override
+    public long discountPence() {
+        return pence / 10;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Book b = new Book(1000);
+
+        Priced asPriced = b;
+        Discountable asDiscountable = b;
+
+        System.out.println(asPriced.pricePence() + &quot;p, save &quot; + asDiscountable.discountPence() + &quot;p&quot;);
+        System.out.println(&quot;one object, both types: &quot;
+                           + (b instanceof Priced) + &quot; / &quot; + (b instanceof Discountable));
+    }
+}</template></tb-runner></figure>
+<p>This is why interfaces, and not multiple inheritance of classes, are Java’s
+answer to “this thing plays several roles”. A role is a set of operations, not
+a set of fields, and interfaces carry no state — so combining them raises no
+question about whose fields you get.</p>
+<h2 id="default-methods-and-why-they-exist" tabindex="-1">Default methods, and why they exist</h2>
+<p>Before Java 8, adding a method to an interface broke every existing
+implementation. That is not a theoretical concern: when the library wanted to
+add <code>forEach</code> to <code>Collection</code>, every <code>Collection</code> in the world would have
+stopped compiling.</p>
+<p>The compromise was the <strong>default method</strong> — an interface method with a body,
+which implementations inherit unless they override it.</p>
+<figure class="widget"><tb-runner data-run="1"><figcaption class="code__title">A body in an interface</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">interface</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Greeter</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">    String </span><span style="--sh-light:#59873A;--sh-dark:#80A665">name</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span><span style="--sh-light:#A0ADA0;--sh-dark:#758575DD">                                  // implementations must supply this</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    default</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> String </span><span style="--sh-light:#59873A;--sh-dark:#80A665">greet</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span><span style="--sh-light:#A0ADA0;--sh-dark:#758575DD">                        // they get this free</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">Hello, </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> name</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> PUNCTUATION</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> Greeter </span><span style="--sh-light:#59873A;--sh-dark:#80A665">of</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">String </span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">name</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span><span style="--sh-light:#A0ADA0;--sh-dark:#758575DD">                // a factory on the interface itself</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#999999;--sh-dark:#666666"> ()</span><span style="--sh-light:#999999;--sh-dark:#666666"> -></span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> name</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">    String</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> PUNCTUATION</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">!</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#A0ADA0;--sh-dark:#758575DD">                       // implicitly public static final</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Formal</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> implements</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Greeter</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    @</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">Override</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> String </span><span style="--sh-light:#59873A;--sh-dark:#80A665">name</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">Dr Lovelace</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    @</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">Override</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> String </span><span style="--sh-light:#59873A;--sh-dark:#80A665">greet</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">Good evening, </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> name</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span><span style="--sh-light:#A0ADA0;--sh-dark:#758575DD">           // overriding the default</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">Greeter</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">of</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">Grace</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">).</span><span style="--sh-light:#59873A;--sh-dark:#80A665">greet</span><span style="--sh-light:#999999;--sh-dark:#666666">());</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375">new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Formal</span><span style="--sh-light:#999999;--sh-dark:#666666">().</span><span style="--sh-light:#59873A;--sh-dark:#80A665">greet</span><span style="--sh-light:#999999;--sh-dark:#666666">());</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">interface Greeter {
+    String name();                                  // implementations must supply this
+
+    default String greet() {                        // they get this free
+        return &quot;Hello, &quot; + name() + PUNCTUATION;
+    }
+
+    static Greeter of(String name) {                // a factory on the interface itself
+        return () -&gt; name;
+    }
+
+    String PUNCTUATION = &quot;!&quot;;                       // implicitly public static final
+}
+
+class Formal implements Greeter {
+    @Override
+    public String name() {
+        return &quot;Dr Lovelace&quot;;
+    }
+
+    @Override
+    public String greet() {
+        return &quot;Good evening, &quot; + name();           // overriding the default
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println(Greeter.of(&quot;Grace&quot;).greet());
+        System.out.println(new Formal().greet());
+    }
+}</template></tb-runner></figure>
+<p>Three things there are worth naming.</p>
+<p><code>default</code> gives a body that implementations inherit — <code>Greeter.of(&quot;Grace&quot;)</code>
+supplies only <code>name()</code> and gets <code>greet()</code> for nothing.</p>
+<p><code>static</code> methods on an interface belong to the interface itself and are not
+inherited. They are the natural home for factories, which used to require a
+separate <code>Greeters</code> utility class.</p>
+<p>A field in an interface is implicitly <code>public static final</code> — a constant. An
+interface still holds no per-object state, and a constant here is a design
+smell more often than not: it becomes part of the public API of every
+implementing class.</p>
+<aside class="callout callout--note"><p class="callout__label">Note</p>
+<p><code>() -&gt; name</code> is a <strong>lambda</strong>, standing in for an interface with a single
+abstract method. <code>Greeter</code> qualifies, since <code>greet</code> has a default and only
+<code>name()</code> is left unimplemented. Part 6 is about this properly; it appears here
+because it is the shortest way to make an implementation inline.</p>
+</aside>
+<h2 id="when-two-defaults-collide" tabindex="-1">When two defaults collide</h2>
+<figure class="widget"><tb-runner data-run="1" data-expect-error="1"><figcaption class="code__title">The compiler will not choose for you</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">interface</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Greeter</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    default</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> String </span><span style="--sh-light:#59873A;--sh-dark:#80A665">greet</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">Hello</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">interface</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Shouter</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    default</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> String </span><span style="--sh-light:#59873A;--sh-dark:#80A665">greet</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">OI</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Both</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> implements</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Greeter</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Shouter</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375">new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Both</span><span style="--sh-light:#999999;--sh-dark:#666666">().</span><span style="--sh-light:#59873A;--sh-dark:#80A665">greet</span><span style="--sh-light:#999999;--sh-dark:#666666">());</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">interface Greeter {
+    default String greet() {
+        return &quot;Hello&quot;;
+    }
+}
+
+interface Shouter {
+    default String greet() {
+        return &quot;OI&quot;;
+    }
+}
+
+class Both implements Greeter, Shouter {
+}
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println(new Both().greet());
+    }
+}</template></tb-runner></figure>
+<p><em>class Both inherits unrelated defaults for greet() from types Greeter and
+Shouter.</em> Java refuses to guess. The fix is to override and say which you mean,
+or combine them:</p>
+<figure class="widget"><tb-runner data-run="1"><figcaption class="code__title">Saying which one you meant</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">interface</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Greeter</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    default</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> String </span><span style="--sh-light:#59873A;--sh-dark:#80A665">greet</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">Hello</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">interface</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Shouter</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    default</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> String </span><span style="--sh-light:#59873A;--sh-dark:#80A665">greet</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">OI</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Both</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> implements</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Greeter</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Shouter</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    @</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">Override</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> String </span><span style="--sh-light:#59873A;--sh-dark:#80A665">greet</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> Greeter</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">super</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">greet</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D"> / </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> Shouter</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">super</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">greet</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375">new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Both</span><span style="--sh-light:#999999;--sh-dark:#666666">().</span><span style="--sh-light:#59873A;--sh-dark:#80A665">greet</span><span style="--sh-light:#999999;--sh-dark:#666666">());</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">interface Greeter {
+    default String greet() {
+        return &quot;Hello&quot;;
+    }
+}
+
+interface Shouter {
+    default String greet() {
+        return &quot;OI&quot;;
+    }
+}
+
+class Both implements Greeter, Shouter {
+    @Override
+    public String greet() {
+        return Greeter.super.greet() + &quot; / &quot; + Shouter.super.greet();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println(new Both().greet());
+    }
+}</template></tb-runner></figure>
+<p><code>Greeter.super.greet()</code> names which inherited default you want — the only place
+in Java where <code>super</code> takes a qualifier.</p>
+<aside class="callout callout--pitfall"><p class="callout__label">Pitfall</p>
+<p>Default methods make interfaces more powerful and are not a licence to put
+behaviour in them by preference. A default cannot see any state, so it can only
+be written in terms of the interface’s own abstract methods — and one that is
+overridden by most implementations was never a sensible default. Use them for
+what they were designed for: adding to an interface that already has
+implementations you cannot change.</p>
+</aside>
+<h2 id="interface-or-abstract-class" tabindex="-1">Interface or abstract class?</h2>
+<p>Both let you write code against a general type. The practical differences:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Interface</th>
+<th>Abstract class</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>How many can a class have?</td>
+<td>Any number</td>
+<td>One</td>
+</tr>
+<tr>
+<td>Can it hold state?</td>
+<td>No (constants only)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Can it have a constructor?</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Method bodies?</td>
+<td><code>default</code> and <code>static</code></td>
+<td>Any</td>
+</tr>
+<tr>
+<td>Access levels?</td>
+<td><code>public</code> (and <code>private</code> helpers)</td>
+<td>All four</td>
+</tr>
+</tbody>
+</table>
+<p>The rule of thumb: <strong>an interface for a capability, an abstract class for a
+partial implementation.</strong> <code>Priced</code> is a capability — anything at all might be
+priced. A half-written <code>AbstractHttpHandler</code> that manages a connection and
+leaves one method for you is a partial implementation, and it needs fields.</p>
+<p>Chapter 2.8 takes abstract classes properly.</p>
+<tb-quiz><template data-role="spec">{
+  &quot;question&quot;: &quot;An interface adds a new abstract method. What happens to existing classes that implement it?&quot;,
+  &quot;options&quot;: [
+    { &quot;text&quot;: &quot;They stop compiling until each supplies the method&quot;, &quot;correct&quot;: true, &quot;why&quot;: &quot;Right — and that is exactly the problem default methods were introduced to solve. Adding a default instead lets existing implementations keep compiling and inherit a body.&quot; },
+    { &quot;text&quot;: &quot;They keep compiling and inherit an empty implementation&quot;, &quot;correct&quot;: false, &quot;why&quot;: &quot;Only a default method supplies a body. A plain abstract method is a requirement, and an implementation that does not meet it is not a valid class.&quot; },
+    { &quot;text&quot;: &quot;They keep compiling but throw at run time when it is called&quot;, &quot;correct&quot;: false, &quot;why&quot;: &quot;That is what an abstract method in a class would do if the JVM allowed it, and it does not. Java catches this at compile time.&quot; },
+    { &quot;text&quot;: &quot;Only classes in other packages break&quot;, &quot;correct&quot;: false, &quot;why&quot;: &quot;Implementing an interface is a compile-time obligation regardless of package. Access levels change who may implement it, not what implementing requires.&quot; }
+  ]
+}</template></tb-quiz>
+<h2 id="practice" tabindex="-1">Practice</h2>
+<tb-exercise data-id="sortable-by-interface"></tb-exercise>
+
+    <nav class="pager" aria-label="Chapter navigation"><a class="pager__link pager__link--prev" href="/JavaTB/objects/polymorphism/">
+           <span class="pager__dir">Previous</span>
+           <span class="pager__title">Polymorphism</span>
+         </a><a class="pager__link pager__link--next" href="/JavaTB/objects/abstract-classes/">
+           <span class="pager__dir">Next</span>
+           <span class="pager__title">Abstract classes</span>
+         </a></nav>
+  </article>
+    </main>
+    <aside class="rail">
+    <div class="rail__inner">
+      <p class="rail__title">On this page</p><ul class="rail__list" id="rail-list"><li class="rail__item rail__item--h2"><a href="#declaring-a-capability">Declaring a capability</a></li><li class="rail__item rail__item--h2"><a href="#several-roles-at-once">Several roles at once</a></li><li class="rail__item rail__item--h2"><a href="#default-methods-and-why-they-exist">Default methods, and why they exist</a></li><li class="rail__item rail__item--h2"><a href="#when-two-defaults-collide">When two defaults collide</a></li><li class="rail__item rail__item--h2"><a href="#interface-or-abstract-class">Interface or abstract class?</a></li><li class="rail__item rail__item--h2"><a href="#practice">Practice</a></li></ul>
+      <div class="rail__meta">
+        <p><span>Standard</span><code>java21</code></p>
+        <p><span>Reading</span>5 min</p>
+        <p><span>Problems</span>2</p>
+      </div>
+      <button class="rail__done" data-chapter="interfaces" id="mark-done">Mark as read</button>
+    </div>
+  </aside>
+  </div>
+  <div class="scrim" id="scrim" hidden></div>
+  <script type="module" src="/JavaTB/assets/index-DTPhoH-i.js"></script>
+</body>
+</html>

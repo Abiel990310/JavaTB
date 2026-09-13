@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Object lifetime and garbage collection · The Java Textbook</title>
+  <meta name="description" content="Nothing is freed because you stopped using it — it is freed because nothing can reach it. What that buys, what it costs, and the leaks it does not prevent.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="/JavaTB/favicon.svg" type="image/svg+xml">
+  <script>(function(){try{var t=localStorage.getItem('tb-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.dataset.theme=t;}catch(e){}})();</script>
+  <link rel="stylesheet" href="/JavaTB/assets/index-DU6-oSWJ.css">
+</head>
+<body class="">
+  <header class="topbar">
+  <button class="topbar__menu" id="menu-toggle" aria-label="Toggle contents" aria-expanded="false">
+    <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>
+  </button>
+  <a class="topbar__brand" href="/JavaTB/">The Java Textbook</a>
+  <div class="topbar__spacer"></div>
+  <button class="search-trigger" id="search-trigger" aria-label="Search the book">
+    <svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M13 13l4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    <span>Search</span><kbd>/</kbd>
+  </button>
+  <button class="icon-button" id="theme-toggle" aria-label="Switch theme" title="Switch theme">
+    <svg viewBox="0 0 20 20" width="17" height="17" aria-hidden="true"><path d="M10 2.5a7.5 7.5 0 1 0 7.5 7.5A6 6 0 0 1 10 2.5Z" fill="currentColor"/></svg>
+  </button>
+</header>
+  <div class="layout">
+    <nav class="sidebar" id="sidebar" aria-label="Book contents">
+  <div class="sidebar__inner">
+    <a class="sidebar__link" href="/JavaTB/">Start here</a>
+    <a class="sidebar__link" href="/JavaTB/practice/">Practice problems</a>
+    <a class="sidebar__link" href="/JavaTB/reference/">Quick reference</a>
+    <a class="sidebar__link" href="/JavaTB/progress/">Progress</a>
+    <hr class="sidebar__rule">
+    <details class="nav__part"><summary><span class="nav__part-num">Part 1</span>Foundations</summary><ul class="nav__list"><li><a href="/JavaTB/foundations/hello-jvm/"><span class="nav__num">1.1</span><span class="nav__text">Hello, JVM</span></a></li><li><a href="/JavaTB/foundations/values-and-variables/"><span class="nav__num">1.2</span><span class="nav__text">Values and variables</span></a></li><li><a href="/JavaTB/foundations/control-flow/"><span class="nav__num">1.3</span><span class="nav__text">Control flow</span></a></li><li><a href="/JavaTB/foundations/methods/"><span class="nav__num">1.4</span><span class="nav__text">Methods</span></a></li><li><a href="/JavaTB/foundations/arrays/"><span class="nav__num">1.5</span><span class="nav__text">Arrays</span></a></li><li><a href="/JavaTB/foundations/strings/"><span class="nav__num">1.6</span><span class="nav__text">Strings</span></a></li><li><a href="/JavaTB/foundations/input-and-output/"><span class="nav__num">1.7</span><span class="nav__text">Input and output</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 2</span>Objects</summary><ul class="nav__list"><li><a href="/JavaTB/objects/classes-and-objects/"><span class="nav__num">2.1</span><span class="nav__text">Classes and objects</span></a></li><li><a href="/JavaTB/objects/aliasing/"><span class="nav__num">2.2</span><span class="nav__text">Aliasing</span></a></li><li><a href="/JavaTB/objects/encapsulation/"><span class="nav__num">2.3</span><span class="nav__text">Encapsulation</span></a></li><li><a href="/JavaTB/objects/equals-hashcode-tostring/"><span class="nav__num">2.4</span><span class="nav__text">equals and hashCode</span></a></li><li><a href="/JavaTB/objects/inheritance/"><span class="nav__num">2.5</span><span class="nav__text">Inheritance</span></a></li><li><a href="/JavaTB/objects/polymorphism/"><span class="nav__num">2.6</span><span class="nav__text">Polymorphism</span></a></li><li><a href="/JavaTB/objects/interfaces/"><span class="nav__num">2.7</span><span class="nav__text">Interfaces</span></a></li><li><a href="/JavaTB/objects/abstract-classes/"><span class="nav__num">2.8</span><span class="nav__text">Abstract classes</span></a></li><li><a href="/JavaTB/objects/records/"><span class="nav__num">2.9</span><span class="nav__text">Records</span></a></li><li><a href="/JavaTB/objects/enums/"><span class="nav__num">2.10</span><span class="nav__text">Enums</span></a></li><li><a href="/JavaTB/objects/sealed-types/"><span class="nav__num">2.11</span><span class="nav__text">Sealed types</span></a></li><li><a href="/JavaTB/objects/nested-classes/"><span class="nav__num">2.12</span><span class="nav__text">Nested classes</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 3</span>When things go wrong</summary><ul class="nav__list"><li><a href="/JavaTB/failure/exceptions/"><span class="nav__num">3.1</span><span class="nav__text">Exceptions</span></a></li><li><a href="/JavaTB/failure/checked-and-unchecked/"><span class="nav__num">3.2</span><span class="nav__text">Checked exceptions</span></a></li><li><a href="/JavaTB/failure/try-with-resources/"><span class="nav__num">3.3</span><span class="nav__text">try-with-resources</span></a></li><li><a href="/JavaTB/failure/null-and-optional/"><span class="nav__num">3.4</span><span class="nav__text">null and Optional</span></a></li><li><a href="/JavaTB/failure/designing-failure/"><span class="nav__num">3.5</span><span class="nav__text">Designing failure</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 4</span>Collections</summary><ul class="nav__list"><li><a href="/JavaTB/collections/the-framework/"><span class="nav__num">4.1</span><span class="nav__text">The framework</span></a></li><li><a href="/JavaTB/collections/list/"><span class="nav__num">4.2</span><span class="nav__text">List</span></a></li><li><a href="/JavaTB/collections/map/"><span class="nav__num">4.3</span><span class="nav__text">Map</span></a></li><li><a href="/JavaTB/collections/set-and-ordering/"><span class="nav__num">4.4</span><span class="nav__text">Set and ordering</span></a></li><li><a href="/JavaTB/collections/queues-and-deques/"><span class="nav__num">4.5</span><span class="nav__text">Queues and deques</span></a></li><li><a href="/JavaTB/collections/iteration/"><span class="nav__num">4.6</span><span class="nav__text">Iteration</span></a></li><li><a href="/JavaTB/collections/immutable-collections/"><span class="nav__num">4.7</span><span class="nav__text">Immutable collections</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 5</span>Generics</summary><ul class="nav__list"><li><a href="/JavaTB/generics/generic-classes-and-methods/"><span class="nav__num">5.1</span><span class="nav__text">Generic classes</span></a></li><li><a href="/JavaTB/generics/erasure/"><span class="nav__num">5.2</span><span class="nav__text">Erasure</span></a></li><li><a href="/JavaTB/generics/wildcards/"><span class="nav__num">5.3</span><span class="nav__text">Wildcards</span></a></li><li><a href="/JavaTB/generics/the-limits/"><span class="nav__num">5.4</span><span class="nav__text">The limits</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 6</span>functional</summary><ul class="nav__list"><li><a href="/JavaTB/functional/lambdas/"><span class="nav__num">6.1</span><span class="nav__text">Lambdas</span></a></li><li><a href="/JavaTB/functional/method-references/"><span class="nav__num">6.2</span><span class="nav__text">Method references</span></a></li><li><a href="/JavaTB/functional/streams/"><span class="nav__num">6.3</span><span class="nav__text">Streams</span></a></li><li><a href="/JavaTB/functional/collectors/"><span class="nav__num">6.4</span><span class="nav__text">Collectors</span></a></li><li><a href="/JavaTB/functional/when-a-loop-is-better/"><span class="nav__num">6.5</span><span class="nav__text">When a loop wins</span></a></li></ul></details><details class="nav__part" open><summary><span class="nav__part-num">Part 7</span>platform</summary><ul class="nav__list"><li><a href="/JavaTB/platform/lifetime-and-gc/" class="is-active" aria-current="page"><span class="nav__num">7.1</span><span class="nav__text">Lifetime and GC</span></a></li><li><a href="/JavaTB/platform/stack-heap-escape/"><span class="nav__num">7.2</span><span class="nav__text">Stack and heap</span></a></li><li><a href="/JavaTB/platform/class-loading/"><span class="nav__num">7.3</span><span class="nav__text">Class loading</span></a></li><li><a href="/JavaTB/platform/reflection/"><span class="nav__num">7.4</span><span class="nav__text">Reflection</span></a></li><li><a href="/JavaTB/platform/classpath-and-modules/"><span class="nav__num">7.5</span><span class="nav__text">Classpath and modules</span></a></li><li><a href="/JavaTB/platform/files-and-nio/"><span class="nav__num">7.6</span><span class="nav__text">Files and NIO</span></a></li><li><a href="/JavaTB/platform/java-time/"><span class="nav__num">7.7</span><span class="nav__text">java.time</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 8</span>concurrency</summary><ul class="nav__list"><li><a href="/JavaTB/concurrency/threads-and-shared-state/"><span class="nav__num">8.1</span><span class="nav__text">Threads</span></a></li><li><a href="/JavaTB/concurrency/the-memory-model/"><span class="nav__num">8.2</span><span class="nav__text">The memory model</span></a></li><li><a href="/JavaTB/concurrency/executors-and-futures/"><span class="nav__num">8.3</span><span class="nav__text">Executors</span></a></li><li><a href="/JavaTB/concurrency/concurrent-collections/"><span class="nav__num">8.4</span><span class="nav__text">Concurrent collections</span></a></li><li><a href="/JavaTB/concurrency/virtual-threads/"><span class="nav__num">8.5</span><span class="nav__text">Virtual threads</span></a></li><li><a href="/JavaTB/concurrency/parallel-streams/"><span class="nav__num">8.6</span><span class="nav__text">Parallel streams</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 9</span>engineering</summary><ul class="nav__list"><li><a href="/JavaTB/engineering/testing/"><span class="nav__num">9.1</span><span class="nav__text">Testing</span></a></li><li><a href="/JavaTB/engineering/build-tools/"><span class="nav__num">9.2</span><span class="nav__text">Build tools</span></a></li><li><a href="/JavaTB/engineering/debugging/"><span class="nav__num">9.3</span><span class="nav__text">Debugging</span></a></li><li><a href="/JavaTB/engineering/measuring/"><span class="nav__num">9.4</span><span class="nav__text">Measuring</span></a></li><li><a href="/JavaTB/engineering/api-design/"><span class="nav__num">9.5</span><span class="nav__text">API design</span></a></li><li><a href="/JavaTB/engineering/packaging/"><span class="nav__num">9.6</span><span class="nav__text">Packaging</span></a></li></ul></details>
+  </div>
+</nav>
+    <main class="content" id="content">
+      <article class="prose" data-chapter="lifetime-and-gc">
+    <div class="chapter-head">
+      <p class="chapter-eyebrow"><a href="/JavaTB/platform/">Part 7 · platform</a></p>
+      <h1>Object lifetime and garbage collection</h1>
+      <p class="chapter-lede">Nothing is freed because you stopped using it — it is freed because nothing can reach it. What that buys, what it costs, and the leaks it does not prevent.</p>
+    </div>
+    
+    <section class="objectives">
+    <h2 class="objectives__title">By the end of this chapter you can</h2>
+    <ul><li>State the reachability rule and why it collects cycles</li><li>Explain why allocation of short-lived objects is cheap</li><li>Choose between strong, soft and weak references</li><li>Recognise the four common shapes of a leak in a garbage-collected language</li></ul>
+  </section>
+    <p>Java has no <code>delete</code>, no <code>free</code>, and no destructor. An object’s memory is
+reclaimed when the garbage collector can prove that no part of the running
+program can reach it — not when the last variable naming it goes out of scope,
+and not at any moment you can predict.</p>
+<p>That one rule explains almost everything in this chapter.</p>
+<h2 id="reachability-not-counting" tabindex="-1">Reachability, not counting</h2>
+<p>A collector that counted references would leak a cycle: two objects pointing at
+each other each have a count of one, forever. Java’s does not count. It starts
+from the <strong>roots</strong> — local variables on every thread’s stack, static fields,
+JNI references — and marks everything reachable from them. Whatever is left is
+garbage, cycle or no cycle.</p>
+<figure class="widget"><tb-runner data-run="1"><figcaption class="code__title">A cycle nobody can reach</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">import</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> java</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">lang</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">ref</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#A65E2B;--sh-dark:#C99076">*</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> final</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Node</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">        Node</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> partner</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">        final</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> String</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> name</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#59873A;--sh-dark:#80A665">        Node</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">String </span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">name</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#A65E2B;--sh-dark:#C99076">            this</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">name</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> name</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> throws</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> Exception </span><span style="--sh-light:#999999;--sh-dark:#666666">{</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">        Node</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> a</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Node</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">a</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">        Node</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> b</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Node</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">b</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        a</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">partner</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> b</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        b</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">partner</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> a</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#A0ADA0;--sh-dark:#758575DD">                 // each holds the other</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">        WeakReference</span><span style="--sh-light:#999999;--sh-dark:#666666">&#x3C;</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">Node</span><span style="--sh-light:#999999;--sh-dark:#666666">></span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> watcher</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> WeakReference</span><span style="--sh-light:#999999;--sh-dark:#666666">&#x3C;>(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">a</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">while a is a local: </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> describe</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">watcher</span><span style="--sh-light:#999999;--sh-dark:#666666">));</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">        a </span><span style="--sh-light:#999999;--sh-dark:#666666">=</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> null</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">        b </span><span style="--sh-light:#999999;--sh-dark:#666666">=</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> null</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        for</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> i</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">&#x3C;</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 5</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> &#x26;&#x26;</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> watcher</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">get</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> !=</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> null</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">++</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">            System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">gc</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">            Thread</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">sleep</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">20</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">after dropping both: </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> describe</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">watcher</span><span style="--sh-light:#999999;--sh-dark:#666666">));</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> String </span><span style="--sh-light:#59873A;--sh-dark:#80A665">describe</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">WeakReference</span><span style="--sh-light:#999999;--sh-dark:#666666">&#x3C;</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">?</span><span style="--sh-light:#999999;--sh-dark:#666666">></span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> ref</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> ref</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">get</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> !=</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> null</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> ?</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">still there</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> :</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">collected</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">import java.lang.ref.*;
+
+public class Main {
+    static final class Node {
+        Node partner;
+        final String name;
+
+        Node(String name) {
+            this.name = name;
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        Node a = new Node(&quot;a&quot;);
+        Node b = new Node(&quot;b&quot;);
+        a.partner = b;
+        b.partner = a;                 // each holds the other
+
+        WeakReference&lt;Node&gt; watcher = new WeakReference&lt;&gt;(a);
+        System.out.println(&quot;while a is a local: &quot; + describe(watcher));
+
+        a = null;
+        b = null;
+        for (int i = 0; i &lt; 5 &amp;&amp; watcher.get() != null; i++) {
+            System.gc();
+            Thread.sleep(20);
+        }
+        System.out.println(&quot;after dropping both: &quot; + describe(watcher));
+    }
+
+    static String describe(WeakReference&lt;?&gt; ref) {
+        return ref.get() != null ? &quot;still there&quot; : &quot;collected&quot;;
+    }
+}</template></tb-runner></figure>
+<p>Both objects still point at each other when they are collected. Nothing else
+points at either, so nothing else can ever look at them, so their contents are
+irrelevant.</p>
+<p>The <code>WeakReference</code> in that program is the only honest way to ask “was this
+collected?” — a strong reference would keep the object alive and change the
+answer by asking the question. We come back to it below.</p>
+<h2 id="systemgc-is-a-request" tabindex="-1"><code>System.gc()</code> is a request</h2>
+<p>The loop above calls <code>System.gc()</code> five times and checks between calls. That is
+not superstition: <code>System.gc()</code> is documented as a <em>suggestion</em>, the JVM is
+free to ignore it, and some collectors do. Nothing in the specification
+promises that an unreachable object is ever collected — only that a reachable
+one is not.</p>
+<p>So: never write production code that depends on a collection happening. If you
+find yourself calling <code>System.gc()</code> to fix a bug, the bug is that something is
+still reachable.</p>
+<h2 id="allocation-is-cheaper-than-you-think" tabindex="-1">Allocation is cheaper than you think</h2>
+<p>The usual instinct from a manually-managed language is that <code>new</code> in a loop is
+expensive. Measure it:</p>
+<figure class="widget"><tb-runner data-run="1"><figcaption class="code__title">Measured: twenty million short-lived objects</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    record</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Point</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> x</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> int</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> y</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">        int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> n</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 20_000_000</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        for</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> round</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 1</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> round </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">&#x3C;=</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 3</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> round</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">++</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">            long</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> start</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">nanoTime</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">            long</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> withObjects</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            for</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> i</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">&#x3C;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> n</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">++</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">                Point</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> p</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Point</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">i</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">+</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 1</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">                withObjects </span><span style="--sh-light:#999999;--sh-dark:#666666">+=</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> p</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">x</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> p</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">y</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">            }</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">            long</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> allocMs</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">nanoTime</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> -</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> start</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> /</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 1_000_000</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">            start </span><span style="--sh-light:#999999;--sh-dark:#666666">=</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">nanoTime</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">            long</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> withoutObjects</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            for</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> i</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">&#x3C;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> n</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">++</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">                withoutObjects </span><span style="--sh-light:#999999;--sh-dark:#666666">+=</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">+</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">i </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">+</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 1</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">            }</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">            long</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> plainMs</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">nanoTime</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> -</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> start</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> /</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 1_000_000</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">            System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">round </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> round</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">                +</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">:  allocating </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> allocMs </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">+</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D"> ms</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">                +</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">   plain arithmetic </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> plainMs </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">+</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D"> ms</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">                +</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">   (</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">withObjects </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">==</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> withoutObjects</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">)</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">public class Main {
+    record Point(int x, int y) {}
+
+    public static void main(String[] args) {
+        int n = 20_000_000;
+
+        for (int round = 1; round &lt;= 3; round++) {
+            long start = System.nanoTime();
+            long withObjects = 0;
+            for (int i = 0; i &lt; n; i++) {
+                Point p = new Point(i, i + 1);
+                withObjects += p.x() + p.y();
+            }
+            long allocMs = (System.nanoTime() - start) / 1_000_000;
+
+            start = System.nanoTime();
+            long withoutObjects = 0;
+            for (int i = 0; i &lt; n; i++) {
+                withoutObjects += i + (i + 1);
+            }
+            long plainMs = (System.nanoTime() - start) / 1_000_000;
+
+            System.out.println(&quot;round &quot; + round
+                + &quot;:  allocating &quot; + allocMs + &quot; ms&quot;
+                + &quot;   plain arithmetic &quot; + plainMs + &quot; ms&quot;
+                + &quot;   (&quot; + (withObjects == withoutObjects) + &quot;)&quot;);
+        }
+    }
+}</template></tb-runner></figure>
+<p>Warm, on the machine this was written on: <strong>13 ms against 6 ms</strong> for twenty
+million objects. That is under half a nanosecond each, which is less than an
+allocation can possibly cost — because most of them are not allocated at all.
+Chapter 6.1 met this already: the JIT proves the <code>Point</code> never escapes the loop
+and replaces it with two <code>int</code> locals. Run the same program with
+<code>-XX:-DoEscapeAnalysis</code> and the first column becomes 61–88 ms, which is the
+real allocation cost: about 3 nanoseconds an object.</p>
+<p>Three nanoseconds is still cheap, and the reason is the <strong>generational
+hypothesis</strong>: most objects die young. New objects go into a contiguous nursery
+where allocating is a pointer bump, and collecting it copies out the few
+survivors and resets the pointer — the cost is proportional to what <em>survives</em>,
+not to what was allocated. A million objects that die immediately cost almost
+nothing to collect.</p>
+<p>The practical reading is not “allocate freely” but “do not contort your code to
+avoid short-lived objects”. What is expensive is objects that survive: they get
+copied between generations, and eventually collected by a slower algorithm over
+the whole old generation.</p>
+<h2 id="what-the-collector-does-not-manage" tabindex="-1">What the collector does not manage</h2>
+<p>Memory. Only memory.</p>
+<p>An open file, a socket, a lock, a native buffer — none of those are reclaimed
+by reachability, because the collector has no idea they exist. This is why
+chapter 3.5 exists and why <code>try</code>-with-resources is not optional. An object
+holding a file descriptor can be collected without the descriptor ever being
+closed, and you will find out when the process hits its file-handle limit.</p>
+<p>Java once had <code>finalize()</code> for this. It was unpredictable, ran on an unspecified
+thread, could resurrect the object, and delayed collection of anything holding
+it; it has been deprecated for removal since Java 9 and disabled by default
+since Java 18. Do not write one.</p>
+<p>The supported replacement is <code>Cleaner</code>, and it is a safety net rather than a
+mechanism:</p>
+<figure class="widget"><tb-runner data-run="1"><figcaption class="code__title">Cleaner as a last resort</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">import</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> java</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">lang</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">ref</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">Cleaner</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> final</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> Cleaner</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> CLEANER</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> Cleaner</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">create</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> final</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Handle</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">        private</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> final</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> int</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> payload</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> int</span><span style="--sh-light:#999999;--sh-dark:#666666">[</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">1_000</span><span style="--sh-light:#999999;--sh-dark:#666666">];</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#59873A;--sh-dark:#80A665">        Handle</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#A0ADA0;--sh-dark:#758575DD">            // The action must NOT capture `this` — a lambda holding the object</span></span>
+<span class="line"><span style="--sh-light:#A0ADA0;--sh-dark:#758575DD">            // it is registered for makes it permanently reachable, and the</span></span>
+<span class="line"><span style="--sh-light:#A0ADA0;--sh-dark:#758575DD">            // cleaner would never run.</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">            CLEANER</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">register</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#A65E2B;--sh-dark:#C99076">this</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#999999;--sh-dark:#666666"> ()</span><span style="--sh-light:#999999;--sh-dark:#666666"> -></span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">  cleanup ran</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">));</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> throws</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> Exception </span><span style="--sh-light:#999999;--sh-dark:#666666">{</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">        Handle</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> handle</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Handle</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">created</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">        handle </span><span style="--sh-light:#999999;--sh-dark:#666666">=</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> null</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        for</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> i</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">&#x3C;</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 10</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">++</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">            System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">gc</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">            Thread</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">sleep</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">20</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        Thread</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">sleep</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">100</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">done</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">import java.lang.ref.Cleaner;
+
+public class Main {
+    static final Cleaner CLEANER = Cleaner.create();
+
+    static final class Handle {
+        private final int[] payload = new int[1_000];
+
+        Handle() {
+            // The action must NOT capture `this` — a lambda holding the object
+            // it is registered for makes it permanently reachable, and the
+            // cleaner would never run.
+            CLEANER.register(this, () -&gt; System.out.println(&quot;  cleanup ran&quot;));
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        Handle handle = new Handle();
+        System.out.println(&quot;created&quot;);
+
+        handle = null;
+        for (int i = 0; i &lt; 10; i++) {
+            System.gc();
+            Thread.sleep(20);
+        }
+        Thread.sleep(100);
+        System.out.println(&quot;done&quot;);
+    }
+}</template></tb-runner></figure>
+<p>The comment in that program is the whole trap. A <code>Cleaner</code> action that captures
+<code>this</code> — including any lambda referring to an instance field — keeps the object
+reachable through the cleaner’s own registry, so the object never becomes
+garbage and the action never runs. The action must hold only the state it needs
+to clean up, in a separate object.</p>
+<p>And note the shape of the demonstration: ten <code>System.gc()</code> calls and a sleep,
+because there is no way to make it happen on demand. That is exactly why a
+<code>Cleaner</code> is a backstop for a caller who forgot <code>close()</code>, never the primary
+path.</p>
+<h2 id="four-strengths-of-reference" tabindex="-1">Four strengths of reference</h2>
+<table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>Cleared when</th>
+<th>Use for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Strong (an ordinary field or variable)</td>
+<td>never — it keeps the object alive</td>
+<td>everything, by default</td>
+</tr>
+<tr>
+<td><code>SoftReference</code></td>
+<td>the JVM would otherwise run out of memory</td>
+<td>a cache you would like to keep</td>
+</tr>
+<tr>
+<td><code>WeakReference</code></td>
+<td>as soon as nothing strong points at the object</td>
+<td>a key or a back-pointer that must not keep its target alive</td>
+</tr>
+<tr>
+<td><code>PhantomReference</code></td>
+<td>after the object is finalizable, and <code>get()</code> always returns <code>null</code></td>
+<td>knowing an object <em>has</em> gone, for cleanup</td>
+</tr>
+</tbody>
+</table>
+<figure class="widget"><tb-runner data-run="1"><figcaption class="code__title">Soft under pressure, weak on sight</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">import</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> java</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">lang</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">ref</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#A65E2B;--sh-dark:#C99076">*</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">import</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> java</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">util</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#A65E2B;--sh-dark:#C99076">*</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> throws</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> Exception </span><span style="--sh-light:#999999;--sh-dark:#666666">{</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">max heap: </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> Runtime</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">getRuntime</span><span style="--sh-light:#999999;--sh-dark:#666666">().</span><span style="--sh-light:#59873A;--sh-dark:#80A665">maxMemory</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> /</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">1024</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> *</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 1024</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D"> MB</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">        List</span><span style="--sh-light:#999999;--sh-dark:#666666">&#x3C;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">SoftReference</span><span style="--sh-light:#999999;--sh-dark:#666666">&#x3C;</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">byte</span><span style="--sh-light:#999999;--sh-dark:#666666">[]>></span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> cache</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> ArrayList</span><span style="--sh-light:#999999;--sh-dark:#666666">&#x3C;>();</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        for</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> i</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">&#x3C;</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 400</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">++</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">            cache</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">add</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375">new</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> SoftReference</span><span style="--sh-light:#999999;--sh-dark:#666666">&#x3C;>(</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375">new</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> byte</span><span style="--sh-light:#999999;--sh-dark:#666666">[</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">1024</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> *</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 1024</span><span style="--sh-light:#999999;--sh-dark:#666666">]));</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">        long</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> cleared</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> cache</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">stream</span><span style="--sh-light:#999999;--sh-dark:#666666">().</span><span style="--sh-light:#59873A;--sh-dark:#80A665">filter</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">ref </span><span style="--sh-light:#999999;--sh-dark:#666666">-></span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> ref</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">get</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> ==</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> null</span><span style="--sh-light:#999999;--sh-dark:#666666">).</span><span style="--sh-light:#59873A;--sh-dark:#80A665">count</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">soft references cleared: </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> cleared </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">+</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D"> of </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> cache</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">size</span><span style="--sh-light:#999999;--sh-dark:#666666">());</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">        Map</span><span style="--sh-light:#999999;--sh-dark:#666666">&#x3C;</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">Object</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> String</span><span style="--sh-light:#999999;--sh-dark:#666666">></span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> weak</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> WeakHashMap</span><span style="--sh-light:#999999;--sh-dark:#666666">&#x3C;>();</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">        Object</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> kept</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Object</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        weak</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">put</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">kept</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">reachable key</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        weak</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">put</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375">new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Object</span><span style="--sh-light:#999999;--sh-dark:#666666">(),</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">nothing points at this key</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">weak map before: </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> weak</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">size</span><span style="--sh-light:#999999;--sh-dark:#666666">());</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        for</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> i</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">&#x3C;</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 5</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">++</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">            System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">gc</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">            Thread</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">sleep</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">20</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">weak map after:  </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> weak</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">size</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">, kept = </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> weak</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">get</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">kept</span><span style="--sh-light:#999999;--sh-dark:#666666">));</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">import java.lang.ref.*;
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        System.out.println(&quot;max heap: &quot; + Runtime.getRuntime().maxMemory() / (1024 * 1024) + &quot; MB&quot;);
+
+        List&lt;SoftReference&lt;byte[]&gt;&gt; cache = new ArrayList&lt;&gt;();
+        for (int i = 0; i &lt; 400; i++) {
+            cache.add(new SoftReference&lt;&gt;(new byte[1024 * 1024]));
+        }
+        long cleared = cache.stream().filter(ref -&gt; ref.get() == null).count();
+        System.out.println(&quot;soft references cleared: &quot; + cleared + &quot; of &quot; + cache.size());
+
+        Map&lt;Object, String&gt; weak = new WeakHashMap&lt;&gt;();
+        Object kept = new Object();
+        weak.put(kept, &quot;reachable key&quot;);
+        weak.put(new Object(), &quot;nothing points at this key&quot;);
+        System.out.println(&quot;weak map before: &quot; + weak.size());
+
+        for (int i = 0; i &lt; 5; i++) {
+            System.gc();
+            Thread.sleep(20);
+        }
+        System.out.println(&quot;weak map after:  &quot; + weak.size() + &quot;, kept = &quot; + weak.get(kept));
+    }
+}</template></tb-runner></figure>
+<p>Four hundred one-megabyte arrays do not fit in a 512 MB heap. With strong
+references that is an <code>OutOfMemoryError</code>; with soft ones the collector clears
+as many as it needs to — 254 of them here — and the program survives. That is
+the entire use case: a cache whose contents are nice to have.</p>
+<p><code>WeakHashMap</code> shows the other half. Its entry whose key nobody else holds
+disappears; the entry whose key is still a local survives. That is what makes
+it right for “extra data attached to an object I do not own” and wrong for
+almost everything else, because entries vanish at unpredictable times.</p>
+<p>Use soft references sparingly. They delay collection, they interact badly with
+a full heap, and a bounded <code>LinkedHashMap</code> cache with an eviction policy you
+chose is usually better than one the collector empties for you at the worst
+possible moment.</p>
+<h2 id="leaks-still-happen" tabindex="-1">Leaks still happen</h2>
+<p>A garbage collector removes the <em>use-after-free</em> and <em>double-free</em> families of
+bug. It does not remove leaks, because a leak in Java is not a failure to free
+— it is an accidental reference.</p>
+<figure class="widget"><tb-runner data-run="1"><figcaption class="code__title">Measured: two hundred thousand things nobody needs</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">import</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> java</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">util</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#A65E2B;--sh-dark:#C99076">*</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> final</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> List</span><span style="--sh-light:#999999;--sh-dark:#666666">&#x3C;</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#999999;--sh-dark:#666666">[]></span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> LISTENERS</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> ArrayList</span><span style="--sh-light:#999999;--sh-dark:#666666">&#x3C;>();</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> long</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> usedBytes</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">        Runtime</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> runtime</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> Runtime</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">getRuntime</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> runtime</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">totalMemory</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> -</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> runtime</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">freeMemory</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> throws</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> Exception </span><span style="--sh-light:#999999;--sh-dark:#666666">{</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">        long</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> before</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> usedBytes</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        for</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> i</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">&#x3C;</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 200_000</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">++</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">            LISTENERS</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">add</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375">new</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> int</span><span style="--sh-light:#999999;--sh-dark:#666666">[</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">64</span><span style="--sh-light:#999999;--sh-dark:#666666">]);</span><span style="--sh-light:#A0ADA0;--sh-dark:#758575DD">        // registered, never removed</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">held by a static list: </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">            +</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#59873A;--sh-dark:#80A665">usedBytes</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> -</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> before</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> /</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">1024</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> *</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 1024</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D"> MB</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        LISTENERS</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">clear</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        for</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> i</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">&#x3C;</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 3</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">++</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">            System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">gc</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">            Thread</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">sleep</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">30</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">after clearing:        </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">            +</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#59873A;--sh-dark:#80A665">usedBytes</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> -</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> before</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> /</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">1024</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> *</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 1024</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D"> MB</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">import java.util.*;
+
+public class Main {
+    static final List&lt;int[]&gt; LISTENERS = new ArrayList&lt;&gt;();
+
+    static long usedBytes() {
+        Runtime runtime = Runtime.getRuntime();
+        return runtime.totalMemory() - runtime.freeMemory();
+    }
+
+    public static void main(String[] args) throws Exception {
+        long before = usedBytes();
+
+        for (int i = 0; i &lt; 200_000; i++) {
+            LISTENERS.add(new int[64]);        // registered, never removed
+        }
+        System.out.println(&quot;held by a static list: &quot;
+            + (usedBytes() - before) / (1024 * 1024) + &quot; MB&quot;);
+
+        LISTENERS.clear();
+        for (int i = 0; i &lt; 3; i++) {
+            System.gc();
+            Thread.sleep(30);
+        }
+        System.out.println(&quot;after clearing:        &quot;
+            + (usedBytes() - before) / (1024 * 1024) + &quot; MB&quot;);
+    }
+}</template></tb-runner></figure>
+<p>56 MB held, zero after <code>clear()</code>. The collector was working perfectly the whole
+time — a <code>static</code> field is a root, so everything in that list was genuinely
+reachable.</p>
+<p>The four shapes worth recognising:</p>
+<ul>
+<li><strong>The collection that never forgets.</strong> A cache, a registry, a list of
+listeners, a <code>Map</code> keyed on something long-lived. Every <code>add</code> needs a
+corresponding <code>remove</code>, or a bound.</li>
+<li><strong>The listener that outlives its subject.</strong> <code>this::handle</code> registered with a
+long-lived publisher keeps the whole enclosing object alive — chapter 6.2’s
+note about bound method references, met as a memory bug.</li>
+<li><strong><code>ThreadLocal</code> on a pooled thread.</strong> The thread is never destroyed, so the
+value is never released. Always <code>remove()</code> in a <code>finally</code>.</li>
+<li><strong>The oversized container.</strong> <code>ArrayList.remove</code> nulls the slot it vacates
+(chapter 5.2’s problem said why); a container you wrote that does not is
+holding every element ever added.</li>
+</ul>
+<p>The tell is always the same: something is still reachable. When a heap grows
+without bound, the question is never “why was this not freed” but “who is still
+holding it” — which is a question a heap dump answers directly.</p>
+<tb-quiz><template data-role="spec">{
+  &quot;question&quot;: &quot;Two objects hold references to each other and nothing else refers to either. What happens?&quot;,
+  &quot;options&quot;: [
+    { &quot;text&quot;: &quot;Both become eligible for collection, because neither is reachable from a root&quot;, &quot;correct&quot;: true, &quot;why&quot;: &quot;Right. Java marks from the roots rather than counting references, so a cycle with no path from a root is garbage like anything else.&quot; },
+    { &quot;text&quot;: &quot;Neither is collected, because each has a live reference to it&quot;, &quot;correct&quot;: false, &quot;why&quot;: &quot;That is what a reference-counting collector would do, and it is why reference counting leaks cycles. Java does not count.&quot; },
+    { &quot;text&quot;: &quot;One is collected and the other survives, depending on allocation order&quot;, &quot;correct&quot;: false, &quot;why&quot;: &quot;Reachability is not affected by order; the pair is reached or not reached together.&quot; },
+    { &quot;text&quot;: &quot;They are collected only if you break the cycle by setting one field to null&quot;, &quot;correct&quot;: false, &quot;why&quot;: &quot;Breaking the cycle is a habit from reference-counted languages and does nothing here.&quot; }
+  ]
+}</template></tb-quiz>
+<h2 id="practice" tabindex="-1">Practice</h2>
+<tb-exercise data-id="plug-the-leak"></tb-exercise>
+
+    <nav class="pager" aria-label="Chapter navigation"><a class="pager__link pager__link--prev" href="/JavaTB/functional/when-a-loop-is-better/">
+           <span class="pager__dir">Previous</span>
+           <span class="pager__title">When a loop is the better answer</span>
+         </a><a class="pager__link pager__link--next" href="/JavaTB/platform/stack-heap-escape/">
+           <span class="pager__dir">Next</span>
+           <span class="pager__title">Stack, heap, and escape — where an object actually lives</span>
+         </a></nav>
+  </article>
+    </main>
+    <aside class="rail">
+    <div class="rail__inner">
+      <p class="rail__title">On this page</p><ul class="rail__list" id="rail-list"><li class="rail__item rail__item--h2"><a href="#reachability-not-counting">Reachability, not counting</a></li><li class="rail__item rail__item--h2"><a href="#systemgc-is-a-request">System.gc() is a request</a></li><li class="rail__item rail__item--h2"><a href="#allocation-is-cheaper-than-you-think">Allocation is cheaper than you think</a></li><li class="rail__item rail__item--h2"><a href="#what-the-collector-does-not-manage">What the collector does not manage</a></li><li class="rail__item rail__item--h2"><a href="#four-strengths-of-reference">Four strengths of reference</a></li><li class="rail__item rail__item--h2"><a href="#leaks-still-happen">Leaks still happen</a></li><li class="rail__item rail__item--h2"><a href="#practice">Practice</a></li></ul>
+      <div class="rail__meta">
+        <p><span>Standard</span><code>java21</code></p>
+        <p><span>Reading</span>8 min</p>
+        <p><span>Problems</span>2</p>
+      </div>
+      <button class="rail__done" data-chapter="lifetime-and-gc" id="mark-done">Mark as read</button>
+    </div>
+  </aside>
+  </div>
+  <div class="scrim" id="scrim" hidden></div>
+  <script type="module" src="/JavaTB/assets/index-DTPhoH-i.js"></script>
+</body>
+</html>

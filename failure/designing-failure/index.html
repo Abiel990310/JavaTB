@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Designing failure · The Java Textbook</title>
+  <meta name="description" content="Choosing between throwing, returning nothing, and returning a result that names the problem — with the cost of each measured rather than assumed.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="/JavaTB/favicon.svg" type="image/svg+xml">
+  <script>(function(){try{var t=localStorage.getItem('tb-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.dataset.theme=t;}catch(e){}})();</script>
+  <link rel="stylesheet" href="/JavaTB/assets/index-DU6-oSWJ.css">
+</head>
+<body class="">
+  <header class="topbar">
+  <button class="topbar__menu" id="menu-toggle" aria-label="Toggle contents" aria-expanded="false">
+    <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>
+  </button>
+  <a class="topbar__brand" href="/JavaTB/">The Java Textbook</a>
+  <div class="topbar__spacer"></div>
+  <button class="search-trigger" id="search-trigger" aria-label="Search the book">
+    <svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M13 13l4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    <span>Search</span><kbd>/</kbd>
+  </button>
+  <button class="icon-button" id="theme-toggle" aria-label="Switch theme" title="Switch theme">
+    <svg viewBox="0 0 20 20" width="17" height="17" aria-hidden="true"><path d="M10 2.5a7.5 7.5 0 1 0 7.5 7.5A6 6 0 0 1 10 2.5Z" fill="currentColor"/></svg>
+  </button>
+</header>
+  <div class="layout">
+    <nav class="sidebar" id="sidebar" aria-label="Book contents">
+  <div class="sidebar__inner">
+    <a class="sidebar__link" href="/JavaTB/">Start here</a>
+    <a class="sidebar__link" href="/JavaTB/practice/">Practice problems</a>
+    <a class="sidebar__link" href="/JavaTB/reference/">Quick reference</a>
+    <a class="sidebar__link" href="/JavaTB/progress/">Progress</a>
+    <hr class="sidebar__rule">
+    <details class="nav__part"><summary><span class="nav__part-num">Part 1</span>Foundations</summary><ul class="nav__list"><li><a href="/JavaTB/foundations/hello-jvm/"><span class="nav__num">1.1</span><span class="nav__text">Hello, JVM</span></a></li><li><a href="/JavaTB/foundations/values-and-variables/"><span class="nav__num">1.2</span><span class="nav__text">Values and variables</span></a></li><li><a href="/JavaTB/foundations/control-flow/"><span class="nav__num">1.3</span><span class="nav__text">Control flow</span></a></li><li><a href="/JavaTB/foundations/methods/"><span class="nav__num">1.4</span><span class="nav__text">Methods</span></a></li><li><a href="/JavaTB/foundations/arrays/"><span class="nav__num">1.5</span><span class="nav__text">Arrays</span></a></li><li><a href="/JavaTB/foundations/strings/"><span class="nav__num">1.6</span><span class="nav__text">Strings</span></a></li><li><a href="/JavaTB/foundations/input-and-output/"><span class="nav__num">1.7</span><span class="nav__text">Input and output</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 2</span>Objects</summary><ul class="nav__list"><li><a href="/JavaTB/objects/classes-and-objects/"><span class="nav__num">2.1</span><span class="nav__text">Classes and objects</span></a></li><li><a href="/JavaTB/objects/aliasing/"><span class="nav__num">2.2</span><span class="nav__text">Aliasing</span></a></li><li><a href="/JavaTB/objects/encapsulation/"><span class="nav__num">2.3</span><span class="nav__text">Encapsulation</span></a></li><li><a href="/JavaTB/objects/equals-hashcode-tostring/"><span class="nav__num">2.4</span><span class="nav__text">equals and hashCode</span></a></li><li><a href="/JavaTB/objects/inheritance/"><span class="nav__num">2.5</span><span class="nav__text">Inheritance</span></a></li><li><a href="/JavaTB/objects/polymorphism/"><span class="nav__num">2.6</span><span class="nav__text">Polymorphism</span></a></li><li><a href="/JavaTB/objects/interfaces/"><span class="nav__num">2.7</span><span class="nav__text">Interfaces</span></a></li><li><a href="/JavaTB/objects/abstract-classes/"><span class="nav__num">2.8</span><span class="nav__text">Abstract classes</span></a></li><li><a href="/JavaTB/objects/records/"><span class="nav__num">2.9</span><span class="nav__text">Records</span></a></li><li><a href="/JavaTB/objects/enums/"><span class="nav__num">2.10</span><span class="nav__text">Enums</span></a></li><li><a href="/JavaTB/objects/sealed-types/"><span class="nav__num">2.11</span><span class="nav__text">Sealed types</span></a></li><li><a href="/JavaTB/objects/nested-classes/"><span class="nav__num">2.12</span><span class="nav__text">Nested classes</span></a></li></ul></details><details class="nav__part" open><summary><span class="nav__part-num">Part 3</span>When things go wrong</summary><ul class="nav__list"><li><a href="/JavaTB/failure/exceptions/"><span class="nav__num">3.1</span><span class="nav__text">Exceptions</span></a></li><li><a href="/JavaTB/failure/checked-and-unchecked/"><span class="nav__num">3.2</span><span class="nav__text">Checked exceptions</span></a></li><li><a href="/JavaTB/failure/try-with-resources/"><span class="nav__num">3.3</span><span class="nav__text">try-with-resources</span></a></li><li><a href="/JavaTB/failure/null-and-optional/"><span class="nav__num">3.4</span><span class="nav__text">null and Optional</span></a></li><li><a href="/JavaTB/failure/designing-failure/" class="is-active" aria-current="page"><span class="nav__num">3.5</span><span class="nav__text">Designing failure</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 4</span>Collections</summary><ul class="nav__list"><li><a href="/JavaTB/collections/the-framework/"><span class="nav__num">4.1</span><span class="nav__text">The framework</span></a></li><li><a href="/JavaTB/collections/list/"><span class="nav__num">4.2</span><span class="nav__text">List</span></a></li><li><a href="/JavaTB/collections/map/"><span class="nav__num">4.3</span><span class="nav__text">Map</span></a></li><li><a href="/JavaTB/collections/set-and-ordering/"><span class="nav__num">4.4</span><span class="nav__text">Set and ordering</span></a></li><li><a href="/JavaTB/collections/queues-and-deques/"><span class="nav__num">4.5</span><span class="nav__text">Queues and deques</span></a></li><li><a href="/JavaTB/collections/iteration/"><span class="nav__num">4.6</span><span class="nav__text">Iteration</span></a></li><li><a href="/JavaTB/collections/immutable-collections/"><span class="nav__num">4.7</span><span class="nav__text">Immutable collections</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 5</span>Generics</summary><ul class="nav__list"><li><a href="/JavaTB/generics/generic-classes-and-methods/"><span class="nav__num">5.1</span><span class="nav__text">Generic classes</span></a></li><li><a href="/JavaTB/generics/erasure/"><span class="nav__num">5.2</span><span class="nav__text">Erasure</span></a></li><li><a href="/JavaTB/generics/wildcards/"><span class="nav__num">5.3</span><span class="nav__text">Wildcards</span></a></li><li><a href="/JavaTB/generics/the-limits/"><span class="nav__num">5.4</span><span class="nav__text">The limits</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 6</span>functional</summary><ul class="nav__list"><li><a href="/JavaTB/functional/lambdas/"><span class="nav__num">6.1</span><span class="nav__text">Lambdas</span></a></li><li><a href="/JavaTB/functional/method-references/"><span class="nav__num">6.2</span><span class="nav__text">Method references</span></a></li><li><a href="/JavaTB/functional/streams/"><span class="nav__num">6.3</span><span class="nav__text">Streams</span></a></li><li><a href="/JavaTB/functional/collectors/"><span class="nav__num">6.4</span><span class="nav__text">Collectors</span></a></li><li><a href="/JavaTB/functional/when-a-loop-is-better/"><span class="nav__num">6.5</span><span class="nav__text">When a loop wins</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 7</span>platform</summary><ul class="nav__list"><li><a href="/JavaTB/platform/lifetime-and-gc/"><span class="nav__num">7.1</span><span class="nav__text">Lifetime and GC</span></a></li><li><a href="/JavaTB/platform/stack-heap-escape/"><span class="nav__num">7.2</span><span class="nav__text">Stack and heap</span></a></li><li><a href="/JavaTB/platform/class-loading/"><span class="nav__num">7.3</span><span class="nav__text">Class loading</span></a></li><li><a href="/JavaTB/platform/reflection/"><span class="nav__num">7.4</span><span class="nav__text">Reflection</span></a></li><li><a href="/JavaTB/platform/classpath-and-modules/"><span class="nav__num">7.5</span><span class="nav__text">Classpath and modules</span></a></li><li><a href="/JavaTB/platform/files-and-nio/"><span class="nav__num">7.6</span><span class="nav__text">Files and NIO</span></a></li><li><a href="/JavaTB/platform/java-time/"><span class="nav__num">7.7</span><span class="nav__text">java.time</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 8</span>concurrency</summary><ul class="nav__list"><li><a href="/JavaTB/concurrency/threads-and-shared-state/"><span class="nav__num">8.1</span><span class="nav__text">Threads</span></a></li><li><a href="/JavaTB/concurrency/the-memory-model/"><span class="nav__num">8.2</span><span class="nav__text">The memory model</span></a></li><li><a href="/JavaTB/concurrency/executors-and-futures/"><span class="nav__num">8.3</span><span class="nav__text">Executors</span></a></li><li><a href="/JavaTB/concurrency/concurrent-collections/"><span class="nav__num">8.4</span><span class="nav__text">Concurrent collections</span></a></li><li><a href="/JavaTB/concurrency/virtual-threads/"><span class="nav__num">8.5</span><span class="nav__text">Virtual threads</span></a></li><li><a href="/JavaTB/concurrency/parallel-streams/"><span class="nav__num">8.6</span><span class="nav__text">Parallel streams</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 9</span>engineering</summary><ul class="nav__list"><li><a href="/JavaTB/engineering/testing/"><span class="nav__num">9.1</span><span class="nav__text">Testing</span></a></li><li><a href="/JavaTB/engineering/build-tools/"><span class="nav__num">9.2</span><span class="nav__text">Build tools</span></a></li><li><a href="/JavaTB/engineering/debugging/"><span class="nav__num">9.3</span><span class="nav__text">Debugging</span></a></li><li><a href="/JavaTB/engineering/measuring/"><span class="nav__num">9.4</span><span class="nav__text">Measuring</span></a></li><li><a href="/JavaTB/engineering/api-design/"><span class="nav__num">9.5</span><span class="nav__text">API design</span></a></li><li><a href="/JavaTB/engineering/packaging/"><span class="nav__num">9.6</span><span class="nav__text">Packaging</span></a></li></ul></details>
+  </div>
+</nav>
+    <main class="content" id="content">
+      <article class="prose" data-chapter="designing-failure">
+    <div class="chapter-head">
+      <p class="chapter-eyebrow"><a href="/JavaTB/failure/">Part 3 · When things go wrong</a></p>
+      <h1>Designing failure</h1>
+      <p class="chapter-lede">Choosing between throwing, returning nothing, and returning a result that names the problem — with the cost of each measured rather than assumed.</p>
+    </div>
+    
+    <section class="objectives">
+    <h2 class="objectives__title">By the end of this chapter you can</h2>
+    <ul><li>Choose between an exception, an Optional and a result type for a given failure</li><li>Say what an exception actually costs and where the cost is</li><li>Explain why a failure that is normal should not be exceptional</li></ul>
+  </section>
+    <p>Three chapters have each shown a mechanism. This one is the judgement, and it
+settles two questions left open earlier: chapter 2.3 split refusals between
+throwing and returning <code>false</code> without fully justifying it, and chapter 2.11
+built an <code>Ok</code>/<code>Err</code> type while explicitly deferring the comparison with
+exceptions.</p>
+<p>There are three ways for a method to report that it could not do the thing.</p>
+<figure class="widget"><tb-runner data-run="1"><figcaption class="code__title">The same operation, three signatures</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">import</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> java</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">util</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">Optional</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    sealed</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> interface</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Parsed</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> permits</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Ok</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Err</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span><span style="--sh-light:#999999;--sh-dark:#666666"> }</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    record</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Ok</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> value</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> implements</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Parsed</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span><span style="--sh-light:#999999;--sh-dark:#666666"> }</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    record</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Err</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">String reason</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> implements</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Parsed</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span><span style="--sh-light:#999999;--sh-dark:#666666"> }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#A0ADA0;--sh-dark:#758575DD">    // 1. Throw: the caller must catch or let it propagate.</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> int</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> byThrowing</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">String </span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">text</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> Integer</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">parseInt</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">text</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#A0ADA0;--sh-dark:#758575DD">    // 2. Optional: absence is expressible, the reason is not.</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> Optional</span><span style="--sh-light:#999999;--sh-dark:#666666">&#x3C;</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">Integer</span><span style="--sh-light:#999999;--sh-dark:#666666">></span><span style="--sh-light:#59873A;--sh-dark:#80A665"> byOptional</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">String </span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">text</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        try</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            return</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> Optional</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">of</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">Integer</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">parseInt</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">text</span><span style="--sh-light:#999999;--sh-dark:#666666">));</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> catch</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">NumberFormatException </span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">e</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            return</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> Optional</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">empty</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#A0ADA0;--sh-dark:#758575DD">    // 3. Result: absence and the reason are both in the type.</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> Parsed </span><span style="--sh-light:#59873A;--sh-dark:#80A665">byResult</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">String </span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">text</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        try</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            return</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Ok</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">Integer</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">parseInt</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">text</span><span style="--sh-light:#999999;--sh-dark:#666666">));</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> catch</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">NumberFormatException </span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">e</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            return</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Err</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">not a number: </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> text</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">throwing:  </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> byThrowing</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">42</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">));</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">optional:  </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> byOptional</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">nope</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">).</span><span style="--sh-light:#59873A;--sh-dark:#80A665">orElse</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">-</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">1</span><span style="--sh-light:#999999;--sh-dark:#666666">));</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">result:    </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> switch</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#59873A;--sh-dark:#80A665">byResult</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">nope</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">))</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            case</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Ok</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> v</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> -></span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">got </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> v</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            case</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Err</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">String reason</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> -></span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">failed: </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> reason</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        });</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">import java.util.Optional;
+
+public class Main {
+    sealed interface Parsed permits Ok, Err { }
+    record Ok(int value) implements Parsed { }
+    record Err(String reason) implements Parsed { }
+
+    // 1. Throw: the caller must catch or let it propagate.
+    static int byThrowing(String text) {
+        return Integer.parseInt(text);
+    }
+
+    // 2. Optional: absence is expressible, the reason is not.
+    static Optional&lt;Integer&gt; byOptional(String text) {
+        try {
+            return Optional.of(Integer.parseInt(text));
+        } catch (NumberFormatException e) {
+            return Optional.empty();
+        }
+    }
+
+    // 3. Result: absence and the reason are both in the type.
+    static Parsed byResult(String text) {
+        try {
+            return new Ok(Integer.parseInt(text));
+        } catch (NumberFormatException e) {
+            return new Err(&quot;not a number: &quot; + text);
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println(&quot;throwing:  &quot; + byThrowing(&quot;42&quot;));
+        System.out.println(&quot;optional:  &quot; + byOptional(&quot;nope&quot;).orElse(-1));
+        System.out.println(&quot;result:    &quot; + switch (byResult(&quot;nope&quot;)) {
+            case Ok(int v) -&gt; &quot;got &quot; + v;
+            case Err(String reason) -&gt; &quot;failed: &quot; + reason;
+        });
+    }
+}</template></tb-runner></figure>
+<h2 id="what-each-one-says" tabindex="-1">What each one says</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>The caller is told</th>
+<th>Can the caller ignore it?</th>
+<th>Carries a reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Exception</td>
+<td>at run time, by unwinding</td>
+<td>unchecked: yes, silently</td>
+<td>yes, plus a stack trace</td>
+</tr>
+<tr>
+<td><code>Optional</code></td>
+<td>in the signature</td>
+<td>only by calling <code>get</code></td>
+<td>no</td>
+</tr>
+<tr>
+<td>Result type</td>
+<td>in the signature</td>
+<td>no — the switch must be exhaustive</td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+<p>The question that decides it is: <strong>can the immediate caller do something useful,
+and do they need to know why?</strong></p>
+<ul>
+<li><strong>No, and no</strong> — throw. Most callers have nothing to contribute and should not
+be made to write a <code>catch</code> that only rethrows. A configuration file that will
+not parse at startup should abort the startup.</li>
+<li><strong>Yes, but the reason does not change what they do</strong> — <code>Optional</code>. A cache
+miss, a lookup with no match. The caller substitutes a default; <em>why</em> it was
+absent is not actionable.</li>
+<li><strong>Yes, and the reason changes what they do</strong> — a result type. Validating a
+form, parsing user input, calling something that fails several distinguishable
+ways.</li>
+</ul>
+<h2 id="what-an-exception-costs" tabindex="-1">What an exception costs</h2>
+<p>Folklore says exceptions are slow. That is worth measuring, because the useful
+part is <em>where</em> the cost is.</p>
+<figure class="widget"><tb-runner data-run="1"><figcaption class="code__title">Measured: throwing, throwing without a trace, and returning</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">import</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> java</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">util</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">function</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">IntUnaryOperator</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> long</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> sink</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#A0ADA0;--sh-dark:#758575DD">    /** An exception that does not capture a stack trace. */</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Fast</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> extends</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> RuntimeException</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#59873A;--sh-dark:#80A665">        Fast</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">String </span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">message</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#A65E2B;--sh-dark:#C99076">            super</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">message</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> null</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> false</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> false</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span><span style="--sh-light:#A0ADA0;--sh-dark:#758575DD">   // no suppression, no writable stack trace</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> int</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> viaException</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> i</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        try</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            if</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">i </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">%</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 2</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> ==</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">                throw</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> IllegalStateException</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">even</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">            }</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            return</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> catch</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">IllegalStateException </span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">e</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            return</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> -</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">1</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> int</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> viaFastException</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> i</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        try</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            if</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">i </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">%</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 2</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> ==</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">                throw</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Fast</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">even</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">            }</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            return</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> catch</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">Fast </span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">e</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            return</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> -</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">1</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> int</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> viaReturn</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> i</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">%</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 2</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> ==</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> ?</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> -</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">1</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> :</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> long</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> run</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">IntUnaryOperator </span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">f</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> n</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">        long</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> total</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        for</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> i</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">&#x3C;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> n</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">++</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">            total </span><span style="--sh-light:#999999;--sh-dark:#666666">+=</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> f</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">applyAsInt</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">i</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> total</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        for</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> w</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> w </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">&#x3C;</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 3</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> w</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">++</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span><span style="--sh-light:#A0ADA0;--sh-dark:#758575DD">                 // warm up</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">            sink </span><span style="--sh-light:#999999;--sh-dark:#666666">+=</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> run</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">Main</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375">::</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">viaException</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 200_000</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">            sink </span><span style="--sh-light:#999999;--sh-dark:#666666">+=</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> run</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">Main</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375">::</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">viaFastException</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 200_000</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">            sink </span><span style="--sh-light:#999999;--sh-dark:#666666">+=</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> run</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">Main</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375">::</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">viaReturn</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 200_000</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">        int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> n</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 1_000_000</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">        long</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> t0</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">nanoTime</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">        sink </span><span style="--sh-light:#999999;--sh-dark:#666666">+=</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> run</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">Main</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375">::</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">viaException</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> n</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">        long</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> t1</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">nanoTime</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">        sink </span><span style="--sh-light:#999999;--sh-dark:#666666">+=</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> run</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">Main</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375">::</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">viaFastException</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> n</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">        long</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> t2</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">nanoTime</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">        sink </span><span style="--sh-light:#999999;--sh-dark:#666666">+=</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> run</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">Main</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375">::</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">viaReturn</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> n</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">        long</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> t3</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">nanoTime</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">printf</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">exception with trace: %4d ms%n</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">t1 </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">-</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> t0</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> /</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 1_000_000</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">printf</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">exception, no trace:  %4d ms%n</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">t2 </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">-</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> t1</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> /</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 1_000_000</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">printf</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">plain return:         %4d ms%n</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">t3 </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">-</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> t2</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> /</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 1_000_000</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">(checksum </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> sink </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">+</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">)</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">import java.util.function.IntUnaryOperator;
+
+public class Main {
+    static long sink;
+
+    /** An exception that does not capture a stack trace. */
+    static class Fast extends RuntimeException {
+        Fast(String message) {
+            super(message, null, false, false);   // no suppression, no writable stack trace
+        }
+    }
+
+    static int viaException(int i) {
+        try {
+            if (i % 2 == 0) {
+                throw new IllegalStateException(&quot;even&quot;);
+            }
+            return i;
+        } catch (IllegalStateException e) {
+            return -1;
+        }
+    }
+
+    static int viaFastException(int i) {
+        try {
+            if (i % 2 == 0) {
+                throw new Fast(&quot;even&quot;);
+            }
+            return i;
+        } catch (Fast e) {
+            return -1;
+        }
+    }
+
+    static int viaReturn(int i) {
+        return i % 2 == 0 ? -1 : i;
+    }
+
+    static long run(IntUnaryOperator f, int n) {
+        long total = 0;
+        for (int i = 0; i &lt; n; i++) {
+            total += f.applyAsInt(i);
+        }
+        return total;
+    }
+
+    public static void main(String[] args) {
+        for (int w = 0; w &lt; 3; w++) {                 // warm up
+            sink += run(Main::viaException, 200_000);
+            sink += run(Main::viaFastException, 200_000);
+            sink += run(Main::viaReturn, 200_000);
+        }
+
+        int n = 1_000_000;
+        long t0 = System.nanoTime();
+        sink += run(Main::viaException, n);
+        long t1 = System.nanoTime();
+        sink += run(Main::viaFastException, n);
+        long t2 = System.nanoTime();
+        sink += run(Main::viaReturn, n);
+        long t3 = System.nanoTime();
+
+        System.out.printf(&quot;exception with trace: %4d ms%n&quot;, (t1 - t0) / 1_000_000);
+        System.out.printf(&quot;exception, no trace:  %4d ms%n&quot;, (t2 - t1) / 1_000_000);
+        System.out.printf(&quot;plain return:         %4d ms%n&quot;, (t3 - t2) / 1_000_000);
+        System.out.println(&quot;(checksum &quot; + sink + &quot;)&quot;);
+    }
+}</template></tb-runner></figure>
+<p>Half a million exceptions in each run. The ordinary exception takes roughly
+seventy times as long as the plain return — and the version that skips the
+stack trace is close to the plain return.</p>
+<p>So the expense is <strong>capturing the stack trace</strong>, not throwing or catching.
+<code>fillInStackTrace</code> walks every frame and records it, which is exactly what
+makes an exception useful for diagnosis and exactly what you are paying for.</p>
+<p>Two conclusions follow, and they point in opposite directions:</p>
+<ul>
+<li><strong>Do not fear exceptions for exceptional things.</strong> A failure that happens once
+per request, or once per program run, costs a microsecond. That is never your
+bottleneck.</li>
+<li><strong>Do not use them for control flow.</strong> A “failure” that happens on half of all
+calls — an expected parse failure, a validation miss, an end-of-input marker
+— is not exceptional, and paying for a stack trace to describe something
+routine is exactly the wrong trade. That is where <code>Optional</code> and result types
+earn their place.</li>
+</ul>
+<p>The <code>super(message, null, false, false)</code> constructor exists for the narrow case
+where you genuinely want a control-flow exception, and it is worth knowing
+about mostly so you recognise it in a library. Reaching for it in your own code
+usually means the design should not have been an exception at all.</p>
+<aside class="callout callout--pitfall"><p class="callout__label">Pitfall</p>
+<p>The worst version of this is an exception used for a routine outcome <em>and</em>
+caught immediately by the caller. You pay for a stack trace nobody reads,
+obscure the ordinary path in <code>try</code> blocks, and lose the compiler’s help,
+because an unchecked exception in a signature is invisible.</p>
+</aside>
+<h2 id="answering-chapter-23" tabindex="-1">Answering chapter 2.3</h2>
+<p>That chapter’s <code>Account</code> threw for a negative deposit and returned <code>false</code> for
+an overdrawn withdrawal, and called the split deliberate. Now it can be
+justified properly:</p>
+<p>A negative deposit means the <em>calling code</em> is wrong. There is no runtime
+condition that produces it, no user action that justifies it, and no sensible
+recovery — so it should be loud, unchecked, and carry a stack trace pointing at
+the line responsible. That is precisely what an exception is for.</p>
+<p>Withdrawing more than the balance is not a bug anywhere. It is a normal
+outcome of a normal request, it happens constantly, and the caller has an
+obvious next step. Making it exceptional would mean a <code>try</code>/<code>catch</code> around
+routine banking and a stack trace for every declined transaction.</p>
+<p>The rule generalises: <strong>exceptions are for the cases that should not happen;
+return values are for the cases that should.</strong></p>
+<h2 id="answering-chapter-211" tabindex="-1">Answering chapter 2.11</h2>
+<p><code>result-or-error</code> built <code>sealed interface Parsed permits Ok, Err</code> and left the
+comparison open. The honest summary:</p>
+<p>A result type is better than an exception when the caller must decide, and its
+advantage is that the compiler enforces the decision — an exhaustive switch has
+no path that ignores the failure, whereas an unchecked exception can be dropped
+silently and a checked one can be swallowed by an empty catch.</p>
+<p>It is worse when failures must travel a long way. An exception unwinds through
+ten frames by itself; a result type must be returned, inspected and re-wrapped
+at every level, and the code between becomes a pipeline of matching. That is
+why languages built around result types provide operators to propagate them
+automatically, and Java has none.</p>
+<p>So: result types near the boundary, where a caller is standing right there and
+must choose. Exceptions for depth, where the handler is far from the failure
+and everything in between has nothing to say.</p>
+<tb-quiz><template data-role="spec">{
+  &quot;question&quot;: &quot;A parser is called once per line on a ten-million-line file, and roughly a third of the lines are malformed and skipped. How should the parse failure be reported?&quot;,
+  &quot;options&quot;: [
+    { &quot;text&quot;: &quot;A result type or Optional — three million stack traces cost real time and describe nothing&quot;, &quot;correct&quot;: true, &quot;why&quot;: &quot;Right. At that rate the failure is a normal outcome rather than an exceptional one, and the measurement in this chapter puts the cost of a captured stack trace at roughly seventy times a plain return.&quot; },
+    { &quot;text&quot;: &quot;An unchecked exception, caught in the loop&quot;, &quot;correct&quot;: false, &quot;why&quot;: &quot;This is the pitfall exactly: an exception thrown and caught immediately, three million times, paying for stack traces nobody reads to describe something routine.&quot; },
+    { &quot;text&quot;: &quot;A checked exception, so the caller cannot forget to handle it&quot;, &quot;correct&quot;: false, &quot;why&quot;: &quot;The compiler's help is real, but it does not change the cost, and it forces a try/catch around the ordinary path. A result type gives the same guarantee without either problem.&quot; },
+    { &quot;text&quot;: &quot;An exception with the stack trace disabled&quot;, &quot;correct&quot;: false, &quot;why&quot;: &quot;That does remove the cost, and it is the sign that an exception was the wrong shape. If the trace is worthless, the failure is not exceptional.&quot; }
+  ]
+}</template></tb-quiz>
+<h2 id="practice" tabindex="-1">Practice</h2>
+<tb-exercise data-id="choose-the-signature"></tb-exercise>
+
+    <nav class="pager" aria-label="Chapter navigation"><a class="pager__link pager__link--prev" href="/JavaTB/failure/null-and-optional/">
+           <span class="pager__dir">Previous</span>
+           <span class="pager__title">null and Optional</span>
+         </a><a class="pager__link pager__link--next" href="/JavaTB/collections/the-framework/">
+           <span class="pager__dir">Next</span>
+           <span class="pager__title">The collections framework</span>
+         </a></nav>
+  </article>
+    </main>
+    <aside class="rail">
+    <div class="rail__inner">
+      <p class="rail__title">On this page</p><ul class="rail__list" id="rail-list"><li class="rail__item rail__item--h2"><a href="#what-each-one-says">What each one says</a></li><li class="rail__item rail__item--h2"><a href="#what-an-exception-costs">What an exception costs</a></li><li class="rail__item rail__item--h2"><a href="#answering-chapter-23">Answering chapter 2.3</a></li><li class="rail__item rail__item--h2"><a href="#answering-chapter-211">Answering chapter 2.11</a></li><li class="rail__item rail__item--h2"><a href="#practice">Practice</a></li></ul>
+      <div class="rail__meta">
+        <p><span>Standard</span><code>java21</code></p>
+        <p><span>Reading</span>6 min</p>
+        <p><span>Problems</span>2</p>
+      </div>
+      <button class="rail__done" data-chapter="designing-failure" id="mark-done">Mark as read</button>
+    </div>
+  </aside>
+  </div>
+  <div class="scrim" id="scrim" hidden></div>
+  <script type="module" src="/JavaTB/assets/index-DTPhoH-i.js"></script>
+</body>
+</html>

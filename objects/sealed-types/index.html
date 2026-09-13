@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sealed types and pattern matching · The Java Textbook</title>
+  <meta name="description" content="Closing a hierarchy so the compiler knows every possibility, then matching on it — including taking records apart in the pattern itself.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="/JavaTB/favicon.svg" type="image/svg+xml">
+  <script>(function(){try{var t=localStorage.getItem('tb-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.dataset.theme=t;}catch(e){}})();</script>
+  <link rel="stylesheet" href="/JavaTB/assets/index-DU6-oSWJ.css">
+</head>
+<body class="">
+  <header class="topbar">
+  <button class="topbar__menu" id="menu-toggle" aria-label="Toggle contents" aria-expanded="false">
+    <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>
+  </button>
+  <a class="topbar__brand" href="/JavaTB/">The Java Textbook</a>
+  <div class="topbar__spacer"></div>
+  <button class="search-trigger" id="search-trigger" aria-label="Search the book">
+    <svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M13 13l4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    <span>Search</span><kbd>/</kbd>
+  </button>
+  <button class="icon-button" id="theme-toggle" aria-label="Switch theme" title="Switch theme">
+    <svg viewBox="0 0 20 20" width="17" height="17" aria-hidden="true"><path d="M10 2.5a7.5 7.5 0 1 0 7.5 7.5A6 6 0 0 1 10 2.5Z" fill="currentColor"/></svg>
+  </button>
+</header>
+  <div class="layout">
+    <nav class="sidebar" id="sidebar" aria-label="Book contents">
+  <div class="sidebar__inner">
+    <a class="sidebar__link" href="/JavaTB/">Start here</a>
+    <a class="sidebar__link" href="/JavaTB/practice/">Practice problems</a>
+    <a class="sidebar__link" href="/JavaTB/reference/">Quick reference</a>
+    <a class="sidebar__link" href="/JavaTB/progress/">Progress</a>
+    <hr class="sidebar__rule">
+    <details class="nav__part"><summary><span class="nav__part-num">Part 1</span>Foundations</summary><ul class="nav__list"><li><a href="/JavaTB/foundations/hello-jvm/"><span class="nav__num">1.1</span><span class="nav__text">Hello, JVM</span></a></li><li><a href="/JavaTB/foundations/values-and-variables/"><span class="nav__num">1.2</span><span class="nav__text">Values and variables</span></a></li><li><a href="/JavaTB/foundations/control-flow/"><span class="nav__num">1.3</span><span class="nav__text">Control flow</span></a></li><li><a href="/JavaTB/foundations/methods/"><span class="nav__num">1.4</span><span class="nav__text">Methods</span></a></li><li><a href="/JavaTB/foundations/arrays/"><span class="nav__num">1.5</span><span class="nav__text">Arrays</span></a></li><li><a href="/JavaTB/foundations/strings/"><span class="nav__num">1.6</span><span class="nav__text">Strings</span></a></li><li><a href="/JavaTB/foundations/input-and-output/"><span class="nav__num">1.7</span><span class="nav__text">Input and output</span></a></li></ul></details><details class="nav__part" open><summary><span class="nav__part-num">Part 2</span>Objects</summary><ul class="nav__list"><li><a href="/JavaTB/objects/classes-and-objects/"><span class="nav__num">2.1</span><span class="nav__text">Classes and objects</span></a></li><li><a href="/JavaTB/objects/aliasing/"><span class="nav__num">2.2</span><span class="nav__text">Aliasing</span></a></li><li><a href="/JavaTB/objects/encapsulation/"><span class="nav__num">2.3</span><span class="nav__text">Encapsulation</span></a></li><li><a href="/JavaTB/objects/equals-hashcode-tostring/"><span class="nav__num">2.4</span><span class="nav__text">equals and hashCode</span></a></li><li><a href="/JavaTB/objects/inheritance/"><span class="nav__num">2.5</span><span class="nav__text">Inheritance</span></a></li><li><a href="/JavaTB/objects/polymorphism/"><span class="nav__num">2.6</span><span class="nav__text">Polymorphism</span></a></li><li><a href="/JavaTB/objects/interfaces/"><span class="nav__num">2.7</span><span class="nav__text">Interfaces</span></a></li><li><a href="/JavaTB/objects/abstract-classes/"><span class="nav__num">2.8</span><span class="nav__text">Abstract classes</span></a></li><li><a href="/JavaTB/objects/records/"><span class="nav__num">2.9</span><span class="nav__text">Records</span></a></li><li><a href="/JavaTB/objects/enums/"><span class="nav__num">2.10</span><span class="nav__text">Enums</span></a></li><li><a href="/JavaTB/objects/sealed-types/" class="is-active" aria-current="page"><span class="nav__num">2.11</span><span class="nav__text">Sealed types</span></a></li><li><a href="/JavaTB/objects/nested-classes/"><span class="nav__num">2.12</span><span class="nav__text">Nested classes</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 3</span>When things go wrong</summary><ul class="nav__list"><li><a href="/JavaTB/failure/exceptions/"><span class="nav__num">3.1</span><span class="nav__text">Exceptions</span></a></li><li><a href="/JavaTB/failure/checked-and-unchecked/"><span class="nav__num">3.2</span><span class="nav__text">Checked exceptions</span></a></li><li><a href="/JavaTB/failure/try-with-resources/"><span class="nav__num">3.3</span><span class="nav__text">try-with-resources</span></a></li><li><a href="/JavaTB/failure/null-and-optional/"><span class="nav__num">3.4</span><span class="nav__text">null and Optional</span></a></li><li><a href="/JavaTB/failure/designing-failure/"><span class="nav__num">3.5</span><span class="nav__text">Designing failure</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 4</span>Collections</summary><ul class="nav__list"><li><a href="/JavaTB/collections/the-framework/"><span class="nav__num">4.1</span><span class="nav__text">The framework</span></a></li><li><a href="/JavaTB/collections/list/"><span class="nav__num">4.2</span><span class="nav__text">List</span></a></li><li><a href="/JavaTB/collections/map/"><span class="nav__num">4.3</span><span class="nav__text">Map</span></a></li><li><a href="/JavaTB/collections/set-and-ordering/"><span class="nav__num">4.4</span><span class="nav__text">Set and ordering</span></a></li><li><a href="/JavaTB/collections/queues-and-deques/"><span class="nav__num">4.5</span><span class="nav__text">Queues and deques</span></a></li><li><a href="/JavaTB/collections/iteration/"><span class="nav__num">4.6</span><span class="nav__text">Iteration</span></a></li><li><a href="/JavaTB/collections/immutable-collections/"><span class="nav__num">4.7</span><span class="nav__text">Immutable collections</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 5</span>Generics</summary><ul class="nav__list"><li><a href="/JavaTB/generics/generic-classes-and-methods/"><span class="nav__num">5.1</span><span class="nav__text">Generic classes</span></a></li><li><a href="/JavaTB/generics/erasure/"><span class="nav__num">5.2</span><span class="nav__text">Erasure</span></a></li><li><a href="/JavaTB/generics/wildcards/"><span class="nav__num">5.3</span><span class="nav__text">Wildcards</span></a></li><li><a href="/JavaTB/generics/the-limits/"><span class="nav__num">5.4</span><span class="nav__text">The limits</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 6</span>functional</summary><ul class="nav__list"><li><a href="/JavaTB/functional/lambdas/"><span class="nav__num">6.1</span><span class="nav__text">Lambdas</span></a></li><li><a href="/JavaTB/functional/method-references/"><span class="nav__num">6.2</span><span class="nav__text">Method references</span></a></li><li><a href="/JavaTB/functional/streams/"><span class="nav__num">6.3</span><span class="nav__text">Streams</span></a></li><li><a href="/JavaTB/functional/collectors/"><span class="nav__num">6.4</span><span class="nav__text">Collectors</span></a></li><li><a href="/JavaTB/functional/when-a-loop-is-better/"><span class="nav__num">6.5</span><span class="nav__text">When a loop wins</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 7</span>platform</summary><ul class="nav__list"><li><a href="/JavaTB/platform/lifetime-and-gc/"><span class="nav__num">7.1</span><span class="nav__text">Lifetime and GC</span></a></li><li><a href="/JavaTB/platform/stack-heap-escape/"><span class="nav__num">7.2</span><span class="nav__text">Stack and heap</span></a></li><li><a href="/JavaTB/platform/class-loading/"><span class="nav__num">7.3</span><span class="nav__text">Class loading</span></a></li><li><a href="/JavaTB/platform/reflection/"><span class="nav__num">7.4</span><span class="nav__text">Reflection</span></a></li><li><a href="/JavaTB/platform/classpath-and-modules/"><span class="nav__num">7.5</span><span class="nav__text">Classpath and modules</span></a></li><li><a href="/JavaTB/platform/files-and-nio/"><span class="nav__num">7.6</span><span class="nav__text">Files and NIO</span></a></li><li><a href="/JavaTB/platform/java-time/"><span class="nav__num">7.7</span><span class="nav__text">java.time</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 8</span>concurrency</summary><ul class="nav__list"><li><a href="/JavaTB/concurrency/threads-and-shared-state/"><span class="nav__num">8.1</span><span class="nav__text">Threads</span></a></li><li><a href="/JavaTB/concurrency/the-memory-model/"><span class="nav__num">8.2</span><span class="nav__text">The memory model</span></a></li><li><a href="/JavaTB/concurrency/executors-and-futures/"><span class="nav__num">8.3</span><span class="nav__text">Executors</span></a></li><li><a href="/JavaTB/concurrency/concurrent-collections/"><span class="nav__num">8.4</span><span class="nav__text">Concurrent collections</span></a></li><li><a href="/JavaTB/concurrency/virtual-threads/"><span class="nav__num">8.5</span><span class="nav__text">Virtual threads</span></a></li><li><a href="/JavaTB/concurrency/parallel-streams/"><span class="nav__num">8.6</span><span class="nav__text">Parallel streams</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 9</span>engineering</summary><ul class="nav__list"><li><a href="/JavaTB/engineering/testing/"><span class="nav__num">9.1</span><span class="nav__text">Testing</span></a></li><li><a href="/JavaTB/engineering/build-tools/"><span class="nav__num">9.2</span><span class="nav__text">Build tools</span></a></li><li><a href="/JavaTB/engineering/debugging/"><span class="nav__num">9.3</span><span class="nav__text">Debugging</span></a></li><li><a href="/JavaTB/engineering/measuring/"><span class="nav__num">9.4</span><span class="nav__text">Measuring</span></a></li><li><a href="/JavaTB/engineering/api-design/"><span class="nav__num">9.5</span><span class="nav__text">API design</span></a></li><li><a href="/JavaTB/engineering/packaging/"><span class="nav__num">9.6</span><span class="nav__text">Packaging</span></a></li></ul></details>
+  </div>
+</nav>
+    <main class="content" id="content">
+      <article class="prose" data-chapter="sealed-types">
+    <div class="chapter-head">
+      <p class="chapter-eyebrow"><a href="/JavaTB/objects/">Part 2 · Objects</a></p>
+      <h1>Sealed types and pattern matching</h1>
+      <p class="chapter-lede">Closing a hierarchy so the compiler knows every possibility, then matching on it — including taking records apart in the pattern itself.</p>
+    </div>
+    
+    <section class="objectives">
+    <h2 class="objectives__title">By the end of this chapter you can</h2>
+    <ul><li>Declare a sealed type and say what the permits clause buys you</li><li>Write an exhaustive switch over a sealed hierarchy without a default arm</li><li>Use record patterns and guards to match on shape and value together</li></ul>
+  </section>
+    <p>Chapter 2.6 argued that a chain of <code>instanceof</code> usually means a method is
+missing from the type, and promised one exception. This is it.</p>
+<p>Sometimes the operations you want to perform on a hierarchy do not belong to
+it. A <code>Shape</code> should know its own area; it should not know how to render itself
+as SVG, serialise itself to JSON, and price itself for a quotation system —
+each of those belongs to a different part of the program, and piling them onto
+<code>Shape</code> couples everything to everything.</p>
+<p>For that you want to ask what kind of shape you have, from outside. And to do
+it safely you need the compiler to know the list is complete.</p>
+<h2 id="sealing-a-hierarchy" tabindex="-1">Sealing a hierarchy</h2>
+<figure class="widget"><tb-runner data-run="1"><figcaption class="code__title">A closed set of alternatives</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">sealed</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> interface</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Shape</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> permits</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Circle</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Square</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Rect</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span><span style="--sh-light:#999999;--sh-dark:#666666"> }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">record</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Circle</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">double</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> radius</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> implements</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Shape</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span><span style="--sh-light:#999999;--sh-dark:#666666"> }</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">record</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Square</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">double</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> side</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> implements</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Shape</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span><span style="--sh-light:#999999;--sh-dark:#666666"> }</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">record</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Rect</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">double</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> width</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> double</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> height</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> implements</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Shape</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span><span style="--sh-light:#999999;--sh-dark:#666666"> }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> double</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> area</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">Shape </span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">s</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> switch</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">s</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            case</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> Circle c </span><span style="--sh-light:#999999;--sh-dark:#666666">-></span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> Math</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">PI</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> *</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> c</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">radius</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> *</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> c</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">radius</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            case</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> Square q </span><span style="--sh-light:#999999;--sh-dark:#666666">-></span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> q</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">side</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> *</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> q</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">side</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            case</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> Rect r </span><span style="--sh-light:#999999;--sh-dark:#666666">-></span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> r</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">width</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> *</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> r</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">height</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        };</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">        Shape</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> shapes</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Circle</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">1</span><span style="--sh-light:#999999;--sh-dark:#666666">),</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Square</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">3</span><span style="--sh-light:#999999;--sh-dark:#666666">),</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Rect</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">2</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 5</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> };</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        for</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">Shape</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> s</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> :</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> shapes</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">            System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">printf</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">%-28s area %6.2f%n</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> s</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> area</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">s</span><span style="--sh-light:#999999;--sh-dark:#666666">));</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">sealed interface Shape permits Circle, Square, Rect { }
+
+record Circle(double radius) implements Shape { }
+record Square(double side) implements Shape { }
+record Rect(double width, double height) implements Shape { }
+
+public class Main {
+    static double area(Shape s) {
+        return switch (s) {
+            case Circle c -&gt; Math.PI * c.radius() * c.radius();
+            case Square q -&gt; q.side() * q.side();
+            case Rect r -&gt; r.width() * r.height();
+        };
+    }
+
+    public static void main(String[] args) {
+        Shape[] shapes = { new Circle(1), new Square(3), new Rect(2, 5) };
+        for (Shape s : shapes) {
+            System.out.printf(&quot;%-28s area %6.2f%n&quot;, s, area(s));
+        }
+    }
+}</template></tb-runner></figure>
+<p><code>sealed ... permits</code> names every direct subtype. Nothing else may implement
+<code>Shape</code> — not in this file, not in another module, not ever — and that is what
+lets the switch omit its <code>default</code> arm and still compile.</p>
+<p>Every permitted subtype must itself be <code>final</code>, <code>sealed</code>, or <code>non-sealed</code>. A
+record is implicitly final, which is why the three above need no keyword.
+<code>non-sealed</code> is the escape hatch: it reopens that branch to arbitrary
+subclasses, and it exists so a sealed hierarchy can have one extensible corner
+without giving up the guarantee everywhere else.</p>
+<aside class="callout callout--note"><p class="callout__label">Note</p>
+<p>The <code>permits</code> clause can be omitted when all the subtypes are in the same file,
+as they are here — the compiler infers it. Writing it out is worth the words in
+real code, because the list is the documentation.</p>
+</aside>
+<h2 id="the-compiler-enforces-both-halves" tabindex="-1">The compiler enforces both halves</h2>
+<figure class="widget"><tb-runner data-run="1" data-expect-error="1"><figcaption class="code__title">An implementer that was not invited</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">sealed</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> interface</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Shape</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> permits</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Circle</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span><span style="--sh-light:#999999;--sh-dark:#666666"> }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">record</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Circle</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">double</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> radius</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> implements</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Shape</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span><span style="--sh-light:#999999;--sh-dark:#666666"> }</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">record</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Triangle</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">double</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> base</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> double</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> height</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> implements</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Shape</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span><span style="--sh-light:#999999;--sh-dark:#666666"> }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375">new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Circle</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">1</span><span style="--sh-light:#999999;--sh-dark:#666666">));</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">sealed interface Shape permits Circle { }
+
+record Circle(double radius) implements Shape { }
+record Triangle(double base, double height) implements Shape { }
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println(new Circle(1));
+    }
+}</template></tb-runner></figure>
+<p><em>class is not allowed to extend sealed class: Shape (as it is not listed in its
+‘permits’ clause).</em></p>
+<figure class="widget"><tb-runner data-run="1" data-expect-error="1"><figcaption class="code__title">A case that was not covered</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">sealed</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> interface</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Shape</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> permits</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Circle</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Square</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span><span style="--sh-light:#999999;--sh-dark:#666666"> }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">record</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Circle</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">double</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> radius</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> implements</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Shape</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span><span style="--sh-light:#999999;--sh-dark:#666666"> }</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">record</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Square</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">double</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> side</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> implements</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Shape</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span><span style="--sh-light:#999999;--sh-dark:#666666"> }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> String </span><span style="--sh-light:#59873A;--sh-dark:#80A665">name</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">Shape </span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">s</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> switch</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">s</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            case</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> Circle c </span><span style="--sh-light:#999999;--sh-dark:#666666">-></span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">circle</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        };</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#59873A;--sh-dark:#80A665">name</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375">new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Circle</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">1</span><span style="--sh-light:#999999;--sh-dark:#666666">)));</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">sealed interface Shape permits Circle, Square { }
+
+record Circle(double radius) implements Shape { }
+record Square(double side) implements Shape { }
+
+public class Main {
+    static String name(Shape s) {
+        return switch (s) {
+            case Circle c -&gt; &quot;circle&quot;;
+        };
+    }
+
+    public static void main(String[] args) {
+        System.out.println(name(new Circle(1)));
+    }
+}</template></tb-runner></figure>
+<p><em>the switch expression does not cover all possible input values.</em></p>
+<p>Those two errors are the whole feature. The first says the set cannot grow
+behind your back; the second says that when it does grow deliberately, every
+switch over it becomes a compile error until you decide what the new case
+means. It is the enum guarantee from chapter 2.10, extended to types that carry
+data.</p>
+<h2 id="record-patterns" tabindex="-1">Record patterns</h2>
+<p>A pattern can take a record apart in the same breath as matching it:</p>
+<figure class="widget"><tb-runner data-run="1"><figcaption class="code__title">Matching and destructuring at once</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">sealed</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> interface</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Shape</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> permits</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Circle</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Rect</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span><span style="--sh-light:#999999;--sh-dark:#666666"> }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">record</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Circle</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">double</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> radius</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> implements</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Shape</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span><span style="--sh-light:#999999;--sh-dark:#666666"> }</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">record</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Rect</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">double</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> width</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> double</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> height</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> implements</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Shape</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span><span style="--sh-light:#999999;--sh-dark:#666666"> }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> String </span><span style="--sh-light:#59873A;--sh-dark:#80A665">describe</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">Shape </span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">s</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> switch</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">s</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            case</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Circle</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">double</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> r</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> when r </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">></span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 10</span><span style="--sh-light:#999999;--sh-dark:#666666"> -></span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">a big circle of radius </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> r</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            case</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Circle</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">double</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> r</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> -></span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">a circle of radius </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> r</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            case</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Rect</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">double</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> w</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> double</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> h</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> when w </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">==</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> h </span><span style="--sh-light:#999999;--sh-dark:#666666">-></span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">a </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> w </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">+</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D"> square, in disguise</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            case</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Rect</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">double</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> w</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> double</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> h</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> -></span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> w </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">+</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D"> by </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> h</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        };</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">        Shape</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> shapes</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Circle</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">1</span><span style="--sh-light:#999999;--sh-dark:#666666">),</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Circle</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">20</span><span style="--sh-light:#999999;--sh-dark:#666666">),</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Rect</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">4</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 4</span><span style="--sh-light:#999999;--sh-dark:#666666">),</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> Rect</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">2</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 5</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> };</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        for</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">Shape</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> s</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> :</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> shapes</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">            System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#59873A;--sh-dark:#80A665">describe</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">s</span><span style="--sh-light:#999999;--sh-dark:#666666">));</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">sealed interface Shape permits Circle, Rect { }
+
+record Circle(double radius) implements Shape { }
+record Rect(double width, double height) implements Shape { }
+
+public class Main {
+    static String describe(Shape s) {
+        return switch (s) {
+            case Circle(double r) when r &gt; 10 -&gt; &quot;a big circle of radius &quot; + r;
+            case Circle(double r) -&gt; &quot;a circle of radius &quot; + r;
+            case Rect(double w, double h) when w == h -&gt; &quot;a &quot; + w + &quot; square, in disguise&quot;;
+            case Rect(double w, double h) -&gt; w + &quot; by &quot; + h;
+        };
+    }
+
+    public static void main(String[] args) {
+        Shape[] shapes = { new Circle(1), new Circle(20), new Rect(4, 4), new Rect(2, 5) };
+        for (Shape s : shapes) {
+            System.out.println(describe(s));
+        }
+    }
+}</template></tb-runner></figure>
+<p><code>case Rect(double w, double h)</code> matches a <code>Rect</code> and binds its two components
+to names in one step — no accessor calls, no intermediate variable. Patterns
+nest, so <code>case Line(Point(var x1, var y1), Point(var x2, var y2))</code> reaches two
+levels down.</p>
+<p><code>when</code> adds a guard. Order matters: the guarded <code>Circle</code> case must come before
+the unguarded one, or the unguarded one would match everything first — and the
+compiler says so, with <em>this case label is dominated by a preceding case label</em>.</p>
+<h2 id="sealed-types-or-polymorphism" tabindex="-1">Sealed types or polymorphism?</h2>
+<p>Both model “one of several kinds”. The question is where the behaviour belongs.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Put a method on the type</th>
+<th>Sealed type plus switch</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Adding a <strong>kind</strong></td>
+<td>one new class, nothing else changes</td>
+<td>every switch stops compiling</td>
+</tr>
+<tr>
+<td>Adding an <strong>operation</strong></td>
+<td>edit every class in the hierarchy</td>
+<td>one new method, in one place</td>
+</tr>
+<tr>
+<td>Behaviour lives</td>
+<td>with the data</td>
+<td>with the caller</td>
+</tr>
+<tr>
+<td>Works when the hierarchy is</td>
+<td>open</td>
+<td>closed</td>
+</tr>
+</tbody>
+</table>
+<p>So they are duals, and the choice follows from which axis moves. <code>area()</code>
+belongs on <code>Shape</code>: it is intrinsic, and a new shape should supply it. An SVG
+renderer belongs in a switch: it is one of many possible operations, it has
+nothing to do with geometry, and rendering has dependencies a <code>Shape</code> should
+not acquire.</p>
+<p>The failure mode of each is worth remembering. Get it wrong in one direction
+and adding a shape means editing forty switches. Get it wrong in the other and
+<code>Shape</code> ends up importing a JSON library.</p>
+<aside class="callout callout--tip"><p class="callout__label">Tip</p>
+<p>Sealed interfaces plus records is the standard way to model a value that is
+“one of these shapes, each carrying different data” — a parsed token, a result
+that is either success or failure, a message of several kinds. The result type
+is common enough to be worth the pattern: <code>sealed interface Result permits Ok, Err</code>, with <code>record Ok(String value)</code> and <code>record Err(String message)</code>, gives you
+something a switch can exhaustively handle. Chapter 3.5 compares it with
+exceptions.</p>
+</aside>
+<tb-quiz><template data-role="spec">{
+  &quot;question&quot;: &quot;A sealed interface `Event permits Click, Scroll` is switched over exhaustively in six places. A `KeyPress` record is added to the permits clause. What happens?&quot;,
+  &quot;options&quot;: [
+    { &quot;text&quot;: &quot;All six stop compiling until each decides what a KeyPress means&quot;, &quot;correct&quot;: true, &quot;why&quot;: &quot;Right. Exhaustiveness is rechecked against the new permits list, so the compiler produces the list of places needing a decision — the same guarantee an enum gives, for types that carry data.&quot; },
+    { &quot;text&quot;: &quot;They compile, and a KeyPress falls through to no case at run time&quot;, &quot;correct&quot;: false, &quot;why&quot;: &quot;A switch expression must yield a value on every path. If a KeyPress could arrive unmatched the switch was never exhaustive, which is precisely what the compiler refuses.&quot; },
+    { &quot;text&quot;: &quot;Only switches that use record patterns break&quot;, &quot;correct&quot;: false, &quot;why&quot;: &quot;Exhaustiveness is about covering the permitted subtypes. Whether a case binds components makes no difference to whether the set is covered.&quot; },
+    { &quot;text&quot;: &quot;Nothing, because sealed types are checked only at run time&quot;, &quot;correct&quot;: false, &quot;why&quot;: &quot;Both halves are compile-time: an unpermitted implementer will not compile, and neither will an incomplete switch.&quot; }
+  ]
+}</template></tb-quiz>
+<h2 id="practice" tabindex="-1">Practice</h2>
+<tb-exercise data-id="expression-evaluator"></tb-exercise>
+
+    <nav class="pager" aria-label="Chapter navigation"><a class="pager__link pager__link--prev" href="/JavaTB/objects/enums/">
+           <span class="pager__dir">Previous</span>
+           <span class="pager__title">Enums</span>
+         </a><a class="pager__link pager__link--next" href="/JavaTB/objects/nested-classes/">
+           <span class="pager__dir">Next</span>
+           <span class="pager__title">Nested, inner and anonymous classes</span>
+         </a></nav>
+  </article>
+    </main>
+    <aside class="rail">
+    <div class="rail__inner">
+      <p class="rail__title">On this page</p><ul class="rail__list" id="rail-list"><li class="rail__item rail__item--h2"><a href="#sealing-a-hierarchy">Sealing a hierarchy</a></li><li class="rail__item rail__item--h2"><a href="#the-compiler-enforces-both-halves">The compiler enforces both halves</a></li><li class="rail__item rail__item--h2"><a href="#record-patterns">Record patterns</a></li><li class="rail__item rail__item--h2"><a href="#sealed-types-or-polymorphism">Sealed types or polymorphism?</a></li><li class="rail__item rail__item--h2"><a href="#practice">Practice</a></li></ul>
+      <div class="rail__meta">
+        <p><span>Standard</span><code>java21</code></p>
+        <p><span>Reading</span>5 min</p>
+        <p><span>Problems</span>2</p>
+      </div>
+      <button class="rail__done" data-chapter="sealed-types" id="mark-done">Mark as read</button>
+    </div>
+  </aside>
+  </div>
+  <div class="scrim" id="scrim" hidden></div>
+  <script type="module" src="/JavaTB/assets/index-DTPhoH-i.js"></script>
+</body>
+</html>

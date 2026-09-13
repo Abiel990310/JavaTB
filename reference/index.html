@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quick reference · The Java Textbook</title>
+  <meta name="description" content="Every chapter objective in one scannable table — find your level and continue.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="/JavaTB/favicon.svg" type="image/svg+xml">
+  <script>(function(){try{var t=localStorage.getItem('tb-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.dataset.theme=t;}catch(e){}})();</script>
+  <link rel="stylesheet" href="/JavaTB/assets/index-DU6-oSWJ.css">
+</head>
+<body class="">
+  <header class="topbar">
+  <button class="topbar__menu" id="menu-toggle" aria-label="Toggle contents" aria-expanded="false">
+    <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>
+  </button>
+  <a class="topbar__brand" href="/JavaTB/">The Java Textbook</a>
+  <div class="topbar__spacer"></div>
+  <button class="search-trigger" id="search-trigger" aria-label="Search the book">
+    <svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M13 13l4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    <span>Search</span><kbd>/</kbd>
+  </button>
+  <button class="icon-button" id="theme-toggle" aria-label="Switch theme" title="Switch theme">
+    <svg viewBox="0 0 20 20" width="17" height="17" aria-hidden="true"><path d="M10 2.5a7.5 7.5 0 1 0 7.5 7.5A6 6 0 0 1 10 2.5Z" fill="currentColor"/></svg>
+  </button>
+</header>
+  <div class="layout">
+    <nav class="sidebar" id="sidebar" aria-label="Book contents">
+  <div class="sidebar__inner">
+    <a class="sidebar__link" href="/JavaTB/">Start here</a>
+    <a class="sidebar__link" href="/JavaTB/practice/">Practice problems</a>
+    <a class="sidebar__link" href="/JavaTB/reference/">Quick reference</a>
+    <a class="sidebar__link" href="/JavaTB/progress/">Progress</a>
+    <hr class="sidebar__rule">
+    <details class="nav__part"><summary><span class="nav__part-num">Part 1</span>Foundations</summary><ul class="nav__list"><li><a href="/JavaTB/foundations/hello-jvm/"><span class="nav__num">1.1</span><span class="nav__text">Hello, JVM</span></a></li><li><a href="/JavaTB/foundations/values-and-variables/"><span class="nav__num">1.2</span><span class="nav__text">Values and variables</span></a></li><li><a href="/JavaTB/foundations/control-flow/"><span class="nav__num">1.3</span><span class="nav__text">Control flow</span></a></li><li><a href="/JavaTB/foundations/methods/"><span class="nav__num">1.4</span><span class="nav__text">Methods</span></a></li><li><a href="/JavaTB/foundations/arrays/"><span class="nav__num">1.5</span><span class="nav__text">Arrays</span></a></li><li><a href="/JavaTB/foundations/strings/"><span class="nav__num">1.6</span><span class="nav__text">Strings</span></a></li><li><a href="/JavaTB/foundations/input-and-output/"><span class="nav__num">1.7</span><span class="nav__text">Input and output</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 2</span>Objects</summary><ul class="nav__list"><li><a href="/JavaTB/objects/classes-and-objects/"><span class="nav__num">2.1</span><span class="nav__text">Classes and objects</span></a></li><li><a href="/JavaTB/objects/aliasing/"><span class="nav__num">2.2</span><span class="nav__text">Aliasing</span></a></li><li><a href="/JavaTB/objects/encapsulation/"><span class="nav__num">2.3</span><span class="nav__text">Encapsulation</span></a></li><li><a href="/JavaTB/objects/equals-hashcode-tostring/"><span class="nav__num">2.4</span><span class="nav__text">equals and hashCode</span></a></li><li><a href="/JavaTB/objects/inheritance/"><span class="nav__num">2.5</span><span class="nav__text">Inheritance</span></a></li><li><a href="/JavaTB/objects/polymorphism/"><span class="nav__num">2.6</span><span class="nav__text">Polymorphism</span></a></li><li><a href="/JavaTB/objects/interfaces/"><span class="nav__num">2.7</span><span class="nav__text">Interfaces</span></a></li><li><a href="/JavaTB/objects/abstract-classes/"><span class="nav__num">2.8</span><span class="nav__text">Abstract classes</span></a></li><li><a href="/JavaTB/objects/records/"><span class="nav__num">2.9</span><span class="nav__text">Records</span></a></li><li><a href="/JavaTB/objects/enums/"><span class="nav__num">2.10</span><span class="nav__text">Enums</span></a></li><li><a href="/JavaTB/objects/sealed-types/"><span class="nav__num">2.11</span><span class="nav__text">Sealed types</span></a></li><li><a href="/JavaTB/objects/nested-classes/"><span class="nav__num">2.12</span><span class="nav__text">Nested classes</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 3</span>When things go wrong</summary><ul class="nav__list"><li><a href="/JavaTB/failure/exceptions/"><span class="nav__num">3.1</span><span class="nav__text">Exceptions</span></a></li><li><a href="/JavaTB/failure/checked-and-unchecked/"><span class="nav__num">3.2</span><span class="nav__text">Checked exceptions</span></a></li><li><a href="/JavaTB/failure/try-with-resources/"><span class="nav__num">3.3</span><span class="nav__text">try-with-resources</span></a></li><li><a href="/JavaTB/failure/null-and-optional/"><span class="nav__num">3.4</span><span class="nav__text">null and Optional</span></a></li><li><a href="/JavaTB/failure/designing-failure/"><span class="nav__num">3.5</span><span class="nav__text">Designing failure</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 4</span>Collections</summary><ul class="nav__list"><li><a href="/JavaTB/collections/the-framework/"><span class="nav__num">4.1</span><span class="nav__text">The framework</span></a></li><li><a href="/JavaTB/collections/list/"><span class="nav__num">4.2</span><span class="nav__text">List</span></a></li><li><a href="/JavaTB/collections/map/"><span class="nav__num">4.3</span><span class="nav__text">Map</span></a></li><li><a href="/JavaTB/collections/set-and-ordering/"><span class="nav__num">4.4</span><span class="nav__text">Set and ordering</span></a></li><li><a href="/JavaTB/collections/queues-and-deques/"><span class="nav__num">4.5</span><span class="nav__text">Queues and deques</span></a></li><li><a href="/JavaTB/collections/iteration/"><span class="nav__num">4.6</span><span class="nav__text">Iteration</span></a></li><li><a href="/JavaTB/collections/immutable-collections/"><span class="nav__num">4.7</span><span class="nav__text">Immutable collections</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 5</span>Generics</summary><ul class="nav__list"><li><a href="/JavaTB/generics/generic-classes-and-methods/"><span class="nav__num">5.1</span><span class="nav__text">Generic classes</span></a></li><li><a href="/JavaTB/generics/erasure/"><span class="nav__num">5.2</span><span class="nav__text">Erasure</span></a></li><li><a href="/JavaTB/generics/wildcards/"><span class="nav__num">5.3</span><span class="nav__text">Wildcards</span></a></li><li><a href="/JavaTB/generics/the-limits/"><span class="nav__num">5.4</span><span class="nav__text">The limits</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 6</span>functional</summary><ul class="nav__list"><li><a href="/JavaTB/functional/lambdas/"><span class="nav__num">6.1</span><span class="nav__text">Lambdas</span></a></li><li><a href="/JavaTB/functional/method-references/"><span class="nav__num">6.2</span><span class="nav__text">Method references</span></a></li><li><a href="/JavaTB/functional/streams/"><span class="nav__num">6.3</span><span class="nav__text">Streams</span></a></li><li><a href="/JavaTB/functional/collectors/"><span class="nav__num">6.4</span><span class="nav__text">Collectors</span></a></li><li><a href="/JavaTB/functional/when-a-loop-is-better/"><span class="nav__num">6.5</span><span class="nav__text">When a loop wins</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 7</span>platform</summary><ul class="nav__list"><li><a href="/JavaTB/platform/lifetime-and-gc/"><span class="nav__num">7.1</span><span class="nav__text">Lifetime and GC</span></a></li><li><a href="/JavaTB/platform/stack-heap-escape/"><span class="nav__num">7.2</span><span class="nav__text">Stack and heap</span></a></li><li><a href="/JavaTB/platform/class-loading/"><span class="nav__num">7.3</span><span class="nav__text">Class loading</span></a></li><li><a href="/JavaTB/platform/reflection/"><span class="nav__num">7.4</span><span class="nav__text">Reflection</span></a></li><li><a href="/JavaTB/platform/classpath-and-modules/"><span class="nav__num">7.5</span><span class="nav__text">Classpath and modules</span></a></li><li><a href="/JavaTB/platform/files-and-nio/"><span class="nav__num">7.6</span><span class="nav__text">Files and NIO</span></a></li><li><a href="/JavaTB/platform/java-time/"><span class="nav__num">7.7</span><span class="nav__text">java.time</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 8</span>concurrency</summary><ul class="nav__list"><li><a href="/JavaTB/concurrency/threads-and-shared-state/"><span class="nav__num">8.1</span><span class="nav__text">Threads</span></a></li><li><a href="/JavaTB/concurrency/the-memory-model/"><span class="nav__num">8.2</span><span class="nav__text">The memory model</span></a></li><li><a href="/JavaTB/concurrency/executors-and-futures/"><span class="nav__num">8.3</span><span class="nav__text">Executors</span></a></li><li><a href="/JavaTB/concurrency/concurrent-collections/"><span class="nav__num">8.4</span><span class="nav__text">Concurrent collections</span></a></li><li><a href="/JavaTB/concurrency/virtual-threads/"><span class="nav__num">8.5</span><span class="nav__text">Virtual threads</span></a></li><li><a href="/JavaTB/concurrency/parallel-streams/"><span class="nav__num">8.6</span><span class="nav__text">Parallel streams</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 9</span>engineering</summary><ul class="nav__list"><li><a href="/JavaTB/engineering/testing/"><span class="nav__num">9.1</span><span class="nav__text">Testing</span></a></li><li><a href="/JavaTB/engineering/build-tools/"><span class="nav__num">9.2</span><span class="nav__text">Build tools</span></a></li><li><a href="/JavaTB/engineering/debugging/"><span class="nav__num">9.3</span><span class="nav__text">Debugging</span></a></li><li><a href="/JavaTB/engineering/measuring/"><span class="nav__num">9.4</span><span class="nav__text">Measuring</span></a></li><li><a href="/JavaTB/engineering/api-design/"><span class="nav__num">9.5</span><span class="nav__text">API design</span></a></li><li><a href="/JavaTB/engineering/packaging/"><span class="nav__num">9.6</span><span class="nav__text">Packaging</span></a></li></ul></details>
+  </div>
+</nav>
+    <main class="content" id="content">
+      <article class="prose prose--wide">
+    <h1>Quick reference</h1>
+    <p class="chapter-lede">Every chapter's objectives in one place. Use it to find where you are: scan for the first row you cannot honestly claim, and start there.</p>
+    <section class="ref-part">
+        <h2>Foundations</h2>
+        <table class="ref-table">
+          <thead><tr><th>Chapter</th><th>You should be able to</th><th>Standard</th></tr></thead>
+          <tbody>
+            <tr>
+                  <td><a href="/JavaTB/foundations/hello-jvm/">Hello, JVM</a></td>
+                  <td><ul><li>Explain what javac and java each do, and what a class file holds</li><li>Tell from an error message which stage produced it</li><li>Compile and run a Java program from source</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/foundations/values-and-variables/">Values and variables</a></td>
+                  <td><ul><li>Name the eight primitive types and say what each one can hold</li><li>Predict what an int does when it overflows, and detect it rather than hope</li><li>Explain why 0.1 + 0.2 is not 0.3, and choose a type that does not have that problem</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/foundations/control-flow/">Control flow</a></td>
+                  <td><ul><li>Choose the right loop for a job and say what each one cannot do</li><li>Write a switch expression, and explain why it must be exhaustive</li><li>Recognise fall-through in a classic switch and the warning javac gives for it</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/foundations/methods/">Methods</a></td>
+                  <td><ul><li>Predict which changes a method makes are visible to its caller, and say why</li><li>Choose between overloads the way the compiler does</li><li>Write a recursive method and say what limits how deep it can go</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/foundations/arrays/">Arrays</a></td>
+                  <td><ul><li>Create arrays and say what they contain before anything is assigned</li><li>Compare and copy arrays correctly, including nested ones</li><li>Explain why storing into an Object[] can throw at run time</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/foundations/strings/">Strings</a></td>
+                  <td><ul><li>Explain why == on strings is unreliable and when it happens to work</li><li>Build a string in a loop without making the work quadratic</li><li>Choose between trim and strip, and say what neither of them removes</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/foundations/input-and-output/">Input and output</a></td>
+                  <td><ul><li>Format output with printf and say when to use %n rather than a newline</li><li>Read numbers and lines from the same input without losing one</li><li>Say when Scanner is too slow and what to reach for instead</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr>
+          </tbody>
+        </table>
+      </section><section class="ref-part">
+        <h2>Objects</h2>
+        <table class="ref-table">
+          <thead><tr><th>Chapter</th><th>You should be able to</th><th>Standard</th></tr></thead>
+          <tbody>
+            <tr>
+                  <td><a href="/JavaTB/objects/classes-and-objects/">Classes and objects</a></td>
+                  <td><ul><li>Define a class with fields and constructors and create objects from it</li><li>Explain why fields have defaults and local variables do not</li><li>Say what two variables naming one object means for the code that changes it</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/objects/aliasing/">Aliasing</a></td>
+                  <td><ul><li>Spot the two places a reference to an object's internals escapes</li><li>Write a class that cannot be modified from outside by copying at its boundaries</li><li>Explain what final does and does not protect</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/objects/encapsulation/">Encapsulation</a></td>
+                  <td><ul><li>Choose an access level and say what it actually protects</li><li>Establish an invariant in a constructor and preserve it in every method</li><li>Say why a getter and setter for every field is not encapsulation</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/objects/equals-hashcode-tostring/">equals and hashCode</a></td>
+                  <td><ul><li>Write equals and hashCode that satisfy their contracts</li><li>Explain exactly what breaks when equals is overridden without hashCode</li><li>Say why a field that can change must not take part in a hash code</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/objects/inheritance/">Inheritance</a></td>
+                  <td><ul><li>Write a subclass with a constructor that initialises its parent correctly</li><li>Explain the order in which a subclass is built, and what is unsafe during it</li><li>Distinguish overriding a method from hiding a field</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/objects/polymorphism/">Polymorphism</a></td>
+                  <td><ul><li>Explain which method runs when a call goes through a parent reference</li><li>Downcast safely, and say why a chain of instanceof usually signals a design problem</li><li>Say what dynamic dispatch costs, based on a measurement rather than folklore</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/objects/interfaces/">Interfaces</a></td>
+                  <td><ul><li>Declare and implement an interface, and say how it differs from a class</li><li>Explain why default methods exist and what they cost</li><li>Resolve a conflict when two interfaces supply the same default</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/objects/abstract-classes/">Abstract classes</a></td>
+                  <td><ul><li>Write an abstract class with shared state and an abstract method</li><li>Explain what the compiler enforces about abstract types</li><li>Choose between an abstract class and an interface for a given job</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/objects/records/">Records</a></td>
+                  <td><ul><li>Declare a record and say which members the compiler generates</li><li>Validate and normalise state in a compact constructor</li><li>Explain why a record holding an array does not compare the way you expect</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/objects/enums/">Enums</a></td>
+                  <td><ul><li>Declare an enum with fields, a constructor and per-constant behaviour</li><li>Explain what a switch expression over an enum guarantees when a constant is added</li><li>Say why ordinal() must not be stored anywhere durable</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/objects/sealed-types/">Sealed types</a></td>
+                  <td><ul><li>Declare a sealed type and say what the permits clause buys you</li><li>Write an exhaustive switch over a sealed hierarchy without a default arm</li><li>Use record patterns and guards to match on shape and value together</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/objects/nested-classes/">Nested classes</a></td>
+                  <td><ul><li>Choose between a static nested class and an inner class, and say what the difference costs</li><li>Explain what an inner class instance holds a reference to, and when that leaks</li><li>Say why a captured local must be effectively final</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr>
+          </tbody>
+        </table>
+      </section><section class="ref-part">
+        <h2>When things go wrong</h2>
+        <table class="ref-table">
+          <thead><tr><th>Chapter</th><th>You should be able to</th><th>Standard</th></tr></thead>
+          <tbody>
+            <tr>
+                  <td><a href="/JavaTB/failure/exceptions/">Exceptions</a></td>
+                  <td><ul><li>Throw and catch an exception, and read the stack trace it produces</li><li>Place the hierarchy — Throwable, Error, Exception, RuntimeException</li><li>Explain what finally guarantees, and the one thing it must never contain</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/failure/checked-and-unchecked/">Checked exceptions</a></td>
+                  <td><ul><li>Say which exceptions the compiler forces you to declare or catch</li><li>Explain why an override may narrow a throws clause but never widen it</li><li>Choose between checked and unchecked for an exception of your own</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/failure/try-with-resources/">try-with-resources</a></td>
+                  <td><ul><li>Write a try-with-resources block and implement AutoCloseable</li><li>Say in what order resources are closed</li><li>Explain what a suppressed exception is and what is lost without one</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/failure/null-and-optional/">null and Optional</a></td>
+                  <td><ul><li>Read a helpful NullPointerException and say what it names</li><li>Use Optional to make absence part of a return type</li><li>Explain why orElse can be wrong and orElseGet right</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/failure/designing-failure/">Designing failure</a></td>
+                  <td><ul><li>Choose between an exception, an Optional and a result type for a given failure</li><li>Say what an exception actually costs and where the cost is</li><li>Explain why a failure that is normal should not be exceptional</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr>
+          </tbody>
+        </table>
+      </section><section class="ref-part">
+        <h2>Collections</h2>
+        <table class="ref-table">
+          <thead><tr><th>Chapter</th><th>You should be able to</th><th>Standard</th></tr></thead>
+          <tbody>
+            <tr>
+                  <td><a href="/JavaTB/collections/the-framework/">The framework</a></td>
+                  <td><ul><li>Place List, Set, Queue and Map in the hierarchy and say what each promises</li><li>Distinguish an immutable collection, a fixed-size one, a view and a snapshot</li><li>Say which collections guarantee an iteration order and which only appear to</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/collections/list/">List</a></td>
+                  <td><ul><li>Say what ArrayList and LinkedList each cost for indexing, iteration and insertion</li><li>Explain why LinkedList loses at insertion despite O(1) insertion</li><li>Choose the right list, and know when the right answer is neither</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/collections/map/">Map</a></td>
+                  <td><ul><li>Use the map operations that replace get-check-put</li><li>Explain buckets, load factor and resizing</li><li>Say what happens when every key collides, and what makes it survivable</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/collections/set-and-ordering/">Set and ordering</a></td>
+                  <td><ul><li>Build a Comparator from comparing, thenComparing and reversed</li><li>Explain why a TreeSet decides duplicates by comparison rather than equals</li><li>Choose between HashSet, LinkedHashSet and TreeSet</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/collections/queues-and-deques/">Queues and deques</a></td>
+                  <td><ul><li>Use a Deque as both a stack and a queue, and choose between its two method families</li><li>Say what a PriorityQueue guarantees and what it does not</li><li>Explain why iterating a PriorityQueue is not the same as draining it</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/collections/iteration/">Iteration</a></td>
+                  <td><ul><li>Explain how fail-fast iteration detects modification</li><li>Remove elements safely during iteration</li><li>Say why ConcurrentModificationException is best-effort and what that costs</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/collections/immutable-collections/">Immutable collections</a></td>
+                  <td><ul><li>Explain why an immutable collection of mutable elements is not immutable</li><li>Say why Set.of and Map.of iterate differently between runs</li><li>Choose where to copy at a boundary, and where a copy costs nothing</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr>
+          </tbody>
+        </table>
+      </section><section class="ref-part">
+        <h2>Generics</h2>
+        <table class="ref-table">
+          <thead><tr><th>Chapter</th><th>You should be able to</th><th>Standard</th></tr></thead>
+          <tbody>
+            <tr>
+                  <td><a href="/JavaTB/generics/generic-classes-and-methods/">Generic classes</a></td>
+                  <td><ul><li>Declare a generic class and a generic method, and say where each type parameter belongs</li><li>Use a bounded type parameter to call methods on a type variable</li><li>Explain what a raw type gives up and what it costs</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/generics/erasure/">Erasure</a></td>
+                  <td><ul><li>Say what a generic type looks like at run time and why</li><li>Explain heap pollution and the unchecked warning that precedes it</li><li>Predict which generic constructs the compiler will reject, and why</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/generics/wildcards/">Wildcards</a></td>
+                  <td><ul><li>Explain why generics are invariant and arrays are not</li><li>Choose between ? extends and ? super using PECS</li><li>Say what you may and may not do through each kind of wildcard</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/generics/the-limits/">The limits</a></td>
+                  <td><ul><li>Say why List of int does not compile and what boxing costs</li><li>Explain why generic array creation is forbidden</li><li>Choose the standard workaround for each restriction</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr>
+          </tbody>
+        </table>
+      </section><section class="ref-part">
+        <h2>functional</h2>
+        <table class="ref-table">
+          <thead><tr><th>Chapter</th><th>You should be able to</th><th>Standard</th></tr></thead>
+          <tbody>
+            <tr>
+                  <td><a href="/JavaTB/functional/lambdas/">Lambdas</a></td>
+                  <td><ul><li>Say what a functional interface is and what @FunctionalInterface checks</li><li>Write a lambda for a given target type and explain how the type is inferred</li><li>Explain effectively-final capture and why it is required</li><li>Choose the right built-in functional interface, including the primitive ones</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/functional/method-references/">Method references</a></td>
+                  <td><ul><li>Recognise the four kinds of method reference and what each desugars to</li><li>Explain when a receiver is captured and when it is looked up per call</li><li>Say why an ambiguous reference is a compile error rather than a guess</li><li>Decide when a lambda reads better than a reference</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/functional/streams/">Streams</a></td>
+                  <td><ul><li>Describe a pipeline as source, intermediate operations, and terminal operation</li><li>Predict the order in which stage code runs, and why</li><li>Explain why a stream may be consumed only once</li><li>Choose a primitive stream where the elements are primitives</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/functional/collectors/">Collectors</a></td>
+                  <td><ul><li>Use groupingBy, partitioningBy, toMap and joining, including downstream collectors</li><li>Say why toMap throws on a duplicate key and how to decide the winner</li><li>Explain the difference between reduce and collect for a mutable result</li><li>Write a collector with Collector.of</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/functional/when-a-loop-is-better/">When a loop wins</a></td>
+                  <td><ul><li>Name the cases where a loop reads better than a pipeline</li><li>Account for per-pipeline overhead on small collections</li><li>Explain why checked exceptions and index-dependent logic resist streams</li><li>State the conditions under which parallel streams help, and measure one that does not</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr>
+          </tbody>
+        </table>
+      </section><section class="ref-part">
+        <h2>platform</h2>
+        <table class="ref-table">
+          <thead><tr><th>Chapter</th><th>You should be able to</th><th>Standard</th></tr></thead>
+          <tbody>
+            <tr>
+                  <td><a href="/JavaTB/platform/lifetime-and-gc/">Lifetime and GC</a></td>
+                  <td><ul><li>State the reachability rule and why it collects cycles</li><li>Explain why allocation of short-lived objects is cheap</li><li>Choose between strong, soft and weak references</li><li>Recognise the four common shapes of a leak in a garbage-collected language</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/platform/stack-heap-escape/">Stack and heap</a></td>
+                  <td><ul><li>Say what lives in a stack frame and what lives on the heap</li><li>Predict roughly how deep recursion can go and what changes it</li><li>Explain escape analysis and scalar replacement, and measure the difference</li><li>Recognise that publishing an object has a cost beyond design</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/platform/class-loading/">Class loading</a></td>
+                  <td><ul><li>List what does and does not trigger class initialisation</li><li>Explain why a static final constant does not load its class</li><li>Predict the order of static and instance initialisers</li><li>[object Object]</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/platform/reflection/">Reflection</a></td>
+                  <td><ul><li>Inspect a class's members and read runtime annotations</li><li>Write a small annotation-driven runner</li><li>Say what setAccessible can and cannot open, and why</li><li>Measure reflection's cost and know when it is worth paying</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/platform/classpath-and-modules/">Classpath and modules</a></td>
+                  <td><ul><li>Describe parent delegation and the three built-in class loaders</li><li>Explain why class identity is name plus defining loader</li><li>Read a module's exports, opens and readability at run time</li><li>Say when the classpath is still the right answer</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/platform/files-and-nio/">Files and NIO</a></td>
+                  <td><ul><li>Manipulate paths without touching the filesystem</li><li>Write a containment check that survives .. and absolute inputs</li><li>Read and write files with the Files API, closing what needs closing</li><li>Explain why Files throws where File returned false</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/platform/java-time/">java.time</a></td>
+                  <td><ul><li>Choose between LocalDate, LocalDateTime, Instant and ZonedDateTime</li><li>Explain why Period and Duration give different answers across a DST change</li><li>Handle local times that do not exist or happen twice</li><li>Say what was wrong with Date, Calendar and SimpleDateFormat</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr>
+          </tbody>
+        </table>
+      </section><section class="ref-part">
+        <h2>concurrency</h2>
+        <table class="ref-table">
+          <thead><tr><th>Chapter</th><th>You should be able to</th><th>Standard</th></tr></thead>
+          <tbody>
+            <tr>
+                  <td><a href="/JavaTB/concurrency/threads-and-shared-state/">Threads</a></td>
+                  <td><ul><li>Distinguish start() from run(), and a thread from a task</li><li>Explain why count++ loses updates and what fixes it</li><li>Separate atomicity from visibility, and see each fail on its own</li><li>Recognise check-then-act races and lock-ordering deadlock</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/concurrency/the-memory-model/">The memory model</a></td>
+                  <td><ul><li>Show that a program's statements can be reordered across threads</li><li>State the happens-before edges the language gives you</li><li>Choose between volatile, synchronized and the atomic classes</li><li>Explain safe publication and the final-field guarantee</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/concurrency/executors-and-futures/">Executors</a></td>
+                  <td><ul><li>Submit tasks to an ExecutorService and collect results</li><li>Explain why submit hides an exception that execute reports</li><li>Shut a pool down properly, including with try-with-resources</li><li>Compose asynchronous work with CompletableFuture</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/concurrency/concurrent-collections/">Concurrent collections</a></td>
+                  <td><ul><li>Say why a synchronized wrapper is not enough</li><li>Use ConcurrentHashMap's atomic compound operations</li><li>Choose between CopyOnWriteArrayList and a synchronized list by measuring</li><li>Use a BlockingQueue to hand work between threads</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/concurrency/virtual-threads/">Virtual threads</a></td>
+                  <td><ul><li>Create virtual threads and say how they differ from platform threads</li><li>Explain why thread-per-task becomes viable again</li><li>Recognise pinning, and what causes it in Java 21</li><li>Know what structured concurrency will add, and what to use meanwhile</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/concurrency/parallel-streams/">Parallel streams</a></td>
+                  <td><ul><li>State the associativity and identity rules a parallel reduction requires</li><li>Explain what ordering a parallel pipeline does and does not preserve</li><li>Recognise a source that cannot be split usefully</li><li>Decide when to run a pipeline on a pool of your own</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr>
+          </tbody>
+        </table>
+      </section><section class="ref-part">
+        <h2>engineering</h2>
+        <table class="ref-table">
+          <thead><tr><th>Chapter</th><th>You should be able to</th><th>Standard</th></tr></thead>
+          <tbody>
+            <tr>
+                  <td><a href="/JavaTB/engineering/testing/">Testing</a></td>
+                  <td><ul><li>Build a working test framework from annotations and reflection</li><li>Map its pieces onto JUnit 5</li><li>Write tests that fail for one reason and say what it is</li><li>Make untestable code testable by injecting the thing that varies</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/engineering/build-tools/">Build tools</a></td>
+                  <td><ul><li>Say what a build tool does that javac does not</li><li>Build and read a jar, and explain what makes it executable</li><li>Resolve a dependency conflict by both common strategies and see them disagree</li><li>Compare versions correctly and pin them deliberately</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/engineering/debugging/">Debugging</a></td>
+                  <td><ul><li>Read a chained stack trace and find the real failure</li><li>Explain suppressed exceptions and truncated async traces</li><li>Measure what a thrown exception costs</li><li>Recognise the traces the JVM stops producing</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/engineering/measuring/">Measuring</a></td>
+                  <td><ul><li>Warm up a measurement, and see how much it matters</li><li>Recognise a benchmark the JIT has deleted</li><li>Choose a timer, and know what it costs and resolves to</li><li>Report a distribution rather than a number</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/engineering/api-design/">API design</a></td>
+                  <td><ul><li>Choose between a constructor, a static factory and a builder</li><li>Avoid overloads that resolve in ways nobody predicts</li><li>Design signatures that fail at compile time rather than at run time</li><li>Say what you can and cannot change after release</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr><tr>
+                  <td><a href="/JavaTB/engineering/packaging/">Packaging</a></td>
+                  <td><ul><li>Choose between a fat jar, a runtime image and an installer</li><li>Discover plugins the way ServiceLoader does</li><li>Layer configuration so the right source wins</li><li>Build reproducibly and shut down cleanly</li></ul></td>
+                  <td><code>java21</code></td>
+                </tr>
+          </tbody>
+        </table>
+      </section>
+  </article>
+    </main>
+    <div class="rail" aria-hidden="true"></div>
+  </div>
+  <div class="scrim" id="scrim" hidden></div>
+  <script type="module" src="/JavaTB/assets/index-DTPhoH-i.js"></script>
+</body>
+</html>

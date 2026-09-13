@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Methods and what gets copied · The Java Textbook</title>
+  <meta name="description" content="Parameters, returns and overloading — and the single rule about copying that explains why some changes a method makes are visible to its caller and some are not.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="/JavaTB/favicon.svg" type="image/svg+xml">
+  <script>(function(){try{var t=localStorage.getItem('tb-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.dataset.theme=t;}catch(e){}})();</script>
+  <link rel="stylesheet" href="/JavaTB/assets/index-DU6-oSWJ.css">
+</head>
+<body class="">
+  <header class="topbar">
+  <button class="topbar__menu" id="menu-toggle" aria-label="Toggle contents" aria-expanded="false">
+    <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>
+  </button>
+  <a class="topbar__brand" href="/JavaTB/">The Java Textbook</a>
+  <div class="topbar__spacer"></div>
+  <button class="search-trigger" id="search-trigger" aria-label="Search the book">
+    <svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M13 13l4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    <span>Search</span><kbd>/</kbd>
+  </button>
+  <button class="icon-button" id="theme-toggle" aria-label="Switch theme" title="Switch theme">
+    <svg viewBox="0 0 20 20" width="17" height="17" aria-hidden="true"><path d="M10 2.5a7.5 7.5 0 1 0 7.5 7.5A6 6 0 0 1 10 2.5Z" fill="currentColor"/></svg>
+  </button>
+</header>
+  <div class="layout">
+    <nav class="sidebar" id="sidebar" aria-label="Book contents">
+  <div class="sidebar__inner">
+    <a class="sidebar__link" href="/JavaTB/">Start here</a>
+    <a class="sidebar__link" href="/JavaTB/practice/">Practice problems</a>
+    <a class="sidebar__link" href="/JavaTB/reference/">Quick reference</a>
+    <a class="sidebar__link" href="/JavaTB/progress/">Progress</a>
+    <hr class="sidebar__rule">
+    <details class="nav__part" open><summary><span class="nav__part-num">Part 1</span>Foundations</summary><ul class="nav__list"><li><a href="/JavaTB/foundations/hello-jvm/"><span class="nav__num">1.1</span><span class="nav__text">Hello, JVM</span></a></li><li><a href="/JavaTB/foundations/values-and-variables/"><span class="nav__num">1.2</span><span class="nav__text">Values and variables</span></a></li><li><a href="/JavaTB/foundations/control-flow/"><span class="nav__num">1.3</span><span class="nav__text">Control flow</span></a></li><li><a href="/JavaTB/foundations/methods/" class="is-active" aria-current="page"><span class="nav__num">1.4</span><span class="nav__text">Methods</span></a></li><li><a href="/JavaTB/foundations/arrays/"><span class="nav__num">1.5</span><span class="nav__text">Arrays</span></a></li><li><a href="/JavaTB/foundations/strings/"><span class="nav__num">1.6</span><span class="nav__text">Strings</span></a></li><li><a href="/JavaTB/foundations/input-and-output/"><span class="nav__num">1.7</span><span class="nav__text">Input and output</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 2</span>Objects</summary><ul class="nav__list"><li><a href="/JavaTB/objects/classes-and-objects/"><span class="nav__num">2.1</span><span class="nav__text">Classes and objects</span></a></li><li><a href="/JavaTB/objects/aliasing/"><span class="nav__num">2.2</span><span class="nav__text">Aliasing</span></a></li><li><a href="/JavaTB/objects/encapsulation/"><span class="nav__num">2.3</span><span class="nav__text">Encapsulation</span></a></li><li><a href="/JavaTB/objects/equals-hashcode-tostring/"><span class="nav__num">2.4</span><span class="nav__text">equals and hashCode</span></a></li><li><a href="/JavaTB/objects/inheritance/"><span class="nav__num">2.5</span><span class="nav__text">Inheritance</span></a></li><li><a href="/JavaTB/objects/polymorphism/"><span class="nav__num">2.6</span><span class="nav__text">Polymorphism</span></a></li><li><a href="/JavaTB/objects/interfaces/"><span class="nav__num">2.7</span><span class="nav__text">Interfaces</span></a></li><li><a href="/JavaTB/objects/abstract-classes/"><span class="nav__num">2.8</span><span class="nav__text">Abstract classes</span></a></li><li><a href="/JavaTB/objects/records/"><span class="nav__num">2.9</span><span class="nav__text">Records</span></a></li><li><a href="/JavaTB/objects/enums/"><span class="nav__num">2.10</span><span class="nav__text">Enums</span></a></li><li><a href="/JavaTB/objects/sealed-types/"><span class="nav__num">2.11</span><span class="nav__text">Sealed types</span></a></li><li><a href="/JavaTB/objects/nested-classes/"><span class="nav__num">2.12</span><span class="nav__text">Nested classes</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 3</span>When things go wrong</summary><ul class="nav__list"><li><a href="/JavaTB/failure/exceptions/"><span class="nav__num">3.1</span><span class="nav__text">Exceptions</span></a></li><li><a href="/JavaTB/failure/checked-and-unchecked/"><span class="nav__num">3.2</span><span class="nav__text">Checked exceptions</span></a></li><li><a href="/JavaTB/failure/try-with-resources/"><span class="nav__num">3.3</span><span class="nav__text">try-with-resources</span></a></li><li><a href="/JavaTB/failure/null-and-optional/"><span class="nav__num">3.4</span><span class="nav__text">null and Optional</span></a></li><li><a href="/JavaTB/failure/designing-failure/"><span class="nav__num">3.5</span><span class="nav__text">Designing failure</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 4</span>Collections</summary><ul class="nav__list"><li><a href="/JavaTB/collections/the-framework/"><span class="nav__num">4.1</span><span class="nav__text">The framework</span></a></li><li><a href="/JavaTB/collections/list/"><span class="nav__num">4.2</span><span class="nav__text">List</span></a></li><li><a href="/JavaTB/collections/map/"><span class="nav__num">4.3</span><span class="nav__text">Map</span></a></li><li><a href="/JavaTB/collections/set-and-ordering/"><span class="nav__num">4.4</span><span class="nav__text">Set and ordering</span></a></li><li><a href="/JavaTB/collections/queues-and-deques/"><span class="nav__num">4.5</span><span class="nav__text">Queues and deques</span></a></li><li><a href="/JavaTB/collections/iteration/"><span class="nav__num">4.6</span><span class="nav__text">Iteration</span></a></li><li><a href="/JavaTB/collections/immutable-collections/"><span class="nav__num">4.7</span><span class="nav__text">Immutable collections</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 5</span>Generics</summary><ul class="nav__list"><li><a href="/JavaTB/generics/generic-classes-and-methods/"><span class="nav__num">5.1</span><span class="nav__text">Generic classes</span></a></li><li><a href="/JavaTB/generics/erasure/"><span class="nav__num">5.2</span><span class="nav__text">Erasure</span></a></li><li><a href="/JavaTB/generics/wildcards/"><span class="nav__num">5.3</span><span class="nav__text">Wildcards</span></a></li><li><a href="/JavaTB/generics/the-limits/"><span class="nav__num">5.4</span><span class="nav__text">The limits</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 6</span>functional</summary><ul class="nav__list"><li><a href="/JavaTB/functional/lambdas/"><span class="nav__num">6.1</span><span class="nav__text">Lambdas</span></a></li><li><a href="/JavaTB/functional/method-references/"><span class="nav__num">6.2</span><span class="nav__text">Method references</span></a></li><li><a href="/JavaTB/functional/streams/"><span class="nav__num">6.3</span><span class="nav__text">Streams</span></a></li><li><a href="/JavaTB/functional/collectors/"><span class="nav__num">6.4</span><span class="nav__text">Collectors</span></a></li><li><a href="/JavaTB/functional/when-a-loop-is-better/"><span class="nav__num">6.5</span><span class="nav__text">When a loop wins</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 7</span>platform</summary><ul class="nav__list"><li><a href="/JavaTB/platform/lifetime-and-gc/"><span class="nav__num">7.1</span><span class="nav__text">Lifetime and GC</span></a></li><li><a href="/JavaTB/platform/stack-heap-escape/"><span class="nav__num">7.2</span><span class="nav__text">Stack and heap</span></a></li><li><a href="/JavaTB/platform/class-loading/"><span class="nav__num">7.3</span><span class="nav__text">Class loading</span></a></li><li><a href="/JavaTB/platform/reflection/"><span class="nav__num">7.4</span><span class="nav__text">Reflection</span></a></li><li><a href="/JavaTB/platform/classpath-and-modules/"><span class="nav__num">7.5</span><span class="nav__text">Classpath and modules</span></a></li><li><a href="/JavaTB/platform/files-and-nio/"><span class="nav__num">7.6</span><span class="nav__text">Files and NIO</span></a></li><li><a href="/JavaTB/platform/java-time/"><span class="nav__num">7.7</span><span class="nav__text">java.time</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 8</span>concurrency</summary><ul class="nav__list"><li><a href="/JavaTB/concurrency/threads-and-shared-state/"><span class="nav__num">8.1</span><span class="nav__text">Threads</span></a></li><li><a href="/JavaTB/concurrency/the-memory-model/"><span class="nav__num">8.2</span><span class="nav__text">The memory model</span></a></li><li><a href="/JavaTB/concurrency/executors-and-futures/"><span class="nav__num">8.3</span><span class="nav__text">Executors</span></a></li><li><a href="/JavaTB/concurrency/concurrent-collections/"><span class="nav__num">8.4</span><span class="nav__text">Concurrent collections</span></a></li><li><a href="/JavaTB/concurrency/virtual-threads/"><span class="nav__num">8.5</span><span class="nav__text">Virtual threads</span></a></li><li><a href="/JavaTB/concurrency/parallel-streams/"><span class="nav__num">8.6</span><span class="nav__text">Parallel streams</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 9</span>engineering</summary><ul class="nav__list"><li><a href="/JavaTB/engineering/testing/"><span class="nav__num">9.1</span><span class="nav__text">Testing</span></a></li><li><a href="/JavaTB/engineering/build-tools/"><span class="nav__num">9.2</span><span class="nav__text">Build tools</span></a></li><li><a href="/JavaTB/engineering/debugging/"><span class="nav__num">9.3</span><span class="nav__text">Debugging</span></a></li><li><a href="/JavaTB/engineering/measuring/"><span class="nav__num">9.4</span><span class="nav__text">Measuring</span></a></li><li><a href="/JavaTB/engineering/api-design/"><span class="nav__num">9.5</span><span class="nav__text">API design</span></a></li><li><a href="/JavaTB/engineering/packaging/"><span class="nav__num">9.6</span><span class="nav__text">Packaging</span></a></li></ul></details>
+  </div>
+</nav>
+    <main class="content" id="content">
+      <article class="prose" data-chapter="methods">
+    <div class="chapter-head">
+      <p class="chapter-eyebrow"><a href="/JavaTB/foundations/">Part 1 · Foundations</a></p>
+      <h1>Methods and what gets copied</h1>
+      <p class="chapter-lede">Parameters, returns and overloading — and the single rule about copying that explains why some changes a method makes are visible to its caller and some are not.</p>
+    </div>
+    
+    <section class="objectives">
+    <h2 class="objectives__title">By the end of this chapter you can</h2>
+    <ul><li>Predict which changes a method makes are visible to its caller, and say why</li><li>Choose between overloads the way the compiler does</li><li>Write a recursive method and say what limits how deep it can go</li></ul>
+  </section>
+    <p>A method is a named piece of work with inputs and an output. You have been
+writing them since the first chapter; <code>main</code> is one. This chapter is about what
+happens at the boundary — what a caller hands over, what the method gets, and
+which of the method’s changes the caller can see afterwards.</p>
+<p>There is exactly one rule, and it has no exceptions: <strong>Java passes everything by
+value.</strong> Almost every confusion in this area comes from believing there is a
+second rule for objects. There is not. What changes is <em>what the value is</em>.</p>
+<h2 id="declaring-and-calling" tabindex="-1">Declaring and calling</h2>
+<figure class="widget"><tb-runner data-run="1"><figcaption class="code__title">Inputs, an output, and a name that says what it does</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> int</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> larger</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> a</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> b</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> a </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">></span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> b </span><span style="--sh-light:#1E754F;--sh-dark:#4D9375">?</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> a </span><span style="--sh-light:#1E754F;--sh-dark:#4D9375">:</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> b</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> announce</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">String </span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">what</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span><span style="--sh-light:#A0ADA0;--sh-dark:#758575DD">   // void: no result, called for its effect</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">-> </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> what</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#59873A;--sh-dark:#80A665">        announce</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">comparing 3 and 9</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#59873A;--sh-dark:#80A665">larger</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">3</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 9</span><span style="--sh-light:#999999;--sh-dark:#666666">));</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">public class Main {
+    static int larger(int a, int b) {
+        return a &gt; b ? a : b;
+    }
+
+    static void announce(String what) {   // void: no result, called for its effect
+        System.out.println(&quot;-&gt; &quot; + what);
+    }
+
+    public static void main(String[] args) {
+        announce(&quot;comparing 3 and 9&quot;);
+        System.out.println(larger(3, 9));
+    }
+}</template></tb-runner></figure>
+<p>The <code>static</code> on these will be explained properly in Part 2, when there are
+objects for a non-static method to belong to. Until then, read it as “this
+method belongs to the class rather than to any particular object”, which is
+what lets <code>main</code> call it directly.</p>
+<h2 id="primitives-the-value-is-the-number" tabindex="-1">Primitives: the value is the number</h2>
+<figure class="widget"><tb-runner data-run="1"><figcaption class="code__title">The swap that does not swap</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> trySwap</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> a</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> b</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">        int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> temp</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> a</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">        a </span><span style="--sh-light:#999999;--sh-dark:#666666">=</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> b</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">        b </span><span style="--sh-light:#999999;--sh-dark:#666666">=</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> temp</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">        int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> x</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 1</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> y </span><span style="--sh-light:#999999;--sh-dark:#666666">=</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 2</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#59873A;--sh-dark:#80A665">        trySwap</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">x</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> y</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">x = </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> x </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">+</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">, y = </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> y</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">public class Main {
+    static void trySwap(int a, int b) {
+        int temp = a;
+        a = b;
+        b = temp;
+    }
+
+    public static void main(String[] args) {
+        int x = 1, y = 2;
+        trySwap(x, y);
+        System.out.println(&quot;x = &quot; + x + &quot;, y = &quot; + y);
+    }
+}</template></tb-runner></figure>
+<p><code>a</code> and <code>b</code> are new variables holding copies of <code>1</code> and <code>2</code>. The method swaps
+its own two copies perfectly, and then they cease to exist. <code>x</code> and <code>y</code> were
+never involved. No arrangement of the code inside <code>trySwap</code> can change that —
+a method simply cannot reassign a caller’s primitive variable, and Java has no
+<code>&amp;</code> or <code>out</code> to let it.</p>
+<h2 id="references-the-value-is-the-arrow-not-the-object" tabindex="-1">References: the value is the arrow, not the object</h2>
+<p>Here is where people conclude Java must pass objects by reference. Watch
+carefully, because both of these are the same rule:</p>
+<figure class="widget"><tb-runner data-run="1"><figcaption class="code__title">One works, one does not</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">import</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> java</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">util</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">Arrays</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> fill</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> xs</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        for</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> i</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">&#x3C;</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> xs</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">length</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> i</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">++</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">            xs</span><span style="--sh-light:#999999;--sh-dark:#666666">[</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">i</span><span style="--sh-light:#999999;--sh-dark:#666666">]</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 9</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#A0ADA0;--sh-dark:#758575DD">               // follow the arrow, change what is there</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> replace</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> xs</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">        xs </span><span style="--sh-light:#999999;--sh-dark:#666666">=</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> new</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> int</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 7</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 7</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 7</span><span style="--sh-light:#999999;--sh-dark:#666666"> };</span><span style="--sh-light:#A0ADA0;--sh-dark:#758575DD">  // point my copy of the arrow somewhere else</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">        int</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> a</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 1</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 2</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 3</span><span style="--sh-light:#999999;--sh-dark:#666666"> };</span></span>
+<span class="line"><span style="--sh-light:#59873A;--sh-dark:#80A665">        fill</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">a</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">after fill:    </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> Arrays</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">toString</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">a</span><span style="--sh-light:#999999;--sh-dark:#666666">));</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">        int</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> b</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 1</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 2</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 3</span><span style="--sh-light:#999999;--sh-dark:#666666"> };</span></span>
+<span class="line"><span style="--sh-light:#59873A;--sh-dark:#80A665">        replace</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">b</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">after replace: </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> Arrays</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">toString</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">b</span><span style="--sh-light:#999999;--sh-dark:#666666">));</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">import java.util.Arrays;
+
+public class Main {
+    static void fill(int[] xs) {
+        for (int i = 0; i &lt; xs.length; i++) {
+            xs[i] = 9;               // follow the arrow, change what is there
+        }
+    }
+
+    static void replace(int[] xs) {
+        xs = new int[] { 7, 7, 7 };  // point my copy of the arrow somewhere else
+    }
+
+    public static void main(String[] args) {
+        int[] a = { 1, 2, 3 };
+        fill(a);
+        System.out.println(&quot;after fill:    &quot; + Arrays.toString(a));
+
+        int[] b = { 1, 2, 3 };
+        replace(b);
+        System.out.println(&quot;after replace: &quot; + Arrays.toString(b));
+    }
+}</template></tb-runner></figure>
+<p><code>fill</code> changes the caller’s array. <code>replace</code> does not. The difference is not
+that one is “by reference” and the other is not — it is that a variable of
+array or object type does not hold the object. It holds a <em>reference</em> to it: an
+arrow pointing at the object. Calling a method copies the arrow. Both arrows
+then point at the same object, so following either one reaches the same
+elements — but reassigning the parameter only moves the copy.</p>
+<figure class="widget"><tb-memviz><template data-role="spec">{
+  &quot;title&quot;: &quot;What a method call copies&quot;,
+  &quot;steps&quot;: [
+    {
+      &quot;caption&quot;: &quot;main has a, an arrow pointing at a three-element array.&quot;,
+      &quot;line&quot;: 1,
+      &quot;stack&quot;: [
+        { &quot;id&quot;: &quot;a&quot;, &quot;name&quot;: &quot;a&quot;, &quot;type&quot;: &quot;int[]&quot;,
+          &quot;fields&quot;: [{ &quot;k&quot;: &quot;ref&quot;, &quot;v&quot;: &quot;→&quot;, &quot;anchor&quot;: &quot;a.ref&quot; }] }
+      ],
+      &quot;heap&quot;: [ { &quot;id&quot;: &quot;arr&quot;, &quot;value&quot;: &quot;[1, 2, 3]&quot; } ],
+      &quot;arrows&quot;: [ { &quot;from&quot;: &quot;a.ref&quot;, &quot;to&quot;: &quot;arr&quot; } ]
+    },
+    {
+      &quot;caption&quot;: &quot;Calling fill(a) copies the arrow into the parameter xs. Two arrows, one array.&quot;,
+      &quot;line&quot;: 2,
+      &quot;stack&quot;: [
+        { &quot;id&quot;: &quot;a&quot;, &quot;name&quot;: &quot;a&quot;, &quot;type&quot;: &quot;int[]&quot;,
+          &quot;fields&quot;: [{ &quot;k&quot;: &quot;ref&quot;, &quot;v&quot;: &quot;→&quot;, &quot;anchor&quot;: &quot;a.ref&quot; }] },
+        { &quot;id&quot;: &quot;xs&quot;, &quot;name&quot;: &quot;xs&quot;, &quot;type&quot;: &quot;int[]&quot;, &quot;state&quot;: &quot;new&quot;,
+          &quot;fields&quot;: [{ &quot;k&quot;: &quot;ref&quot;, &quot;v&quot;: &quot;→&quot;, &quot;anchor&quot;: &quot;xs.ref&quot; }] }
+      ],
+      &quot;heap&quot;: [ { &quot;id&quot;: &quot;arr&quot;, &quot;value&quot;: &quot;[1, 2, 3]&quot; } ],
+      &quot;arrows&quot;: [ { &quot;from&quot;: &quot;a.ref&quot;, &quot;to&quot;: &quot;arr&quot; }, { &quot;from&quot;: &quot;xs.ref&quot;, &quot;to&quot;: &quot;arr&quot; } ]
+    },
+    {
+      &quot;caption&quot;: &quot;xs[i] = 9 follows the arrow and changes the array itself. Both names see it.&quot;,
+      &quot;line&quot;: 3,
+      &quot;stack&quot;: [
+        { &quot;id&quot;: &quot;a&quot;, &quot;name&quot;: &quot;a&quot;, &quot;type&quot;: &quot;int[]&quot;,
+          &quot;fields&quot;: [{ &quot;k&quot;: &quot;ref&quot;, &quot;v&quot;: &quot;→&quot;, &quot;anchor&quot;: &quot;a.ref&quot; }] },
+        { &quot;id&quot;: &quot;xs&quot;, &quot;name&quot;: &quot;xs&quot;, &quot;type&quot;: &quot;int[]&quot;,
+          &quot;fields&quot;: [{ &quot;k&quot;: &quot;ref&quot;, &quot;v&quot;: &quot;→&quot;, &quot;anchor&quot;: &quot;xs.ref&quot; }] }
+      ],
+      &quot;heap&quot;: [ { &quot;id&quot;: &quot;arr&quot;, &quot;value&quot;: &quot;[9, 9, 9]&quot;, &quot;state&quot;: &quot;new&quot; } ],
+      &quot;arrows&quot;: [ { &quot;from&quot;: &quot;a.ref&quot;, &quot;to&quot;: &quot;arr&quot; }, { &quot;from&quot;: &quot;xs.ref&quot;, &quot;to&quot;: &quot;arr&quot; } ]
+    },
+    {
+      &quot;caption&quot;: &quot;In replace, xs = new int[]{7,7,7} moves only the copy. The caller's arrow never moved, and the new array is unreachable when the method returns.&quot;,
+      &quot;line&quot;: 4,
+      &quot;stack&quot;: [
+        { &quot;id&quot;: &quot;a&quot;, &quot;name&quot;: &quot;a&quot;, &quot;type&quot;: &quot;int[]&quot;,
+          &quot;fields&quot;: [{ &quot;k&quot;: &quot;ref&quot;, &quot;v&quot;: &quot;→&quot;, &quot;anchor&quot;: &quot;a.ref&quot; }] },
+        { &quot;id&quot;: &quot;xs&quot;, &quot;name&quot;: &quot;xs&quot;, &quot;type&quot;: &quot;int[]&quot;,
+          &quot;fields&quot;: [{ &quot;k&quot;: &quot;ref&quot;, &quot;v&quot;: &quot;→&quot;, &quot;anchor&quot;: &quot;xs.ref&quot; }] }
+      ],
+      &quot;heap&quot;: [
+        { &quot;id&quot;: &quot;arr&quot;, &quot;value&quot;: &quot;[1, 2, 3]&quot; },
+        { &quot;id&quot;: &quot;new&quot;, &quot;value&quot;: &quot;[7, 7, 7]&quot;, &quot;state&quot;: &quot;new&quot; }
+      ],
+      &quot;arrows&quot;: [ { &quot;from&quot;: &quot;a.ref&quot;, &quot;to&quot;: &quot;arr&quot; }, { &quot;from&quot;: &quot;xs.ref&quot;, &quot;to&quot;: &quot;new&quot; } ]
+    }
+  ]
+}</template></tb-memviz></figure>
+<p>So the practical rule a caller needs is not about primitives versus objects. It
+is: <strong>a method can change what your object contains; it cannot change which
+object your variable names.</strong></p>
+<p>That also explains why passing a <code>String</code> never surprises anyone. A <code>String</code>
+has no method that changes its contents, so there is nothing a method could do
+to it that you would notice — not because strings are passed differently, but
+because they are immutable. Chapter 1.6 comes back to this.</p>
+<h2 id="overloading" tabindex="-1">Overloading</h2>
+<p>Several methods may share a name if their parameters differ. The compiler picks
+one at compile time, from the <em>declared</em> types of the arguments:</p>
+<figure class="widget"><tb-runner data-run="1"><figcaption class="code__title">Which one gets called</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> String </span><span style="--sh-light:#59873A;--sh-dark:#80A665">f</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">long</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> x</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666">      {</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> return</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">f(long)</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#999999;--sh-dark:#666666"> }</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> String </span><span style="--sh-light:#59873A;--sh-dark:#80A665">f</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">Integer </span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">x</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666">   {</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> return</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">f(Integer)</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#999999;--sh-dark:#666666"> }</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> String </span><span style="--sh-light:#59873A;--sh-dark:#80A665">f</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">Object</span><span style="--sh-light:#999999;--sh-dark:#666666">...</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> x</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> return</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">f(Object...)</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#999999;--sh-dark:#666666"> }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">f(5) -> </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> f</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">5</span><span style="--sh-light:#999999;--sh-dark:#666666">));</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">public class Main {
+    static String f(long x)      { return &quot;f(long)&quot;; }
+    static String f(Integer x)   { return &quot;f(Integer)&quot;; }
+    static String f(Object... x) { return &quot;f(Object...)&quot;; }
+
+    public static void main(String[] args) {
+        System.out.println(&quot;f(5) -&gt; &quot; + f(5));
+    }
+}</template></tb-runner></figure>
+<p><code>5</code> is an <code>int</code>, and there is no <code>f(int)</code>. All three candidates could accept it,
+so the compiler applies a fixed order of preference:</p>
+<ol>
+<li><strong>Widening a primitive</strong> — <code>int</code> to <code>long</code>. Tried first.</li>
+<li><strong>Boxing</strong> — <code>int</code> to <code>Integer</code>. Only if no widening fits.</li>
+<li><strong>Varargs</strong> — always last.</li>
+</ol>
+<p>Hence <code>f(long)</code>. This order is worth knowing because it is invisible at the call
+site: <code>f(5)</code> looks like it should prefer the <code>Integer</code> overload, which is the
+one that mentions the value’s own type. It does not. Overloads that differ only
+in ways this rule has to arbitrate are a reliable source of confusion — when
+two overloads do genuinely different things, give them different names.</p>
+<h2 id="varargs" tabindex="-1">Varargs</h2>
+<figure class="widget"><tb-runner data-run="1"><figcaption class="code__title">Any number of arguments, including none</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> int</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> sum</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#999999;--sh-dark:#666666">...</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> numbers</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span><span style="--sh-light:#A0ADA0;--sh-dark:#758575DD">     // numbers is an int[] inside the method</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">        int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> total</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        for</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> n</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> :</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> numbers</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">            total </span><span style="--sh-light:#999999;--sh-dark:#666666">+=</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> n</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> total</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#59873A;--sh-dark:#80A665">sum</span><span style="--sh-light:#999999;--sh-dark:#666666">());</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#59873A;--sh-dark:#80A665">sum</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">1</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 2</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 3</span><span style="--sh-light:#999999;--sh-dark:#666666">));</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#59873A;--sh-dark:#80A665">sum</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375">new</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> int</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 4</span><span style="--sh-light:#999999;--sh-dark:#666666">,</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 5</span><span style="--sh-light:#999999;--sh-dark:#666666"> }));</span><span style="--sh-light:#A0ADA0;--sh-dark:#758575DD">   // an array works too</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">public class Main {
+    static int sum(int... numbers) {     // numbers is an int[] inside the method
+        int total = 0;
+        for (int n : numbers) {
+            total += n;
+        }
+        return total;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(sum());
+        System.out.println(sum(1, 2, 3));
+        System.out.println(sum(new int[] { 4, 5 }));   // an array works too
+    }
+}</template></tb-runner></figure>
+<p>Inside the method the parameter simply <em>is</em> an array, which is why the
+enhanced <code>for</code> works on it and why passing an array directly is accepted. A
+method may have only one varargs parameter and it must come last, since
+otherwise there would be no way to tell where it ended.</p>
+<h2 id="recursion-and-where-it-stops" tabindex="-1">Recursion, and where it stops</h2>
+<p>A method may call itself. Every call needs a <em>stack frame</em> holding its
+parameters and locals, and the stack is finite:</p>
+<figure class="widget"><tb-runner data-run="1"><figcaption class="code__title">How deep can it go?</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> depth</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> down</span><span style="--sh-light:#999999;--sh-dark:#666666">()</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">        depth</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">++</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#59873A;--sh-dark:#80A665">        down</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        for</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> run</span><span style="--sh-light:#999999;--sh-dark:#666666"> =</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 1</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> run </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">&#x3C;=</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 3</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> run</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">++</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">            depth </span><span style="--sh-light:#999999;--sh-dark:#666666">=</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 0</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            try</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#59873A;--sh-dark:#80A665">                down</span><span style="--sh-light:#999999;--sh-dark:#666666">();</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">            }</span><span style="--sh-light:#1E754F;--sh-dark:#4D9375"> catch</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">StackOverflowError </span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">e</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">                System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">run </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> run </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">+</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D"> reached </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> depth </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">+</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D"> frames</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">            }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">public class Main {
+    static int depth = 0;
+
+    static void down() {
+        depth++;
+        down();
+    }
+
+    public static void main(String[] args) {
+        for (int run = 1; run &lt;= 3; run++) {
+            depth = 0;
+            try {
+                down();
+            } catch (StackOverflowError e) {
+                System.out.println(&quot;run &quot; + run + &quot; reached &quot; + depth + &quot; frames&quot;);
+            }
+        }
+    }
+}</template></tb-runner></figure>
+<p>Look at the three numbers. The first is reliably the smallest, and the second
+and third usually settle on the same larger value. That is the JIT compiler
+from chapter 1.1 showing through: <code>down</code> starts out interpreted, and by the
+second round HotSpot has compiled it to machine code with a smaller frame, so
+the same stack holds more of them.</p>
+<p>The absolute figures are worth nothing — press Run twice and even the settled
+number moves, since it depends on the JVM, the platform and the thread’s stack
+size. What is reproducible is the shape: the first run goes least deep.</p>
+<p>Two things follow. Depth limits are a property of the run, not of the program,
+so a recursion that is “fine” in testing can fail in production on the same
+input. And <code>StackOverflowError</code> is an <code>Error</code>, not an <code>Exception</code> — the
+convention is that you do not catch it. The sample catches one to measure it,
+which is a legitimate use and not a pattern to copy.</p>
+<aside class="callout callout--warning"><p class="callout__label">Undefined behaviour</p>
+<p>Recursion depth is bounded by the thread’s stack, which defaults to a few
+hundred kilobytes to a couple of megabytes depending on the JVM and platform.
+Recursing once per element of a large input is a crash waiting for a big enough
+input; write it as a loop instead.</p>
+</aside>
+<p>Useful recursion has a <strong>base case</strong> that returns without recursing, and every
+other path must move towards it:</p>
+<figure class="widget"><tb-runner data-run="1"><figcaption class="code__title">A recursion that ends</figcaption><div data-role="rendered"><pre class="shiki shiki-themes vitesse-light vitesse-dark" style="--sh-light:#393a34;--sh-dark:#dbd7caee;--sh-light-bg:#ffffff;--sh-dark-bg:#121212" tabindex="0"><code><span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> class</span><span style="--sh-light:#2E8F82;--sh-dark:#5DA994"> Main</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> int</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> digitSum</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">int</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> n</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        if</span><span style="--sh-light:#999999;--sh-dark:#666666"> (</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">n </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">&#x3C;</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 10</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">            return</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> n</span><span style="--sh-light:#999999;--sh-dark:#666666">;</span><span style="--sh-light:#A0ADA0;--sh-dark:#758575DD">                       // base case</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">        }</span></span>
+<span class="line"><span style="--sh-light:#1E754F;--sh-dark:#4D9375">        return</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE"> n </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">%</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 10</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> digitSum</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#393A34;--sh-dark:#DBD7CAEE">n </span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">/</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91"> 10</span><span style="--sh-light:#999999;--sh-dark:#666666">);</span><span style="--sh-light:#A0ADA0;--sh-dark:#758575DD">   // strictly smaller each time</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--sh-light:#AB5959;--sh-dark:#CB7676">    public</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> static</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> void</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> main</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676">String</span><span style="--sh-light:#999999;--sh-dark:#666666">[]</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A"> args</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#999999;--sh-dark:#666666"> {</span></span>
+<span class="line"><span style="--sh-light:#B07D48;--sh-dark:#BD976A">        System</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#B07D48;--sh-dark:#BD976A">out</span><span style="--sh-light:#999999;--sh-dark:#666666">.</span><span style="--sh-light:#59873A;--sh-dark:#80A665">println</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#59873A;--sh-dark:#80A665">digitSum</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">7</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">, </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> digitSum</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">1234</span><span style="--sh-light:#999999;--sh-dark:#666666">)</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77"> "</span><span style="--sh-light:#B56959;--sh-dark:#C98A7D">, </span><span style="--sh-light:#B5695977;--sh-dark:#C98A7D77">"</span><span style="--sh-light:#AB5959;--sh-dark:#CB7676"> +</span><span style="--sh-light:#59873A;--sh-dark:#80A665"> digitSum</span><span style="--sh-light:#999999;--sh-dark:#666666">(</span><span style="--sh-light:#2F798A;--sh-dark:#4C9A91">999</span><span style="--sh-light:#999999;--sh-dark:#666666">));</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">    }</span></span>
+<span class="line"><span style="--sh-light:#999999;--sh-dark:#666666">}</span></span></code></pre></div><template data-role="source">public class Main {
+    static int digitSum(int n) {
+        if (n &lt; 10) {
+            return n;                       // base case
+        }
+        return n % 10 + digitSum(n / 10);   // strictly smaller each time
+    }
+
+    public static void main(String[] args) {
+        System.out.println(digitSum(7) + &quot;, &quot; + digitSum(1234) + &quot;, &quot; + digitSum(999));
+    }
+}</template></tb-runner></figure>
+<tb-quiz><template data-role="spec">{
+  &quot;question&quot;: &quot;A method takes a `StringBuilder` parameter, calls `append(\&quot;!\&quot;)` on it, and then assigns a brand-new StringBuilder to the parameter. What does the caller see afterwards?&quot;,
+  &quot;options&quot;: [
+    { &quot;text&quot;: &quot;The exclamation mark was added; the reassignment had no effect&quot;, &quot;correct&quot;: true, &quot;why&quot;: &quot;Right. append followed the copied arrow and changed the shared object. The assignment moved only the method's copy of the arrow, leaving the caller's pointing where it always did.&quot; },
+    { &quot;text&quot;: &quot;Both changes are visible&quot;, &quot;correct&quot;: false, &quot;why&quot;: &quot;That would require the caller's variable itself to be reachable from the method. Java copies the reference on the way in, so the caller's variable cannot be reassigned.&quot; },
+    { &quot;text&quot;: &quot;Neither change is visible&quot;, &quot;correct&quot;: false, &quot;why&quot;: &quot;This is the mistake in the other direction. The copy is of the arrow, not of the object, so mutating through it is visible to everyone holding an arrow to that object.&quot; },
+    { &quot;text&quot;: &quot;It depends on whether the parameter is declared final&quot;, &quot;correct&quot;: false, &quot;why&quot;: &quot;final would stop the method reassigning its own parameter, which changed nothing anyway. It has no effect on what the caller sees.&quot; }
+  ]
+}</template></tb-quiz>
+<h2 id="practice" tabindex="-1">Practice</h2>
+<tb-exercise data-id="swap-elements"></tb-exercise>
+
+    <nav class="pager" aria-label="Chapter navigation"><a class="pager__link pager__link--prev" href="/JavaTB/foundations/control-flow/">
+           <span class="pager__dir">Previous</span>
+           <span class="pager__title">Control flow</span>
+         </a><a class="pager__link pager__link--next" href="/JavaTB/foundations/arrays/">
+           <span class="pager__dir">Next</span>
+           <span class="pager__title">Arrays</span>
+         </a></nav>
+  </article>
+    </main>
+    <aside class="rail">
+    <div class="rail__inner">
+      <p class="rail__title">On this page</p><ul class="rail__list" id="rail-list"><li class="rail__item rail__item--h2"><a href="#declaring-and-calling">Declaring and calling</a></li><li class="rail__item rail__item--h2"><a href="#primitives-the-value-is-the-number">Primitives: the value is the number</a></li><li class="rail__item rail__item--h2"><a href="#references-the-value-is-the-arrow-not-the-object">References: the value is the arrow, not the object</a></li><li class="rail__item rail__item--h2"><a href="#overloading">Overloading</a></li><li class="rail__item rail__item--h2"><a href="#varargs">Varargs</a></li><li class="rail__item rail__item--h2"><a href="#recursion-and-where-it-stops">Recursion, and where it stops</a></li><li class="rail__item rail__item--h2"><a href="#practice">Practice</a></li></ul>
+      <div class="rail__meta">
+        <p><span>Standard</span><code>java21</code></p>
+        <p><span>Reading</span>8 min</p>
+        <p><span>Problems</span>2</p>
+      </div>
+      <button class="rail__done" data-chapter="methods" id="mark-done">Mark as read</button>
+    </div>
+  </aside>
+  </div>
+  <div class="scrim" id="scrim" hidden></div>
+  <script type="module" src="/JavaTB/assets/index-DTPhoH-i.js"></script>
+</body>
+</html>

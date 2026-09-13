@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Java Textbook — an interactive Java book</title>
+  <meta name="description" content="An interactive Java textbook: runnable examples, diagrams of what the JVM is doing, and auto-graded practice problems, from first program to generics and concurrency.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="/JavaTB/favicon.svg" type="image/svg+xml">
+  <script>(function(){try{var t=localStorage.getItem('tb-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.dataset.theme=t;}catch(e){}})();</script>
+  <link rel="stylesheet" href="/JavaTB/assets/index-DU6-oSWJ.css">
+</head>
+<body class="is-home">
+  <header class="topbar">
+  <button class="topbar__menu" id="menu-toggle" aria-label="Toggle contents" aria-expanded="false">
+    <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>
+  </button>
+  <a class="topbar__brand" href="/JavaTB/">The Java Textbook</a>
+  <div class="topbar__spacer"></div>
+  <button class="search-trigger" id="search-trigger" aria-label="Search the book">
+    <svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M13 13l4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    <span>Search</span><kbd>/</kbd>
+  </button>
+  <button class="icon-button" id="theme-toggle" aria-label="Switch theme" title="Switch theme">
+    <svg viewBox="0 0 20 20" width="17" height="17" aria-hidden="true"><path d="M10 2.5a7.5 7.5 0 1 0 7.5 7.5A6 6 0 0 1 10 2.5Z" fill="currentColor"/></svg>
+  </button>
+</header>
+  <div class="layout">
+    <nav class="sidebar" id="sidebar" aria-label="Book contents">
+  <div class="sidebar__inner">
+    <a class="sidebar__link" href="/JavaTB/">Start here</a>
+    <a class="sidebar__link" href="/JavaTB/practice/">Practice problems</a>
+    <a class="sidebar__link" href="/JavaTB/reference/">Quick reference</a>
+    <a class="sidebar__link" href="/JavaTB/progress/">Progress</a>
+    <hr class="sidebar__rule">
+    <details class="nav__part"><summary><span class="nav__part-num">Part 1</span>Foundations</summary><ul class="nav__list"><li><a href="/JavaTB/foundations/hello-jvm/"><span class="nav__num">1.1</span><span class="nav__text">Hello, JVM</span></a></li><li><a href="/JavaTB/foundations/values-and-variables/"><span class="nav__num">1.2</span><span class="nav__text">Values and variables</span></a></li><li><a href="/JavaTB/foundations/control-flow/"><span class="nav__num">1.3</span><span class="nav__text">Control flow</span></a></li><li><a href="/JavaTB/foundations/methods/"><span class="nav__num">1.4</span><span class="nav__text">Methods</span></a></li><li><a href="/JavaTB/foundations/arrays/"><span class="nav__num">1.5</span><span class="nav__text">Arrays</span></a></li><li><a href="/JavaTB/foundations/strings/"><span class="nav__num">1.6</span><span class="nav__text">Strings</span></a></li><li><a href="/JavaTB/foundations/input-and-output/"><span class="nav__num">1.7</span><span class="nav__text">Input and output</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 2</span>Objects</summary><ul class="nav__list"><li><a href="/JavaTB/objects/classes-and-objects/"><span class="nav__num">2.1</span><span class="nav__text">Classes and objects</span></a></li><li><a href="/JavaTB/objects/aliasing/"><span class="nav__num">2.2</span><span class="nav__text">Aliasing</span></a></li><li><a href="/JavaTB/objects/encapsulation/"><span class="nav__num">2.3</span><span class="nav__text">Encapsulation</span></a></li><li><a href="/JavaTB/objects/equals-hashcode-tostring/"><span class="nav__num">2.4</span><span class="nav__text">equals and hashCode</span></a></li><li><a href="/JavaTB/objects/inheritance/"><span class="nav__num">2.5</span><span class="nav__text">Inheritance</span></a></li><li><a href="/JavaTB/objects/polymorphism/"><span class="nav__num">2.6</span><span class="nav__text">Polymorphism</span></a></li><li><a href="/JavaTB/objects/interfaces/"><span class="nav__num">2.7</span><span class="nav__text">Interfaces</span></a></li><li><a href="/JavaTB/objects/abstract-classes/"><span class="nav__num">2.8</span><span class="nav__text">Abstract classes</span></a></li><li><a href="/JavaTB/objects/records/"><span class="nav__num">2.9</span><span class="nav__text">Records</span></a></li><li><a href="/JavaTB/objects/enums/"><span class="nav__num">2.10</span><span class="nav__text">Enums</span></a></li><li><a href="/JavaTB/objects/sealed-types/"><span class="nav__num">2.11</span><span class="nav__text">Sealed types</span></a></li><li><a href="/JavaTB/objects/nested-classes/"><span class="nav__num">2.12</span><span class="nav__text">Nested classes</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 3</span>When things go wrong</summary><ul class="nav__list"><li><a href="/JavaTB/failure/exceptions/"><span class="nav__num">3.1</span><span class="nav__text">Exceptions</span></a></li><li><a href="/JavaTB/failure/checked-and-unchecked/"><span class="nav__num">3.2</span><span class="nav__text">Checked exceptions</span></a></li><li><a href="/JavaTB/failure/try-with-resources/"><span class="nav__num">3.3</span><span class="nav__text">try-with-resources</span></a></li><li><a href="/JavaTB/failure/null-and-optional/"><span class="nav__num">3.4</span><span class="nav__text">null and Optional</span></a></li><li><a href="/JavaTB/failure/designing-failure/"><span class="nav__num">3.5</span><span class="nav__text">Designing failure</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 4</span>Collections</summary><ul class="nav__list"><li><a href="/JavaTB/collections/the-framework/"><span class="nav__num">4.1</span><span class="nav__text">The framework</span></a></li><li><a href="/JavaTB/collections/list/"><span class="nav__num">4.2</span><span class="nav__text">List</span></a></li><li><a href="/JavaTB/collections/map/"><span class="nav__num">4.3</span><span class="nav__text">Map</span></a></li><li><a href="/JavaTB/collections/set-and-ordering/"><span class="nav__num">4.4</span><span class="nav__text">Set and ordering</span></a></li><li><a href="/JavaTB/collections/queues-and-deques/"><span class="nav__num">4.5</span><span class="nav__text">Queues and deques</span></a></li><li><a href="/JavaTB/collections/iteration/"><span class="nav__num">4.6</span><span class="nav__text">Iteration</span></a></li><li><a href="/JavaTB/collections/immutable-collections/"><span class="nav__num">4.7</span><span class="nav__text">Immutable collections</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 5</span>Generics</summary><ul class="nav__list"><li><a href="/JavaTB/generics/generic-classes-and-methods/"><span class="nav__num">5.1</span><span class="nav__text">Generic classes</span></a></li><li><a href="/JavaTB/generics/erasure/"><span class="nav__num">5.2</span><span class="nav__text">Erasure</span></a></li><li><a href="/JavaTB/generics/wildcards/"><span class="nav__num">5.3</span><span class="nav__text">Wildcards</span></a></li><li><a href="/JavaTB/generics/the-limits/"><span class="nav__num">5.4</span><span class="nav__text">The limits</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 6</span>functional</summary><ul class="nav__list"><li><a href="/JavaTB/functional/lambdas/"><span class="nav__num">6.1</span><span class="nav__text">Lambdas</span></a></li><li><a href="/JavaTB/functional/method-references/"><span class="nav__num">6.2</span><span class="nav__text">Method references</span></a></li><li><a href="/JavaTB/functional/streams/"><span class="nav__num">6.3</span><span class="nav__text">Streams</span></a></li><li><a href="/JavaTB/functional/collectors/"><span class="nav__num">6.4</span><span class="nav__text">Collectors</span></a></li><li><a href="/JavaTB/functional/when-a-loop-is-better/"><span class="nav__num">6.5</span><span class="nav__text">When a loop wins</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 7</span>platform</summary><ul class="nav__list"><li><a href="/JavaTB/platform/lifetime-and-gc/"><span class="nav__num">7.1</span><span class="nav__text">Lifetime and GC</span></a></li><li><a href="/JavaTB/platform/stack-heap-escape/"><span class="nav__num">7.2</span><span class="nav__text">Stack and heap</span></a></li><li><a href="/JavaTB/platform/class-loading/"><span class="nav__num">7.3</span><span class="nav__text">Class loading</span></a></li><li><a href="/JavaTB/platform/reflection/"><span class="nav__num">7.4</span><span class="nav__text">Reflection</span></a></li><li><a href="/JavaTB/platform/classpath-and-modules/"><span class="nav__num">7.5</span><span class="nav__text">Classpath and modules</span></a></li><li><a href="/JavaTB/platform/files-and-nio/"><span class="nav__num">7.6</span><span class="nav__text">Files and NIO</span></a></li><li><a href="/JavaTB/platform/java-time/"><span class="nav__num">7.7</span><span class="nav__text">java.time</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 8</span>concurrency</summary><ul class="nav__list"><li><a href="/JavaTB/concurrency/threads-and-shared-state/"><span class="nav__num">8.1</span><span class="nav__text">Threads</span></a></li><li><a href="/JavaTB/concurrency/the-memory-model/"><span class="nav__num">8.2</span><span class="nav__text">The memory model</span></a></li><li><a href="/JavaTB/concurrency/executors-and-futures/"><span class="nav__num">8.3</span><span class="nav__text">Executors</span></a></li><li><a href="/JavaTB/concurrency/concurrent-collections/"><span class="nav__num">8.4</span><span class="nav__text">Concurrent collections</span></a></li><li><a href="/JavaTB/concurrency/virtual-threads/"><span class="nav__num">8.5</span><span class="nav__text">Virtual threads</span></a></li><li><a href="/JavaTB/concurrency/parallel-streams/"><span class="nav__num">8.6</span><span class="nav__text">Parallel streams</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 9</span>engineering</summary><ul class="nav__list"><li><a href="/JavaTB/engineering/testing/"><span class="nav__num">9.1</span><span class="nav__text">Testing</span></a></li><li><a href="/JavaTB/engineering/build-tools/"><span class="nav__num">9.2</span><span class="nav__text">Build tools</span></a></li><li><a href="/JavaTB/engineering/debugging/"><span class="nav__num">9.3</span><span class="nav__text">Debugging</span></a></li><li><a href="/JavaTB/engineering/measuring/"><span class="nav__num">9.4</span><span class="nav__text">Measuring</span></a></li><li><a href="/JavaTB/engineering/api-design/"><span class="nav__num">9.5</span><span class="nav__text">API design</span></a></li><li><a href="/JavaTB/engineering/packaging/"><span class="nav__num">9.6</span><span class="nav__text">Packaging</span></a></li></ul></details>
+  </div>
+</nav>
+    <main class="content" id="content">
+      <article class="prose prose--wide home">
+    <section class="hero">
+      <h1>Java, all the way down</h1>
+      <p class="hero__lede">Every code sample on this site compiles and runs in your browser. Every idea that usually gets waved at &mdash; what the JVM actually does, why generics forget their types, what a stream is really doing &mdash; comes with a program you can change, and problems that check your answer by running it.</p>
+      <div class="hero__actions">
+        <a class="button button--primary" href="/JavaTB/foundations/hello-jvm/">Start at the beginning</a>
+        <a class="button" href="/JavaTB/practice/">Jump to problems</a>
+        <button class="button" id="resume-button" hidden>Resume where you left off</button>
+      </div>
+      <p class="hero__stats">59 chapters · 59 written · 118 problems</p>
+    </section>
+
+    <section class="paths">
+      <h2>Three ways to read this</h2>
+      <div class="paths__grid">
+        <div class="path">
+          <h3>New to programming</h3>
+          <p>Read the early parts in order. They assume nothing: no JDK installed, no terminal experience, no maths beyond arithmetic.</p>
+          <a href="/JavaTB/foundations/hello-jvm/">Begin &rarr;</a>
+        </div>
+        <div class="path">
+          <h3>You know another language</h3>
+          <p>Skim the first part, then slow down where Java stops behaving like what you already know: references and equality, checked exceptions, and generics that are erased before they run.</p>
+          <a href="/JavaTB/objects/classes-and-objects/">Skip ahead &rarr;</a>
+        </div>
+        <div class="path">
+          <h3>You want the problems</h3>
+          <p>The problem bank is filterable by topic and difficulty, and each problem compiles and tests your submission. Your progress is saved in this browser.</p>
+          <a href="/JavaTB/practice/">Open the bank &rarr;</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="contents">
+      <h2>Contents</h2>
+      <ol class="toc"><li class="toc-part">
+        <div class="toc-part__head">
+          <span class="toc-part__num">Part 1</span>
+          <h3><a href="/JavaTB/foundations/">Foundations</a></h3>
+          <p>How Java source becomes a running program, and the handful of constructs every later chapter assumes. Nothing here presumes you have programmed before.</p>
+        </div>
+        <ol class="toc-part__chapters">
+          <li><a href="/JavaTB/foundations/hello-jvm/"><span class="toc-num">1.1</span> Hello, JVM</a></li><li><a href="/JavaTB/foundations/values-and-variables/"><span class="toc-num">1.2</span> Values and variables</a></li><li><a href="/JavaTB/foundations/control-flow/"><span class="toc-num">1.3</span> Control flow</a></li><li><a href="/JavaTB/foundations/methods/"><span class="toc-num">1.4</span> Methods</a></li><li><a href="/JavaTB/foundations/arrays/"><span class="toc-num">1.5</span> Arrays</a></li><li><a href="/JavaTB/foundations/strings/"><span class="toc-num">1.6</span> Strings</a></li><li><a href="/JavaTB/foundations/input-and-output/"><span class="toc-num">1.7</span> Input and output</a></li>
+        </ol>
+      </li><li class="toc-part">
+        <div class="toc-part__head">
+          <span class="toc-part__num">Part 2</span>
+          <h3><a href="/JavaTB/objects/">Objects</a></h3>
+          <p>Modelling a problem with classes: state and the code that guards it, the ways one type can stand in for another, and the modern tools — records, enums, sealed types — that say more with less.</p>
+        </div>
+        <ol class="toc-part__chapters">
+          <li><a href="/JavaTB/objects/classes-and-objects/"><span class="toc-num">2.1</span> Classes and objects</a></li><li><a href="/JavaTB/objects/aliasing/"><span class="toc-num">2.2</span> Aliasing</a></li><li><a href="/JavaTB/objects/encapsulation/"><span class="toc-num">2.3</span> Encapsulation</a></li><li><a href="/JavaTB/objects/equals-hashcode-tostring/"><span class="toc-num">2.4</span> equals and hashCode</a></li><li><a href="/JavaTB/objects/inheritance/"><span class="toc-num">2.5</span> Inheritance</a></li><li><a href="/JavaTB/objects/polymorphism/"><span class="toc-num">2.6</span> Polymorphism</a></li><li><a href="/JavaTB/objects/interfaces/"><span class="toc-num">2.7</span> Interfaces</a></li><li><a href="/JavaTB/objects/abstract-classes/"><span class="toc-num">2.8</span> Abstract classes</a></li><li><a href="/JavaTB/objects/records/"><span class="toc-num">2.9</span> Records</a></li><li><a href="/JavaTB/objects/enums/"><span class="toc-num">2.10</span> Enums</a></li><li><a href="/JavaTB/objects/sealed-types/"><span class="toc-num">2.11</span> Sealed types</a></li><li><a href="/JavaTB/objects/nested-classes/"><span class="toc-num">2.12</span> Nested classes</a></li>
+        </ol>
+      </li><li class="toc-part">
+        <div class="toc-part__head">
+          <span class="toc-part__num">Part 3</span>
+          <h3><a href="/JavaTB/failure/">When things go wrong</a></h3>
+          <p>Failure as a design problem rather than an afterthought: what exceptions are, which ones the compiler makes you acknowledge, how to release resources reliably, and how to choose between throwing, returning nothing, and returning a result.</p>
+        </div>
+        <ol class="toc-part__chapters">
+          <li><a href="/JavaTB/failure/exceptions/"><span class="toc-num">3.1</span> Exceptions</a></li><li><a href="/JavaTB/failure/checked-and-unchecked/"><span class="toc-num">3.2</span> Checked exceptions</a></li><li><a href="/JavaTB/failure/try-with-resources/"><span class="toc-num">3.3</span> try-with-resources</a></li><li><a href="/JavaTB/failure/null-and-optional/"><span class="toc-num">3.4</span> null and Optional</a></li><li><a href="/JavaTB/failure/designing-failure/"><span class="toc-num">3.5</span> Designing failure</a></li>
+        </ol>
+      </li><li class="toc-part">
+        <div class="toc-part__head">
+          <span class="toc-part__num">Part 4</span>
+          <h3><a href="/JavaTB/collections/">Collections</a></h3>
+          <p>The library you reach for every day: the shape of the hierarchy, what each implementation actually costs, and the ordering guarantees each one does and does not make.</p>
+        </div>
+        <ol class="toc-part__chapters">
+          <li><a href="/JavaTB/collections/the-framework/"><span class="toc-num">4.1</span> The framework</a></li><li><a href="/JavaTB/collections/list/"><span class="toc-num">4.2</span> List</a></li><li><a href="/JavaTB/collections/map/"><span class="toc-num">4.3</span> Map</a></li><li><a href="/JavaTB/collections/set-and-ordering/"><span class="toc-num">4.4</span> Set and ordering</a></li><li><a href="/JavaTB/collections/queues-and-deques/"><span class="toc-num">4.5</span> Queues and deques</a></li><li><a href="/JavaTB/collections/iteration/"><span class="toc-num">4.6</span> Iteration</a></li><li><a href="/JavaTB/collections/immutable-collections/"><span class="toc-num">4.7</span> Immutable collections</a></li>
+        </ol>
+      </li><li class="toc-part">
+        <div class="toc-part__head">
+          <span class="toc-part__num">Part 5</span>
+          <h3><a href="/JavaTB/generics/">Generics</a></h3>
+          <p>Types that take types: writing code once for many element types, what the compiler checks, what survives to run time, and the limits that follow from how it was implemented.</p>
+        </div>
+        <ol class="toc-part__chapters">
+          <li><a href="/JavaTB/generics/generic-classes-and-methods/"><span class="toc-num">5.1</span> Generic classes</a></li><li><a href="/JavaTB/generics/erasure/"><span class="toc-num">5.2</span> Erasure</a></li><li><a href="/JavaTB/generics/wildcards/"><span class="toc-num">5.3</span> Wildcards</a></li><li><a href="/JavaTB/generics/the-limits/"><span class="toc-num">5.4</span> The limits</a></li>
+        </ol>
+      </li><li class="toc-part">
+        <div class="toc-part__head">
+          <span class="toc-part__num">Part 6</span>
+          <h3><a href="/JavaTB/functional/">functional</a></h3>
+          <p></p>
+        </div>
+        <ol class="toc-part__chapters">
+          <li><a href="/JavaTB/functional/lambdas/"><span class="toc-num">6.1</span> Lambdas</a></li><li><a href="/JavaTB/functional/method-references/"><span class="toc-num">6.2</span> Method references</a></li><li><a href="/JavaTB/functional/streams/"><span class="toc-num">6.3</span> Streams</a></li><li><a href="/JavaTB/functional/collectors/"><span class="toc-num">6.4</span> Collectors</a></li><li><a href="/JavaTB/functional/when-a-loop-is-better/"><span class="toc-num">6.5</span> When a loop wins</a></li>
+        </ol>
+      </li><li class="toc-part">
+        <div class="toc-part__head">
+          <span class="toc-part__num">Part 7</span>
+          <h3><a href="/JavaTB/platform/">platform</a></h3>
+          <p></p>
+        </div>
+        <ol class="toc-part__chapters">
+          <li><a href="/JavaTB/platform/lifetime-and-gc/"><span class="toc-num">7.1</span> Lifetime and GC</a></li><li><a href="/JavaTB/platform/stack-heap-escape/"><span class="toc-num">7.2</span> Stack and heap</a></li><li><a href="/JavaTB/platform/class-loading/"><span class="toc-num">7.3</span> Class loading</a></li><li><a href="/JavaTB/platform/reflection/"><span class="toc-num">7.4</span> Reflection</a></li><li><a href="/JavaTB/platform/classpath-and-modules/"><span class="toc-num">7.5</span> Classpath and modules</a></li><li><a href="/JavaTB/platform/files-and-nio/"><span class="toc-num">7.6</span> Files and NIO</a></li><li><a href="/JavaTB/platform/java-time/"><span class="toc-num">7.7</span> java.time</a></li>
+        </ol>
+      </li><li class="toc-part">
+        <div class="toc-part__head">
+          <span class="toc-part__num">Part 8</span>
+          <h3><a href="/JavaTB/concurrency/">concurrency</a></h3>
+          <p></p>
+        </div>
+        <ol class="toc-part__chapters">
+          <li><a href="/JavaTB/concurrency/threads-and-shared-state/"><span class="toc-num">8.1</span> Threads</a></li><li><a href="/JavaTB/concurrency/the-memory-model/"><span class="toc-num">8.2</span> The memory model</a></li><li><a href="/JavaTB/concurrency/executors-and-futures/"><span class="toc-num">8.3</span> Executors</a></li><li><a href="/JavaTB/concurrency/concurrent-collections/"><span class="toc-num">8.4</span> Concurrent collections</a></li><li><a href="/JavaTB/concurrency/virtual-threads/"><span class="toc-num">8.5</span> Virtual threads</a></li><li><a href="/JavaTB/concurrency/parallel-streams/"><span class="toc-num">8.6</span> Parallel streams</a></li>
+        </ol>
+      </li><li class="toc-part">
+        <div class="toc-part__head">
+          <span class="toc-part__num">Part 9</span>
+          <h3><a href="/JavaTB/engineering/">engineering</a></h3>
+          <p></p>
+        </div>
+        <ol class="toc-part__chapters">
+          <li><a href="/JavaTB/engineering/testing/"><span class="toc-num">9.1</span> Testing</a></li><li><a href="/JavaTB/engineering/build-tools/"><span class="toc-num">9.2</span> Build tools</a></li><li><a href="/JavaTB/engineering/debugging/"><span class="toc-num">9.3</span> Debugging</a></li><li><a href="/JavaTB/engineering/measuring/"><span class="toc-num">9.4</span> Measuring</a></li><li><a href="/JavaTB/engineering/api-design/"><span class="toc-num">9.5</span> API design</a></li><li><a href="/JavaTB/engineering/packaging/"><span class="toc-num">9.6</span> Packaging</a></li>
+        </ol>
+      </li></ol>
+    </section>
+  </article>
+    </main>
+    <div class="rail" aria-hidden="true"></div>
+  </div>
+  <div class="scrim" id="scrim" hidden></div>
+  <script type="module" src="/JavaTB/assets/index-DTPhoH-i.js"></script>
+</body>
+</html>
