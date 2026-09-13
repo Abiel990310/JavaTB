@@ -23,7 +23,10 @@ function clientData(book: Book) {
       slug: ch.slug,
       title: ch.title,
       part: part.title,
-      url: `/${part.slug}/${ch.slug}/`,
+      // Must go through url(): search results are links, and on Pages the site
+      // is under /<repo>/. A raw "/part/chapter/" resolves against the domain
+      // root and 404s — invisible in `npm run dev`, where BASE is "/".
+      url: url(`${part.slug}/${ch.slug}/`),
       summary: ch.summary,
       headings: ch.headings.map((h) => ({ id: h.id, text: h.text })),
       // Trimmed: enough for useful matching without shipping the whole book twice.
